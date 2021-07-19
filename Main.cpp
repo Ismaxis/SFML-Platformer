@@ -3,7 +3,6 @@
 #include<filesystem>
 #include<ctime>
 #include"Player.h"
-#include"PlayerInfo.h"
 
 using namespace sf;
 using namespace std;
@@ -80,6 +79,7 @@ int main()
 			curVel.x = 0;
 			player1.setPos(Vector2i(0, curPos.y));
 		}
+		
 		// Y
 		if (curPos.y + player1Size.y < winSize.y)
 		{

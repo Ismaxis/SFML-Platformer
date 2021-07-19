@@ -1,6 +1,5 @@
 #include<iostream>
 #include "Player.h"
-#include "PlayerInfo.h"
 
 void Player::update(sf::Vector2f vel)
 {
@@ -23,16 +22,6 @@ sf::Vector2i Player::getPos()
 	pos.y = plPosition.y + plSize.y;
 
 	return plPosition;
-}
-
-PlayerInfo Player::getInfo()
-{
-	PlayerInfo info;
-	info.position = plPosition;
-	info.size = plSize;
-	info.texture = plTexture;
-
-	return info;
 }
 
 void Player::init(sf::Vector2i pos, sf::Texture texture)
