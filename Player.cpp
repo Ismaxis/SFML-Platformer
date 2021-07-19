@@ -1,4 +1,3 @@
-#include<iostream>
 #include "Player.h"
 
 void Player::update(sf::Vector2f vel)
@@ -41,6 +40,5 @@ sf::Sprite Player::getSprite()
 	playerSprite.setTexture(plTexture);
 	playerSprite.setPosition(sf::Vector2f(plPosition));
 	
-
 	return playerSprite;
 }

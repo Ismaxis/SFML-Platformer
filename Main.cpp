@@ -1,34 +1,50 @@
 #include<SFML/Graphics.hpp>
 #include<iostream>
+
+#include<fstream>
+#include<vector>
+#include<string>
+#include<sstream>
+
 #include<filesystem>
 #include<ctime>
 #include"Player.h"
+#include"Map.h"
 
 using namespace sf;
 using namespace std;
 
+
 int main()
 {	
-	const Vector2u winSize = { 960, 540 };
+	// Window
+	const Vector2u winSize = {960, 544};
+	const int cageSize = 16;
+	const Vector2u gridSize = { winSize.x / cageSize, winSize.y / cageSize };
 	RenderWindow window(VideoMode(winSize.x, winSize.y), "SFML window", Style::Default);
 	window.setFramerateLimit(60);
+	
+	//Map
+	Map map1;
 
+	map1.setMap("map.txt");
+	map1.setSheet("Textures/mapSheet.png");
+
+	std::vector<std::vector<sf::Sprite>> mapSprite;
+
+	// Player
 	Player player1;
 	Vector2f curVel = { 0, 0 };
 	Vector2i curPos;
 	int defVel = 5;
-
 	//const std::filesystem::path path = "Texture\Player.png"; create path frim string
 	Texture texture;
-	if (!texture.loadFromFile("Textures/Player.png"))
-	{
-		cout << "Texture load failed!" << endl;
-		return 0;
-	}
-
+	if (!texture.loadFromFile("Textures/Player05.png")) throw	runtime_error("Could not open file");
 	Vector2u player1Size = texture.getSize();
-	player1.init(Vector2i(winSize.x/2, winSize.y), texture);
+	player1.init(Vector2i(winSize.x / 2, winSize.y), texture);
 
+
+	// Window loop
 	while (window.isOpen())
 	{
 		Event event;
@@ -42,11 +58,11 @@ int main()
 			if (event.type == Event::KeyPressed)
 			{
 				// X movement
-				if (event.key.code == Keyboard::D)
+				if (event.key.code == Keyboard::D && !Keyboard::isKeyPressed(Keyboard::A))
 				{
 					curVel.x = defVel;
 				}
-				else if (event.key.code == Keyboard::A)
+				else if (event.key.code == Keyboard::A && !Keyboard::isKeyPressed(Keyboard::D))
 				{
 					curVel.x = -defVel;
 				}
@@ -64,7 +80,7 @@ int main()
 		}
 
 		// Clear
-		window.clear(Color::White);
+		window.clear(Color::Magenta);
 
 		// Colllision check
 		curPos = player1.getPos();
@@ -96,8 +112,18 @@ int main()
 		player1.update(curVel);
 
 		// Draw block
-		window.draw(player1.getSprite());
+		
+		mapSprite = map1.getSprites();
 
+		for (size_t i = 0; i < gridSize.y; i++)
+		{
+			for (size_t j = 0; j < gridSize.x; j++)
+			{
+				window.draw(mapSprite[i][j]);
+			}
+		}
+
+		window.draw(player1.getSprite());
 		window.display();
 	}
 	system("exit");
