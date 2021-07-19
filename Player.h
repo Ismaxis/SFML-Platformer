@@ -1,4 +1,4 @@
-#include"PlayerInfo.h"
+#include<SFML/Graphics.hpp>
 #pragma once
 class Player
 {
@@ -11,8 +11,6 @@ public:
 	void init(sf::Vector2i, sf::Texture);
 
 	void update(sf::Vector2f);
-
-	PlayerInfo getInfo();
 
 	void setPos(sf::Vector2i);
 

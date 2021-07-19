@@ -80,6 +80,7 @@ int main()
 			curVel.x = 0;
 			player1.setPos(Vector2i(0, curPos.y));
 		}
+		
 		// Y
 		if (curPos.y + player1Size.y < winSize.y)
 		{
