@@ -1,18 +1,23 @@
-#include<SFML/Graphics.hpp>
 #include"PlayerInfo.h"
 #pragma once
 class Player
 {
 private:
-	sf::Vector2i position;
-	sf::Vector2f velocity;
-	sf::Vector2u size;
-	sf::Texture texture;
+	sf::Vector2i plPosition;
+	sf::Vector2f plVelocity;
+	sf::Vector2u plSize;
+	sf::Texture plTexture;
 public:
-	void update();
-	
+	void init(sf::Vector2i, sf::Texture);
+
+	void update(sf::Vector2f);
+
 	PlayerInfo getInfo();
 
-	sf::Sprite* draw(sf::Vector2u winSize);
+	void setPos(sf::Vector2i);
+
+	sf::Vector2i getPos();
+
+	sf::Sprite getSprite();
 };
 
