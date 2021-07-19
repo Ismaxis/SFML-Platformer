@@ -42,16 +42,23 @@ int main()
 			}
 			if (event.type == Event::KeyPressed)
 			{
-				if (Keyboard::isKeyPressed(Keyboard::D))
+				// X movement
+				if (event.key.code == Keyboard::D)
 				{
 					curVel.x = defVel;
 				}
-				else if (Keyboard::isKeyPressed(Keyboard::A))
+				else if (event.key.code == Keyboard::A)
 				{
 					curVel.x = -defVel;
 				}
+				
+				// Jump 
+				if (event.key.code == Keyboard::Space || event.key.code == Keyboard::W)
+				{
+					curVel.y = 10;
+				}
 			}
-			if (event.type == Event::KeyReleased)
+			else if (!Keyboard::isKeyPressed(Keyboard::A) && !Keyboard::isKeyPressed(Keyboard::D))
 			{
 				curVel.x = 0;
 			}
@@ -62,6 +69,7 @@ int main()
 
 		// Colllision check
 		curPos = player1.getPos();
+		// X
 		if (curPos.x + player1Size.x > winSize.x)
 		{
 			curVel.x = 0;
@@ -71,6 +79,16 @@ int main()
 		{
 			curVel.x = 0;
 			player1.setPos(Vector2i(0, curPos.y));
+		}
+		// Y
+		if (curPos.y + player1Size.y < winSize.y)
+		{
+			curVel.y -= 1;
+		}
+		if (curPos.y + player1Size.y > winSize.y)
+		{
+			player1.setPos(Vector2i(curPos.x, winSize.y - player1Size.y));
+			curVel.y = 0;
 		}
 
 		// Update
