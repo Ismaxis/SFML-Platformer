@@ -68,6 +68,7 @@ int main()
 
 		// Colllision check
 		curPos = player1.getPos();
+
 		// X
 		if (curPos.x + player1Size.x > winSize.x)
 		{
