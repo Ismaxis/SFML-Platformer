@@ -8,7 +8,6 @@ private:
 	sf::Vector2f plVelocity;
 	sf::Vector2u plSize;
 	sf::Texture plTexture;
-	bool onGround;
 public:
 	void init(sf::Vector2i, std::string path);
 

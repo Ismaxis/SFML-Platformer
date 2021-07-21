@@ -21,6 +21,6 @@ public:
 
 	std::vector<std::vector<sf::Sprite>> getSprites();
 
-	bool isCollide(sf::Vector2i pos);
+	sf::Vector2<sf::Vector2<bool>> isCollide(sf::Vector2i pos, sf::Vector2u size);
 };
 

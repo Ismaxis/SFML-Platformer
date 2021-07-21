@@ -24,11 +24,6 @@ void Player::update(sf::Vector2f vel)
 	plPosition.y -= plVelocity.y;
 }
 
-void Player::setStatus(bool status)
-{
-	onGround = status;
-}
-
 void Player::setPos(sf::Vector2i pos)
 {
 	plPosition.x = pos.x - plSize.x / 2;
@@ -44,11 +39,6 @@ sf::Vector2i Player::getPos()
 	pos.y = plPosition.y + plSize.y;
 
 	return pos;
-}
-
-bool Player::getStatus()
-{
-	return onGround;
 }
 
 sf::Vector2u Player::getSize()

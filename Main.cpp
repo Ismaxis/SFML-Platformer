@@ -17,9 +17,9 @@ using namespace std;
 int main()
 {	
 	// Window
-	const Vector2u winSize = {960, 544};
+	const Vector2i winSize = {960, 544};
 	const int cageSize = 16;
-	const Vector2u gridSize = { winSize.x / cageSize, winSize.y / cageSize };
+	const Vector2i gridSize = { winSize.x / cageSize, winSize.y / cageSize };
 	RenderWindow window(VideoMode(winSize.x, winSize.y), "SFML window", Style::Default);
 	window.setFramerateLimit(60);
 	
@@ -36,7 +36,7 @@ int main()
 	Vector2f curVel = { 0, 0 };
 	Vector2i curPos;
 	int defVel = 5;
-	bool isCollide, prevCollide = false;
+	sf::Vector2<sf::Vector2<bool>> isCollide = { {false, false}, {false, false} }, prevCollide = { {false, false}, {false, false} };
 	player.init(Vector2i(winSize.x/10, winSize.y/2), "Textures/Player05.png");
 
 
@@ -81,16 +81,7 @@ int main()
 		// Colllision check
 		curPos = player.getPos();
 
-		isCollide = map.isCollide(curPos);
-		if (isCollide) {
-			if (!prevCollide)
-			{
-				curVel.y = 0;
-				player.setPos(sf::Vector2i(curPos.x, int(curPos.y / cageSize) * cageSize));
-			}
-		}
-		prevCollide = isCollide;
-
+		// Window collide
 		// X
 		if (curPos.x > winSize.x)
 		{
@@ -102,17 +93,32 @@ int main()
 			curVel.x = 0;
 			player.setPos(Vector2i(1, curPos.y));
 		}
-		
+
 		// Y
-		if (curPos.y < winSize.y && !isCollide)
+		if (curPos.y < winSize.y && !isCollide.y.x)
 		{
 			curVel.y -= 1;
 		}
 		else if (curPos.y > winSize.y)
 		{
-			player.setPos(Vector2i(curPos.x, winSize.y));
+			player.setPos(Vector2i(curPos.x, winSize.y - 1));
 			curVel.y = 0;
 		}
+
+		// Map collide
+		curPos = player.getPos();
+		isCollide = map.isCollide(curPos, player.getSize());
+		
+		// Y
+		if (isCollide.y.x) {
+			if (!prevCollide.y.x)
+			{
+				//player.setPos(sf::Vector2i(curPos.x - curVel.x, curPos.y + curVel.y));
+				player.setPos(sf::Vector2i(curPos.x, curPos.y / cageSize * cageSize));
+				curVel.y = 0;
+			}
+		}
+		prevCollide = isCollide;
 
 		// Update
 		player.update(curVel);
