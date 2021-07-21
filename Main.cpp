@@ -6,7 +6,6 @@
 #include<string>
 #include<sstream>
 
-#include<filesystem>
 #include<ctime>
 #include"Player.h"
 #include"Map.h"
@@ -25,23 +24,20 @@ int main()
 	window.setFramerateLimit(60);
 	
 	//Map
-	Map map1;
+	Map map;
 
-	map1.setMap("map.txt");
-	map1.setSheet("Textures/mapSheet.png");
+	map.setMap("map.txt");
+	map.setSheet("Textures/mapSheet.png");
 
 	std::vector<std::vector<sf::Sprite>> mapSprite;
 
 	// Player
-	Player player1;
+	Player player;
 	Vector2f curVel = { 0, 0 };
 	Vector2i curPos;
 	int defVel = 5;
-	//const std::filesystem::path path = "Texture\Player.png"; create path frim string
-	Texture texture;
-	if (!texture.loadFromFile("Textures/Player05.png")) throw	runtime_error("Could not open file");
-	Vector2u player1Size = texture.getSize();
-	player1.init(Vector2i(winSize.x / 2, winSize.y), texture);
+	bool isCollide, prevCollide = false;
+	player.init(Vector2i(winSize.x/10, winSize.y/2), "Textures/Player05.png");
 
 
 	// Window loop
@@ -58,11 +54,11 @@ int main()
 			if (event.type == Event::KeyPressed)
 			{
 				// X movement
-				if (event.key.code == Keyboard::D && !Keyboard::isKeyPressed(Keyboard::A))
+				if (event.key.code == Keyboard::D)// && !Keyboard::isKeyPressed(Keyboard::A))
 				{
 					curVel.x = defVel;
 				}
-				else if (event.key.code == Keyboard::A && !Keyboard::isKeyPressed(Keyboard::D))
+				else if (event.key.code == Keyboard::A)// && !Keyboard::isKeyPressed(Keyboard::D))
 				{
 					curVel.x = -defVel;
 				}
@@ -80,40 +76,49 @@ int main()
 		}
 
 		// Clear
-		window.clear(Color::Magenta);
+		window.clear(Color::White);
 
 		// Colllision check
-		curPos = player1.getPos();
+		curPos = player.getPos();
+
+		isCollide = map.isCollide(curPos);
+		if (isCollide) {
+			if (!prevCollide)
+			{
+				curVel.y = 0;
+				player.setPos(sf::Vector2i(curPos.x, int(curPos.y / cageSize) * cageSize));
+			}
+		}
+		prevCollide = isCollide;
 
 		// X
-		if (curPos.x + player1Size.x > winSize.x)
+		if (curPos.x > winSize.x)
 		{
 			curVel.x = 0;
-			player1.setPos(Vector2i(winSize.x - player1Size.x , curPos.y));
+			player.setPos(Vector2i(winSize.x, curPos.y));
 		}
 		else if (curPos.x < 0)
 		{
 			curVel.x = 0;
-			player1.setPos(Vector2i(0, curPos.y));
+			player.setPos(Vector2i(1, curPos.y));
 		}
 		
 		// Y
-		if (curPos.y + player1Size.y < winSize.y)
+		if (curPos.y < winSize.y && !isCollide)
 		{
 			curVel.y -= 1;
 		}
-		if (curPos.y + player1Size.y > winSize.y)
+		else if (curPos.y > winSize.y)
 		{
-			player1.setPos(Vector2i(curPos.x, winSize.y - player1Size.y));
+			player.setPos(Vector2i(curPos.x, winSize.y));
 			curVel.y = 0;
 		}
 
 		// Update
-		player1.update(curVel);
+		player.update(curVel);
 
 		// Draw block
-		
-		mapSprite = map1.getSprites();
+		mapSprite = map.getSprites();
 
 		for (size_t i = 0; i < gridSize.y; i++)
 		{
@@ -123,7 +128,7 @@ int main()
 			}
 		}
 
-		window.draw(player1.getSprite());
+		window.draw(player.getSprite());
 		window.display();
 	}
 	system("exit");

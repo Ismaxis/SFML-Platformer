@@ -75,3 +75,22 @@ std::vector<std::vector<sf::Sprite>> Map::getSprites()
 
 	return result;
 }
+
+bool Map::isCollide(sf::Vector2i pos)
+{
+	sf::Vector2i cage = { pos.x / cageSize, pos.y / cageSize };
+	if (cage.y < map.size())
+	{
+		if (cage.x < map[cage.y].size())
+		{
+			if (map[cage.y][cage.x] != -1)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
+}

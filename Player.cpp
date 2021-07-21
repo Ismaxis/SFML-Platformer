@@ -1,5 +1,21 @@
 #include "Player.h"
 
+void Player::init(sf::Vector2i pos, std::string path)
+{
+	sf::Texture texture;
+	if (!texture.loadFromFile(path))
+	{
+		std::cout << "Hyi" << std::endl;
+	}
+
+	plTexture = texture;
+
+	plSize = texture.getSize();
+
+	plPosition.x = pos.x - plSize.x / 2;
+	plPosition.y = pos.y - plSize.y;
+}
+
 void Player::update(sf::Vector2f vel)
 {
 	plVelocity = vel;
@@ -8,29 +24,36 @@ void Player::update(sf::Vector2f vel)
 	plPosition.y -= plVelocity.y;
 }
 
+void Player::setStatus(bool status)
+{
+	onGround = status;
+}
+
 void Player::setPos(sf::Vector2i pos)
 {
-	plPosition = pos;
+	plPosition.x = pos.x - plSize.x / 2;
+	plPosition.y = pos.y - plSize.y;
 }
 
 sf::Vector2i Player::getPos()
 {
+	// Bottom point
 	sf::Vector2i pos;
 	
-	pos.x = plPosition.x;
+	pos.x = plPosition.x + plSize.x / 2;
 	pos.y = plPosition.y + plSize.y;
 
-	return plPosition;
+	return pos;
 }
 
-void Player::init(sf::Vector2i pos, sf::Texture texture)
+bool Player::getStatus()
 {
-	plTexture = texture;
+	return onGround;
+}
 
-	plSize = texture.getSize();
-
-	plPosition.x = pos.x - plSize.x / 2;
-	plPosition.y = pos.y - plSize.y;
+sf::Vector2u Player::getSize()
+{
+	return plSize;
 }
 
 sf::Sprite Player::getSprite()

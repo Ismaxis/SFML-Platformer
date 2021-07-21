@@ -20,5 +20,7 @@ public:
 	void setSheet(std::string fileName);
 
 	std::vector<std::vector<sf::Sprite>> getSprites();
+
+	bool isCollide(sf::Vector2i pos);
 };
 
