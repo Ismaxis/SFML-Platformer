@@ -1,25 +1,22 @@
 #include<SFML/Graphics.hpp>
 #include<iostream>
+
 #pragma once
 class Player
 {
 private:
-	sf::Vector2i plPosition;
-	sf::Vector2f plVelocity;
+	sf::Vector2f plPosition;
+	sf::Vector2f plVelocity = { 0, 0 };
 	sf::Vector2u plSize;
 	sf::Texture plTexture;
 public:
-	void init(sf::Vector2i, std::string path);
+	void init(sf::Vector2f pos, std::string path);
 
-	void update(sf::Vector2f);
+	void update(sf::Vector2f vel);
 
-	void setPos(sf::Vector2i);
+	void setPos(sf::Vector2f pos);
 
-	void setStatus(bool status);
-
-	sf::Vector2i getPos();
-	
-	bool getStatus();
+	sf::Vector2f getPos();
 
 	sf::Vector2u getSize();
 

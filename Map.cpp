@@ -1,4 +1,5 @@
 #include "Map.h"
+
 void Map::setMap(std::string fileName)
 {
 	std::vector<std::vector<int>> result;
@@ -7,7 +8,7 @@ void Map::setMap(std::string fileName)
 
 	if (!myFile.is_open())
 	{
-		std::cout << "Could not open txt file" << std::endl;
+		std::cout << "Could not open txt map file" << std::endl;
 	}
 
 	std::vector<int> coResult;
@@ -36,6 +37,17 @@ void Map::setMap(std::string fileName)
 	map = result;
 }
 
+void Map::setPlayerSize(sf::Vector2u size)
+{
+	plSizeInCages = sf::Vector2u(size.x / cageSize, size.y / cageSize);
+}
+
+sf::Vector2u Map::getPlayerSize()
+{
+	return plSizeInCages;
+}
+
+
 void Map::setSheet(std::string fileName)
 {
 	sf::Texture texture;
@@ -48,6 +60,11 @@ void Map::setSheet(std::string fileName)
 	sheet = texture;
 
 	cageSize = texture.getSize().y;
+}
+
+int Map::getCageSize() 
+{
+	return cageSize;
 }
 
 std::vector<std::vector<sf::Sprite>> Map::getSprites()
@@ -76,27 +93,43 @@ std::vector<std::vector<sf::Sprite>> Map::getSprites()
 	return result;
 }
 
-sf::Vector2<sf::Vector2<bool>> Map::isCollide(sf::Vector2i pos, sf::Vector2u size)
+sf::Vector2<sf::Vector2<bool>> Map::isCollide(sf::Vector2f pos)
 {
 	sf::Vector2<sf::Vector2<bool>> result = { {false, false}, {false, false} };
-	sf::Vector2i cage = { pos.x / cageSize, pos.y / cageSize };
-	sf::Vector2u sizeInCages = { size.x / cageSize, size.y / cageSize };
+	sf::Vector2u cage = { unsigned int(pos.x / cageSize), unsigned int(pos.y / cageSize) };
+	
+	//std::cout << cage.x << '\t' << cage.y << std::endl;
 
-	if (sizeInCages.y < cage.y < map.size())
+	// Y
+	if (plSizeInCages.y < cage.y && cage.y < map.size())
 	{
-		if (sizeInCages.x < cage.x < map[cage.y].size())
+		// Y bottom
+		if (map[cage.y][cage.x] != -1)
 		{
-			// Y bottom
-			if (map[cage.y][cage.x] != -1)
+			result.y.x = true;
+		}
+		// Y top
+		if (map[cage.y - plSizeInCages.y][cage.x] != -1)
+		{
+			result.y.y = true;
+		}
+
+		// X
+		if (plSizeInCages.x < cage.x && cage.x < map[0].size() - plSizeInCages.x)
+		{
+			// X left
+			if (map[cage.y][cage.x - plSizeInCages.x] != -1)
 			{
-				result.y.x = true;
+				result.x.x = true;
 			}
-			// Y top
-			if (map[cage.y - sizeInCages.y][cage.x] != -1)
+			// X right
+			if (map[cage.y][cage.x + plSizeInCages.x] != -1)
 			{
-				result.y.y = true;
+				result.x.y = true;
 			}
 		}
 	}
+
+
 	return result;
 }

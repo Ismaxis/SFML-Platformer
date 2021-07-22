@@ -10,73 +10,74 @@
 #include"Player.h"
 #include"Map.h"
 
-using namespace sf;
-using namespace std;
-
 
 int main()
 {	
 	// Window
-	const Vector2i winSize = {960, 544};
-	const int cageSize = 16;
-	const Vector2i gridSize = { winSize.x / cageSize, winSize.y / cageSize };
-	RenderWindow window(VideoMode(winSize.x, winSize.y), "SFML window", Style::Default);
+	const sf::Vector2i winSize = {960, 544};
+	sf::RenderWindow window(sf::VideoMode(winSize.x, winSize.y), "SFML window", sf::Style::Default);
 	window.setFramerateLimit(60);
 	
 	//Map
 	Map map;
+	std::vector<std::vector<sf::Sprite>> mapSprite;
 
 	map.setMap("map.txt");
 	map.setSheet("Textures/mapSheet.png");
-
-	std::vector<std::vector<sf::Sprite>> mapSprite;
+	const int cageSize = map.getCageSize();
+	const sf::Vector2i gridSize = { winSize.x / cageSize, winSize.y / cageSize };
 
 	// Player
 	Player player;
-	Vector2f curVel = { 0, 0 };
-	Vector2i curPos;
-	int defVel = 5;
-	sf::Vector2<sf::Vector2<bool>> isCollide = { {false, false}, {false, false} }, prevCollide = { {false, false}, {false, false} };
-	player.init(Vector2i(winSize.x/10, winSize.y/2), "Textures/Player05.png");
 
+	sf::Vector2f curVel;
+	sf::Vector2f curPos;
+	float defVel = 5.0f;
+	sf::Vector2<sf::Vector2<bool>> isCollide = { {false, false}, {false, false} };
+	player.init(sf::Vector2f(winSize.x/10, winSize.y/2), "Textures/Player32X64.png");
+	
+	map.setPlayerSize(player.getSize());
 
 	// Window loop
 	while (window.isOpen())
 	{
-		Event event;
+		sf::Event event;
 
 		while (window.pollEvent(event))
 		{
-			if (event.type == Event::Closed)
+			if (event.type == sf::Event::Closed)
 			{
 				window.close();
 			}
-			if (event.type == Event::KeyPressed)
+			if (event.type == sf::Event::KeyPressed)
 			{
 				// X movement
-				if (event.key.code == Keyboard::D)// && !Keyboard::isKeyPressed(Keyboard::A))
+				if (event.key.code == sf::Keyboard::D)// && !Keyboard::isKeyPressed(Keyboard::A))
 				{
 					curVel.x = defVel;
 				}
-				else if (event.key.code == Keyboard::A)// && !Keyboard::isKeyPressed(Keyboard::D))
+				else if (event.key.code == sf::Keyboard::A)// && !Keyboard::isKeyPressed(Keyboard::D))
 				{
 					curVel.x = -defVel;
 				}
 				
 				// Jump 
-				if (event.key.code == Keyboard::Space || event.key.code == Keyboard::W)
+				if ((event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::W) && curVel.y == 0)
 				{
-					curVel.y = 10;
+					curVel.y = defVel*3;
 				}
 			}
-			else if (!Keyboard::isKeyPressed(Keyboard::A) && !Keyboard::isKeyPressed(Keyboard::D))
+			else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 			{
 				curVel.x = 0;
 			}
 		}
 
 		// Clear
-		window.clear(Color::White);
+		window.clear(sf::Color::White);
+
+		// Predict next position for right collision check
+		player.update(curVel);
 
 		// Colllision check
 		curPos = player.getPos();
@@ -86,14 +87,13 @@ int main()
 		if (curPos.x > winSize.x)
 		{
 			curVel.x = 0;
-			player.setPos(Vector2i(winSize.x, curPos.y));
+			player.setPos(sf::Vector2f(winSize.x - 1, curPos.y));
 		}
 		else if (curPos.x < 0)
 		{
 			curVel.x = 0;
-			player.setPos(Vector2i(1, curPos.y));
+			player.setPos(sf::Vector2f(1, curPos.y));
 		}
-
 		// Y
 		if (curPos.y < winSize.y && !isCollide.y.x)
 		{
@@ -101,27 +101,27 @@ int main()
 		}
 		else if (curPos.y > winSize.y)
 		{
-			player.setPos(Vector2i(curPos.x, winSize.y - 1));
+			player.setPos(sf::Vector2f(curPos.x, winSize.y));
 			curVel.y = 0;
 		}
 
 		// Map collide
 		curPos = player.getPos();
-		isCollide = map.isCollide(curPos, player.getSize());
+		isCollide = map.isCollide(curPos);
+		// Y bottom
+		if (isCollide.y.x) 
+		{	
+			player.setPos(sf::Vector2f(curPos.x, int(curPos.y / cageSize) * cageSize));
+			curVel.y = 0;
 		
-		// Y
-		if (isCollide.y.x) {
-			if (!prevCollide.y.x)
-			{
-				//player.setPos(sf::Vector2i(curPos.x - curVel.x, curPos.y + curVel.y));
-				player.setPos(sf::Vector2i(curPos.x, curPos.y / cageSize * cageSize));
-				curVel.y = 0;
-			}
 		}
-		prevCollide = isCollide;
-
-		// Update
-		player.update(curVel);
+		// Y top
+		if (isCollide.y.y)
+		{
+			player.setPos(sf::Vector2f(curPos.x, curPos.y + curVel.y));
+			curVel.y = 0;
+		}
+	
 
 		// Draw block
 		mapSprite = map.getSprites();
@@ -129,7 +129,7 @@ int main()
 		for (size_t i = 0; i < gridSize.y; i++)
 		{
 			for (size_t j = 0; j < gridSize.x; j++)
-			{
+			{ 
 				window.draw(mapSprite[i][j]);
 			}
 		}
