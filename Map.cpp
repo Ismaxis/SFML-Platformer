@@ -93,39 +93,42 @@ std::vector<std::vector<sf::Sprite>> Map::getSprites()
 	return result;
 }
 
-sf::Vector2<sf::Vector2<bool>> Map::isCollide(sf::Vector2f pos)
+sf::Vector2<sf::Vector2<bool>> Map::isCollide(sf::Vector2f curPos, sf::Vector2f nextPos)
 {
 	sf::Vector2<sf::Vector2<bool>> result = { {false, false}, {false, false} };
-	sf::Vector2u cage = { unsigned int(pos.x / cageSize), unsigned int(pos.y / cageSize) };
+	sf::Vector2u nextCage = { unsigned int(nextPos.x / cageSize), unsigned int(nextPos.y / cageSize) };
 	
-	//std::cout << cage.x << '\t' << cage.y << std::endl;
+	std::cout << nextCage.x << '\t' << nextCage.y << std::endl;
 
 	// Y
-	if (plSizeInCages.y < cage.y && cage.y < map.size())
+	if (plSizeInCages.y < nextCage.y && nextCage.y < map.size())
 	{
 		// Y bottom
-		if (map[cage.y][cage.x] != -1)
+		if (map[nextCage.y][nextCage.x] != -1)
 		{
 			result.y.x = true;
 		}
 		// Y top
-		if (map[cage.y - plSizeInCages.y][cage.x] != -1)
+		if (map[nextCage.y - plSizeInCages.y][nextCage.x] != -1)
 		{
 			result.y.y = true;
 		}
 
 		// X
-		if (plSizeInCages.x < cage.x && cage.x < map[0].size() - plSizeInCages.x)
+		if (1 < nextCage.x && nextCage.x + 1 < map[0].size())
 		{
-			// X left
-			if (map[cage.y][cage.x - plSizeInCages.x] != -1)
+			for (size_t i = 0; i < plSizeInCages.x; i++)
 			{
-				result.x.x = true;
-			}
-			// X right
-			if (map[cage.y][cage.x + plSizeInCages.x] != -1)
-			{
-				result.x.y = true;
+				// X left
+				if (map[nextCage.y - 1 - i][nextCage.x - 1] != -1)
+				{
+					result.x.x = true;
+				}
+				// X right
+				if (map[nextCage.y - 1 - i][nextCage.x + 1] != -1)
+				{
+					result.x.y = true;
+				}
 			}
 		}
 	}

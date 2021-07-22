@@ -30,6 +30,6 @@ public:
 
 	std::vector<std::vector<sf::Sprite>> getSprites();
 
-	sf::Vector2<sf::Vector2<bool>> isCollide(sf::Vector2f pos);
+	sf::Vector2<sf::Vector2<bool>> isCollide(sf::Vector2f curPos, sf::Vector2f nextPos);
 };
 

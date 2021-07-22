@@ -22,8 +22,8 @@ int main()
 	Map map;
 	std::vector<std::vector<sf::Sprite>> mapSprite;
 
-	map.setMap("map.txt");
-	map.setSheet("Textures/mapSheet.png");
+	map.setMap("Maps/map2.txt");
+	map.setSheet("Maps/mapSheet.png");
 	const int cageSize = map.getCageSize();
 	const sf::Vector2i gridSize = { winSize.x / cageSize, winSize.y / cageSize };
 
@@ -32,6 +32,7 @@ int main()
 
 	sf::Vector2f curVel;
 	sf::Vector2f curPos;
+	sf::Vector2f nextPos;
 	float defVel = 5.0f;
 	sf::Vector2<sf::Vector2<bool>> isCollide = { {false, false}, {false, false} };
 	player.init(sf::Vector2f(winSize.x/10, winSize.y/2), "Textures/Player32X64.png");
@@ -76,13 +77,9 @@ int main()
 		// Clear
 		window.clear(sf::Color::White);
 
-		// Predict next position for right collision check
-		player.update(curVel);
-
 		// Colllision check
-		curPos = player.getPos();
-
 		// Window collide
+		curPos = player.getPos();
 		// X
 		if (curPos.x > winSize.x)
 		{
@@ -104,25 +101,40 @@ int main()
 			player.setPos(sf::Vector2f(curPos.x, winSize.y));
 			curVel.y = 0;
 		}
-
+		
 		// Map collide
 		curPos = player.getPos();
-		isCollide = map.isCollide(curPos);
+		player.update(curVel);
+		nextPos = player.getPos();
+
+		isCollide = map.isCollide(curPos, nextPos);
+
 		// Y bottom
 		if (isCollide.y.x) 
 		{	
-			player.setPos(sf::Vector2f(curPos.x, int(curPos.y / cageSize) * cageSize));
+			player.setPos(sf::Vector2f(nextPos.x, int(nextPos.y / cageSize) * cageSize));
 			curVel.y = 0;
 		
 		}
 		// Y top
 		if (isCollide.y.y)
 		{
-			player.setPos(sf::Vector2f(curPos.x, curPos.y + curVel.y));
+			player.setPos(sf::Vector2f(nextPos.x, nextPos.y + curVel.y));
 			curVel.y = 0;
 		}
-	
+		// X left
+		if (isCollide.x.x)
+		{
+			player.setPos(sf::Vector2f(int(nextPos.x / cageSize) * cageSize + player.getSize().x / 2, nextPos.y));
+		}
+		// X right
+		if (isCollide.x.y)
+		{
+			player.setPos(sf::Vector2f(int(nextPos.x / cageSize) * cageSize, nextPos.y));
+		}
 
+
+	
 		// Draw block
 		mapSprite = map.getSprites();
 
