@@ -28,7 +28,6 @@ void Map::setMap(std::string fileName)
 				ss.ignore();
 			}
 		}
-
 		result.push_back(coResult);
 		coResult.clear();
 	}
@@ -98,7 +97,7 @@ sf::Vector2<sf::Vector2<bool>> Map::isCollide(sf::Vector2f curPos, sf::Vector2f 
 	sf::Vector2<sf::Vector2<bool>> result = { {false, false}, {false, false} };
 	sf::Vector2u nextCage = { unsigned int(nextPos.x / cageSize), unsigned int(nextPos.y / cageSize) };
 	
-	std::cout << nextCage.x << '\t' << nextCage.y << std::endl;
+	//std::cout << nextCage.x << '\t' << nextCage.y << std::endl;
 
 	// Y
 	if (plSizeInCages.y < nextCage.y && nextCage.y < map.size())
@@ -113,7 +112,7 @@ sf::Vector2<sf::Vector2<bool>> Map::isCollide(sf::Vector2f curPos, sf::Vector2f 
 		{
 			result.y.y = true;
 		}
-
+		
 		// X
 		if (1 < nextCage.x && nextCage.x + 1 < map[0].size())
 		{

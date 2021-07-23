@@ -21,12 +21,12 @@ int main()
 	//Map
 	Map map;
 	std::vector<std::vector<sf::Sprite>> mapSprite;
-
+	
 	map.setMap("Maps/map2.txt");
 	map.setSheet("Maps/mapSheet.png");
 	const int cageSize = map.getCageSize();
 	const sf::Vector2i gridSize = { winSize.x / cageSize, winSize.y / cageSize };
-
+	
 	// Player
 	Player player;
 
@@ -50,14 +50,15 @@ int main()
 			{
 				window.close();
 			}
+
 			if (event.type == sf::Event::KeyPressed)
 			{
 				// X movement
-				if (event.key.code == sf::Keyboard::D)// && !Keyboard::isKeyPressed(Keyboard::A))
+				if (event.key.code == sf::Keyboard::D)
 				{
 					curVel.x = defVel;
 				}
-				else if (event.key.code == sf::Keyboard::A)// && !Keyboard::isKeyPressed(Keyboard::D))
+				else if (event.key.code == sf::Keyboard::A)
 				{
 					curVel.x = -defVel;
 				}
@@ -65,7 +66,7 @@ int main()
 				// Jump 
 				if ((event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::W) && curVel.y == 0)
 				{
-					curVel.y = defVel*3;
+					curVel.y = defVel * 3;
 				}
 			}
 			else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
@@ -73,9 +74,6 @@ int main()
 				curVel.x = 0;
 			}
 		}
-
-		// Clear
-		window.clear(sf::Color::White);
 
 		// Colllision check
 		// Window collide
@@ -133,7 +131,8 @@ int main()
 			player.setPos(sf::Vector2f(int(nextPos.x / cageSize) * cageSize, nextPos.y));
 		}
 
-
+		// Clear
+		window.clear(sf::Color::White);
 	
 		// Draw block
 		mapSprite = map.getSprites();
