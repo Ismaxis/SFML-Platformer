@@ -12,27 +12,24 @@ int main()
 	const sf::Vector2i winSize = { 960, 544 };
 	sf::RenderWindow window(sf::VideoMode(winSize.x, winSize.y), "SFML window", sf::Style::Default);
 	window.setFramerateLimit(60);
-	
-	//Map
-	Map map;
-	std::vector<std::vector<sf::Sprite>> mapSprite;
-	
-	map.setMap("Maps/map2.txt");
-	map.setSheet("Maps/mapSheet.png");
-	const int cageSize = map.getCageSize();
-	const sf::Vector2i gridSize = { winSize.x / cageSize, winSize.y / cageSize };
-	
-	// Player
-	Player player;
 
+	// Player
+	Player player("Textures/Player32X64.png");
+	player.setPos(sf::Vector2f(winSize.x / 10, winSize.y / 2));
 	sf::Vector2f curVel;
 	sf::Vector2f curPos;
 	sf::Vector2f nextPos;
-	float defVel = 5.0f;
+
+	//Map
+	Map map("Maps/map2.txt", "Maps/mapSheet.png", player.getSize());
+	std::vector<std::vector<sf::Sprite>> mapSprite;
+
+	const int cageSize = map.getCageSize();
+	const sf::Vector2i gridSize = { winSize.x / cageSize, winSize.y / cageSize };
+
+	const sf::Vector2f defVel = { 5.0f, 15.0f };
+	float maxVel = cageSize;
 	sf::Vector2<sf::Vector2<bool>> isCollide = { {false, false}, {false, false} };
-	player.init(sf::Vector2f(winSize.x/10, winSize.y/2), "Textures/Player32X64.png");
-	
-	map.setPlayerSize(player.getSize());
 
 	// Window loop
 	while (window.isOpen())
@@ -51,17 +48,17 @@ int main()
 				// X movement
 				if (event.key.code == sf::Keyboard::D)
 				{
-					curVel.x = defVel;
+					curVel.x = defVel.x;
 				}
 				else if (event.key.code == sf::Keyboard::A)
 				{
-					curVel.x = -defVel;
+					curVel.x = -defVel.x;
 				}
 				
 				// Jump 
 				if ((event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::W) && curVel.y == 0)
 				{
-					curVel.y = defVel * 3;
+					curVel.y = defVel.y;
 				}
 			}
 			else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
@@ -70,6 +67,32 @@ int main()
 			}
 		}
 		
+		// Max velocity check
+		if (abs(curVel.x) > maxVel)
+		{
+			if (curVel.x > 0)
+			{
+				curVel.x = maxVel;
+			}
+			else if (curVel.x < 0)
+			{
+				curVel.x = -maxVel;
+			}
+		}
+		if (abs(curVel.y) > maxVel)
+		{
+			if (curVel.y > 0)
+			{
+				curVel.y = maxVel;
+			}
+			else if (curVel.y < 0)
+			{
+				curVel.y = -maxVel;
+			}
+		}
+
+		player.setVel(curVel);
+
 		// Colllision check
 		// Window collide
 		curPos = player.getPos();
@@ -97,7 +120,7 @@ int main()
 		
 		// Map collide
 		curPos = player.getPos();
-		player.update(curVel);
+		player.update();
 		nextPos = player.getPos();
 
 		isCollide = map.isCollide(curPos, nextPos);

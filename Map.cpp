@@ -1,64 +1,8 @@
 #include "Map.h"
 
-void Map::setMap(std::string fileName)
-{
-	std::vector<std::vector<int>> result;
-
-	std::ifstream myFile(fileName, std::ios::in);
-
-	if (!myFile.is_open())
-	{
-		std::cout << "Could not open txt map file" << std::endl;
-	}
-
-	std::vector<int> coResult;
-	std::string line, colName;
-	int val;
-
-	while (getline(myFile, line))
-	{
-		std::stringstream ss(line);
-
-		while (ss >> val)
-		{
-			coResult.push_back(val);
-
-			if (ss.peek() == ',')
-			{
-				ss.ignore();
-			}
-		}
-		result.push_back(coResult);
-		coResult.clear();
-	}
-	myFile.close();
-
-	map = result;
-}
-
-void Map::setPlayerSize(sf::Vector2u size)
-{
-	plSizeInCages = sf::Vector2u(size.x / cageSize, size.y / cageSize);
-}
-
 sf::Vector2u Map::getPlayerSize()
 {
 	return plSizeInCages;
-}
-
-
-void Map::setSheet(std::string fileName)
-{
-	sf::Texture texture;
-
-	if (!texture.loadFromFile(fileName))
-	{
-		std::cout << "Could not open sheet" << std::endl;
-	}
-
-	sheet = texture;
-
-	cageSize = texture.getSize().y;
 }
 
 int Map::getCageSize() 
@@ -131,7 +75,6 @@ sf::Vector2<sf::Vector2<bool>> Map::isCollide(sf::Vector2f curPos, sf::Vector2f 
 			}
 		}
 	}
-
 
 	return result;
 }

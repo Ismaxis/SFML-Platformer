@@ -1,25 +1,7 @@
 #include "Player.h"
 
-void Player::init(sf::Vector2f pos, std::string path)
+void Player::update()
 {
-	sf::Texture texture;
-	if (!texture.loadFromFile(path))
-	{
-		std::cout << "Could not open player texture" << std::endl;
-	}
-
-	plTexture = texture;
-
-	plSize = texture.getSize();
-
-	plPosition.x = pos.x - plSize.x / 2;
-	plPosition.y = pos.y - plSize.y;
-}
-
-void Player::update(sf::Vector2f vel)
-{
-	plVelocity = vel;
-
 	plPosition.x += plVelocity.x;
 	plPosition.y -= plVelocity.y;
 }
@@ -28,6 +10,12 @@ void Player::setPos(sf::Vector2f pos)
 {
 	plPosition.x = pos.x - plSize.x / 2;
 	plPosition.y = pos.y - plSize.y;
+}
+
+void Player::setVel(sf::Vector2f vel)
+{
+	plVelocity.x = vel.x;
+	plVelocity.y = vel.y;
 }
 
 sf::Vector2f Player::getPos()
@@ -39,6 +27,11 @@ sf::Vector2f Player::getPos()
 	pos.y = plPosition.y + plSize.y;
 
 	return pos;
+}
+
+sf::Vector2f Player::getVel()
+{
+	return plVelocity;
 }
 
 sf::Vector2u Player::getSize()
