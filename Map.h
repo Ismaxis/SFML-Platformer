@@ -1,5 +1,4 @@
 #include<SFML/Graphics.hpp>
-#include<string>
 #include<iostream>
 #include<fstream>
 #include<sstream>
@@ -8,13 +7,11 @@
 class Map
 {
 private:
-	int cageSize;
-	
+	std::vector<std::vector<int>> map;
+
 	sf::Texture sheet;
 
-	sf::Vector2u plSizeInCages;
-
-	std::vector<std::vector<int>> map;
+	int cageSize;
 
 public:
 	Map(std::string mapPath, std::string sheetPath, sf::Vector2u plSize)
@@ -56,16 +53,11 @@ public:
 		}
 
 		cageSize = sheet.getSize().y;
-
-		// Size
-		plSizeInCages = sf::Vector2u(plSize.x / cageSize, plSize.y / cageSize);
 	}
-
-	sf::Vector2u getPlayerSize();
 
 	int getCageSize();
 
-	std::vector<std::vector<sf::Sprite>> getSprites();
+	int getCage(sf::Vector2i coords);
 
-	sf::Vector2<sf::Vector2<bool>> isCollide(sf::Vector2f curPos, sf::Vector2f nextPos);
+	std::vector<std::vector<sf::Sprite>> getSprites();
 };
