@@ -8,8 +8,13 @@
 
 int main()
 {	
+	//Map
+	Map map("Maps/map2.txt", "Maps/mapSheet.png");
+	std::vector<std::vector<sf::Sprite>> mapSprite;
+	sf::Vector2u gridSize = map.getGridSize();
+
 	// Window
-	const sf::Vector2i winSize = { 960, 544 };
+	const sf::Vector2u winSize = { gridSize.x * map.getCageSize(), gridSize.y * map.getCageSize() };
 	sf::RenderWindow window(sf::VideoMode(winSize.x, winSize.y), "Platformer", sf::Style::None);
 	window.setFramerateLimit(60);
 
@@ -17,12 +22,6 @@ int main()
 	Player player("Textures/Player32X64.png");
 	player.setPos(sf::Vector2f(winSize.x / 10, winSize.y / 2));
 
-	//Map
-	Map map("Maps/map2.txt", "Maps/mapSheet.png", player.getSize());
-	std::vector<std::vector<sf::Sprite>> mapSprite;
-	
-	const int cageSize = map.getCageSize();
-	const sf::Vector2i gridSize = { winSize.x / cageSize, winSize.y / cageSize };
 
 	sf::Clock clock;
 	int lastDir = 0;

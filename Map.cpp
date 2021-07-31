@@ -5,6 +5,11 @@ int Map::getCageSize()
 	return cageSize;
 }
 
+sf::Vector2u Map::getGridSize()
+{
+	return sf::Vector2u(map[0].size(), map.size());
+}
+
 int Map::getCage(sf::Vector2i coords)
 {
 	return map[coords.y][coords.x];

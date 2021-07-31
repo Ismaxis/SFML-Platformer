@@ -14,7 +14,7 @@ private:
 	int cageSize;
 
 public:
-	Map(std::string mapPath, std::string sheetPath, sf::Vector2u plSize)
+	Map(std::string mapPath, std::string sheetPath)
 	{
 		// Map
 		std::ifstream myFile(mapPath, std::ios::in);
@@ -56,6 +56,8 @@ public:
 	}
 
 	int getCageSize();
+
+	sf::Vector2u getGridSize();
 
 	int getCage(sf::Vector2i coords);
 
