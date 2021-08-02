@@ -23,7 +23,7 @@ int main()
 
 	// Player
 	Player player("Textures/Player32X64.png");
-	player.setPos(sf::Vector2f(50.0f, (9 * mapSize.y )/ 11.0f));
+	player.setPos(sf::Vector2f(mapSize.x - 500, (9 * mapSize.y )/ 11.0f));
 
 	// Variables
 	sf::Vector2f offset {0, 0};
@@ -74,9 +74,13 @@ int main()
 		player.update(map, time);
 
 		sf::Vector2f playerPos = player.getPos();
-		if (playerPos.x > 300)
+		if (playerPos.x > mapSize.x - winSize.x / 2)
 		{
-			offset.x = playerPos.x - 300;
+			offset.x = mapSize.x - winSize.x;
+		}
+		else if (playerPos.x > winSize.x / 2)
+		{
+			offset.x = playerPos.x - winSize.x / 2;
 		}
 		else
 		{
