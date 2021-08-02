@@ -1,37 +1,38 @@
 #include "Map.h"
 
-int Map::getCageSize()
+int Map::getCageSize() const
 {
 	return cageSize;
 }
 
-sf::Vector2u Map::getGridSize()
+sf::Vector2u Map::getGridSize() const
 {
-	return sf::Vector2u(map[0].size(), map.size());
+	return gridSize;
 }
 
-int Map::getCage(sf::Vector2i coords)
+int Map::getCage(const sf::Vector2i coords)
 {
 	return map[coords.y][coords.x];
 }
 
-std::vector<std::vector<sf::Sprite>> Map::getSprites()
+std::vector<std::vector<sf::Sprite>> Map::getSprites(const sf::Vector2f offset)
 {
 	std::vector<std::vector<sf::Sprite>> result;
 
-	for (size_t i = 0; i < map.size(); i++)
+	sf::Vector2f cageOffset{ offset.x / cageSize, offset.y / cageSize };
+	
+	for (int i = 0; i < map.size(); i++)
 	{
 		std::vector<sf::Sprite> curVector;
-		for (size_t j = 0; j < map[i].size(); j++)
+		for (int j = 0; j < map[i].size(); j++)
 		{
 			sf::Sprite curSprite;
 
-			curSprite.setPosition(sf::Vector2f(cageSize * j, cageSize * i));
+			curSprite.setPosition(sf::Vector2f(cageSize * j - offset.x, cageSize * i - offset.y));
 
 			curSprite.setTexture(sheet);
-			int val = map[i][j];
 
-			curSprite.setTextureRect(sf::IntRect((val + 1) * cageSize, 0, cageSize, cageSize));
+			curSprite.setTextureRect(sf::IntRect((map[i][j]) * cageSize, 0, cageSize, cageSize));
 			
 			curVector.push_back(curSprite);
 		}

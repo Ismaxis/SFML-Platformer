@@ -9,26 +9,29 @@
 int main()
 {	
 	//Map
-	Map map("Maps/map2.txt", "Maps/mapSheet.png");
-	std::vector<std::vector<sf::Sprite>> mapSprite;
+	Map map("Maps/map3.txt", "Maps/mapSheet.png");
+	
 	sf::Vector2u gridSize = map.getGridSize();
+	const sf::Vector2u mapSize{ gridSize.x * map.getCageSize(), gridSize.y * map.getCageSize() };
 
 	// Window
-	const sf::Vector2u winSize = { gridSize.x * map.getCageSize(), gridSize.y * map.getCageSize() };
-	sf::RenderWindow window(sf::VideoMode(winSize.x, winSize.y), "Platformer", sf::Style::None);
+	const sf::Vector2u winSize{ 60 * 16, 34 * 16 };
+	sf::RenderWindow window(sf::VideoMode(winSize.x, winSize.y), "Game", sf::Style::None);
 	window.setFramerateLimit(60);
 
 	// Player
 	Player player("Textures/Player32X64.png");
-	player.setPos(sf::Vector2f(winSize.x / 10, winSize.y / 2));
+	player.setPos(sf::Vector2f(96.0f, (9 * mapSize.y )/ 11.0f));
 
-
+	// Variables
+	sf::Vector2f offset {0, 0};
 	sf::Clock clock;
-	int lastDir = 0;
+	int lastDir{ 0 };
+	
 	// Window loop
 	while (window.isOpen())
 	{
-		float time = clock.restart().asMilliseconds();
+		const int time = clock.restart().asMilliseconds();
 
 		// Event loop
 		sf::Event event;
@@ -54,7 +57,7 @@ int main()
 				// Jump 
 				if ((event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::W) && player.getStatus())
 				{
-					player.Jump();
+					player.jump();
 				}
 			}
 			else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !sf::Keyboard::isKeyPressed(sf::Keyboard::A))
@@ -65,16 +68,25 @@ int main()
 
 
 		// Update
-		player.Move(lastDir);
+		player.move(lastDir);
 		player.update(map, time);
 
-
+		sf::Vector2f playerPos = player.getPos();
+		if (playerPos.x > 300)
+		{
+			offset.x = playerPos.x - 300;
+		}
+		else
+		{
+			offset.x = 0;
+		}
+		
 		// Clear
 		window.clear(sf::Color::White);
 	
 
 		// Draw block
-		mapSprite = map.getSprites();
+		std::vector<std::vector<sf::Sprite>> mapSprite = map.getSprites(offset);
 
 		for (size_t i = 0; i < gridSize.y; i++)
 		{
@@ -84,7 +96,7 @@ int main()
 			}
 		}
 
-		window.draw(player.getSprite());
+		window.draw(player.getSprite(offset));
 		window.display();
 	}
 	system("exit");

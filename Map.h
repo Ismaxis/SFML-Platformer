@@ -9,29 +9,33 @@ class Map
 private:
 	std::vector<std::vector<int>> map;
 
+	sf::Vector2u frameSize;
+	
+	sf::Vector2u gridSize;
+
 	sf::Texture sheet;
 
 	int cageSize;
 
 public:
-	Map(std::string mapPath, std::string sheetPath)
+	Map(const std::string mapPath, const std::string sheetPath)
 	{
 		// Map
-		std::ifstream myFile(mapPath, std::ios::in);
+		std::ifstream file(mapPath, std::ios::in);
 
-		if (!myFile.is_open())
+		if (!file.is_open())
 		{
 			std::cout << "Could not open txt map file" << std::endl;
 		}
 
 		std::vector<int> coResult;
 		std::string line, colName;
-		int val;
 
-		while (getline(myFile, line))
+		while (getline(file, line))
 		{
 			std::stringstream ss(line);
-
+			int val;
+			
 			while (ss >> val)
 			{
 				coResult.push_back(val);
@@ -42,9 +46,10 @@ public:
 				}
 			}
 			map.push_back(coResult);
+			gridSize = sf::Vector2u(map[0].size(), map.size());
 			coResult.clear();
 		}
-		myFile.close();
+		file.close();
 
 		// Sheet
 		if (!sheet.loadFromFile(sheetPath))
@@ -55,11 +60,11 @@ public:
 		cageSize = sheet.getSize().y;
 	}
 
-	int getCageSize();
+	int getCageSize() const;
 
-	sf::Vector2u getGridSize();
+	sf::Vector2u getGridSize() const;
 
 	int getCage(sf::Vector2i coords);
 
-	std::vector<std::vector<sf::Sprite>> getSprites();
+	std::vector<std::vector<sf::Sprite>> getSprites(sf::Vector2f offset);
 };

@@ -1,42 +1,42 @@
 #include "Player.h"
 
-void Player::update(Map map, float time)
+void Player::update(const Map map, const int time)
 {
 	// X
-	Rect.left += plVelocity.x * time;
-	Collision(map, 0);
+	rect.left += plVelocity.x * time;
+	collision(map, 0);
 
 	// Y
-	plVelocity.y += time * 0.006;
+	plVelocity.y += time * 0.006f;
 	
-	Rect.top += plVelocity.y * time;
+	rect.top += plVelocity.y * time;
 	onGround = false;
-	Collision(map, 1);
+	collision(map, 1);
 
 	plVelocity.x = 0;
 }
 
-void Player::Collision(Map map, int mode)
+void Player::collision(Map map, const int mode)
 // Mode: 0 - x check, 1 - y check
 {
-	int cageSize = map.getCageSize();
-	for (size_t x = Rect.left / cageSize; x < (Rect.left + Rect.width) / cageSize; x++)
+	const int cageSize = map.getCageSize();
+	for (int x = rect.left / cageSize; x < (rect.left + rect.width) / cageSize; x++)
 	{
-		for (size_t y = Rect.top / cageSize; y < (Rect.top + Rect.height) / cageSize; y++)
+		for (int y = rect.top / cageSize; y < (rect.top + rect.height) / cageSize; y++)
 		{
-			int curCage = map.getCage(sf::Vector2i(x, y));
-			if (curCage != -1)
+			const int curCage = map.getCage(sf::Vector2i(x, y));
+			if (curCage != 0)
 			{
 				// X
 				if (mode == 0)
 				{
 					if (plVelocity.x > 0)
 					{
-						Rect.left = x * cageSize - Rect.width;
+						rect.left = x * cageSize - rect.width;
 					}
 					else if (plVelocity.x < 0)
 					{
-						Rect.left = (x + 1) * cageSize;
+						rect.left = (x + 1) * cageSize;
 					}
 				}
 
@@ -45,13 +45,13 @@ void Player::Collision(Map map, int mode)
 				{
 					if (plVelocity.y > 0)
 					{
-						Rect.top = y * cageSize - Rect.height;
+						rect.top = y * cageSize - rect.height;
 						plVelocity.y = 0;
 						onGround = true;
 					}
 					else if (plVelocity.y < 0)
 					{
-						Rect.top = (y + 1) * cageSize;
+						rect.top = (y + 1) * cageSize;
 						plVelocity.y = 0;
 					}
 				}
@@ -60,49 +60,49 @@ void Player::Collision(Map map, int mode)
 	}
 }
 
-void Player::Move(int direction)
+void Player::move(const int direction)
 // Directions: -1 - left, 1 - right
 {
 	plVelocity.x = direction * defVel.x;
 }
 
-void Player::Jump()
+void Player::jump()
 {
 	plVelocity.y = -defVel.y;
 }
 
-void Player::setPos(sf::Vector2f pos)
+void Player::setPos(const sf::Vector2f pos)
 {
-	Rect.left = pos.x - Rect.width / 2;
-	Rect.top = pos.y - Rect.height;
+	rect.left = pos.x - rect.width / 2;
+	rect.top = pos.y - rect.height;
 }
 
-sf::Vector2f Player::getPos()
+sf::Vector2f Player::getPos() const
 {
 	sf::Vector2f pos;
 	
-	pos.x = Rect.left + Rect.width / 2;
-	pos.y = Rect.top + Rect.height;
+	pos.x = rect.left + rect.width / 2;
+	pos.y = rect.top + rect.height;
 
 	return pos;
 }
 
-bool Player::getStatus()
+bool Player::getStatus() const
 {
 	return onGround;
 }
 
-sf::Vector2u Player::getSize()
+sf::Vector2u Player::getSize() const
 {
-	return sf::Vector2u(Rect.width, Rect.height);
+	return sf::Vector2u(rect.width, rect.height);
 }
 
-sf::Sprite Player::getSprite()
+sf::Sprite Player::getSprite(const sf::Vector2f offset) const
 {
 	sf::Sprite playerSprite;
 	
 	playerSprite.setTexture(plTexture);
-	playerSprite.setPosition(sf::Vector2f(Rect.left, Rect.top));
+	playerSprite.setPosition(sf::Vector2f(rect.left - offset.x, rect.top - offset.y));
 	
 	return playerSprite;
 }

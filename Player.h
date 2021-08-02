@@ -6,42 +6,42 @@
 class Player
 {
 private:
-	sf::FloatRect Rect;
+	sf::FloatRect rect;
 	sf::Vector2f plVelocity = { 0.0f, 0.0f };
 	const sf::Vector2f defVel = { 0.333f, 1.333f };
 	bool onGround = false;
 	sf::Texture plTexture;
 
 public:
-	Player(std::string path)
+	Player(const std::string path)
 	{
 		if (!plTexture.loadFromFile(path))
 		{
 			std::cout << "Could not open player texture" << std::endl;
 		}
 
-		sf::Vector2u size = plTexture.getSize();
+		const sf::Vector2u size = plTexture.getSize();
 
-		Rect.width = size.x;
-		Rect.height = size.y;
+		rect.width = size.x;
+		rect.height = size.y;
 	}
 
-	void update(Map map, float time);
+	void update(Map map, int time);
 
-	void Collision(Map map, int mode);
+	void collision(Map map, int mode);
 
-	void Move(int direction);
+	void move(int direction);
 
-	void Jump();
+	void jump();
 
 	void setPos(sf::Vector2f pos);
 
-	sf::Vector2f getPos();
+	sf::Vector2f getPos() const;
 
-	bool getStatus();
+	bool getStatus() const;
 
-	sf::Vector2u getSize();
+	sf::Vector2u getSize() const;
 
-	sf::Sprite getSprite();
+	sf::Sprite getSprite(sf::Vector2f offset) const;
 };
 
