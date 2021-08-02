@@ -67,4 +67,6 @@ public:
 	int getCage(sf::Vector2i coords);
 
 	std::vector<std::vector<sf::Sprite>> getSprites(sf::Vector2f offset);
+
+	sf::Sprite getSprite(sf::Vector2u pos, sf::Vector2f offset);
 };
