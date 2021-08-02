@@ -15,7 +15,7 @@ private:
 
 	sf::Texture sheet;
 
-	int cageSize;
+	float cageSize;
 
 public:
 	Map(const std::string mapPath, const std::string sheetPath)
@@ -60,7 +60,7 @@ public:
 		cageSize = sheet.getSize().y;
 	}
 
-	int getCageSize() const;
+	float getCageSize() const;
 
 	sf::Vector2u getGridSize() const;
 

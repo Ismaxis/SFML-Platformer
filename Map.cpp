@@ -1,6 +1,6 @@
 #include "Map.h"
 
-int Map::getCageSize() const
+float Map::getCageSize() const
 {
 	return cageSize;
 }

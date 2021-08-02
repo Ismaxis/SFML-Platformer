@@ -10,20 +10,21 @@ int main()
 {	
 	//Map
 	Map map("Maps/map3.txt", "Maps/mapSheet.png");
-	
-	const sf::Vector2u gridSize = map.getGridSize();
-	const int cageSize = map.getCageSize();
-	const sf::Vector2u mapSize{ gridSize.x * cageSize, gridSize.y * cageSize };
 
+	// Sizes
+	const float cageSize = map.getCageSize();
+	const sf::Vector2u gridSize = map.getGridSize();
+	const sf::Vector2f mapSize{ gridSize.x * cageSize, gridSize.y * cageSize };
+	const sf::Vector2f frameSize = { 60, 34 };
+	const sf::Vector2f winSize{ frameSize.x * 16, frameSize.y * 16 };
+	
 	// Window
-	const sf::Vector2u frameSize = { 60, 34 };
-	const sf::Vector2u winSize{ frameSize.x * 16, frameSize.y * 16 };
 	sf::RenderWindow window(sf::VideoMode(winSize.x, winSize.y), "Game", sf::Style::None);
 	window.setFramerateLimit(60);
 
 	// Player
 	Player player("Textures/Player32X64.png");
-	player.setPos(sf::Vector2f(mapSize.x - 500, (9 * mapSize.y )/ 11.0f));
+	player.setPos(sf::Vector2f(50.0f, 9 * mapSize.y / 11.0f));
 
 	// Variables
 	sf::Vector2f offset {0, 0};
@@ -92,9 +93,9 @@ int main()
 	
 
 		// Draw block
-		for (size_t i = 0; i < frameSize.y; i++)
+		for (float i = 0; i < frameSize.y; i++)
 		{
-			for (size_t j = 0; j < frameSize.x + 1; j++)
+			for (float j = 0; j < frameSize.x + 1; j++)
 			{ 
 				const sf::Vector2f offsetInCages{ offset.x / cageSize, offset.y / cageSize};
 				window.draw(map.getSprite(sf::Vector2u(j + offsetInCages.x, i + offsetInCages.y), offset));
