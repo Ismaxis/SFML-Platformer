@@ -9,7 +9,7 @@
 int main()
 {	
 	//Map
-	Map map("Maps/map3.txt", "Maps/mapSheet.png");
+	Map map("Maps/map3.txt", "Maps/mapSheet2.png");
 
 	// Sizes
 	const float cageSize = map.getCageSize();
@@ -19,9 +19,11 @@ int main()
 	const sf::Vector2f winSize{ frameSize.x * 16, frameSize.y * 16 };
 	
 	// Window
-	sf::RenderWindow window(sf::VideoMode(winSize.x, winSize.y), "Game", sf::Style::None);
+	sf::RenderWindow window(sf::VideoMode(winSize.x, winSize.y), "Game", sf::Style::Titlebar);
 	window.setFramerateLimit(60);
-
+	window.setSize(sf::Vector2u(winSize.x * 2, winSize.y * 2));
+	window.setPosition(sf::Vector2i(0, 0));
+	
 	// Player
 	Player player("Textures/Player32X64.png");
 	player.setPos(sf::Vector2f(50.0f, 9 * mapSize.y / 11.0f));
@@ -89,7 +91,7 @@ int main()
 		}
 		
 		// Clear
-		window.clear(sf::Color::White);
+		window.clear(sf::Color(128, 128, 128, 255));
 	
 
 		// Draw block
