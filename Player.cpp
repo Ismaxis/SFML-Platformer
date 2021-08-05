@@ -7,7 +7,7 @@ void Player::update(const Map map, const int time)
 	collision(map, 0);
 
 	// Y
-	plVelocity.y += time * 0.006f;
+	plVelocity.y += time * 0.01f;
 	
 	rect.top += plVelocity.y * time;
 	onGround = false;

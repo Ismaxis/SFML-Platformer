@@ -8,7 +8,7 @@ class Player
 private:
 	sf::FloatRect rect;
 	sf::Vector2f plVelocity = { 0.0f, 0.0f };
-	const sf::Vector2f defVel = { 0.333f, 1.333f };
+	const sf::Vector2f defVel = { 0.666f, 2.666f };
 	bool onGround = false;
 	sf::Texture plTexture;
 

@@ -9,29 +9,29 @@
 int main()
 {	
 	//Map
-	Map map("Maps/map3.txt", "Maps/mapSheet2.png");
+	Map map("Maps/map3.txt", "Textures/mapSheet32.png");
 
 	// Sizes
-	const float cageSize = map.getCageSize();
-	const sf::Vector2u gridSize = map.getGridSize();
-	const sf::Vector2f mapSize{ gridSize.x * cageSize, gridSize.y * cageSize };
-	const sf::Vector2f frameSize = { 60, 34 };
-	const sf::Vector2f winSize{ frameSize.x * 16, frameSize.y * 16 };
+	const float tileSize = map.getCageSize();
+	const sf::Vector2u gridTileSize = map.getGridSize();
+	const sf::Vector2f winTileSize = { 60,  34 };
+	
+	const sf::Vector2f mapPixelSize{ gridTileSize.x * tileSize, gridTileSize.y * tileSize };
+	const sf::Vector2f winPixelSize{ winTileSize.x * tileSize, winTileSize.y * tileSize };
 	
 	// Window
-	sf::RenderWindow window(sf::VideoMode(winSize.x, winSize.y), "Game", sf::Style::Titlebar);
-	window.setFramerateLimit(60);
-	window.setSize(sf::Vector2u(winSize.x * 2, winSize.y * 2));
-	window.setPosition(sf::Vector2i(0, 0));
+	sf::RenderWindow window(sf::VideoMode(winPixelSize.x, winPixelSize.y), "Game", sf::Style::None);
+	window.setFramerateLimit(144);
+	window.setPosition(sf::Vector2i(350, 150));
 	
 	// Player
-	Player player("Textures/Player32X64.png");
-	player.setPos(sf::Vector2f(50.0f, 9 * mapSize.y / 11.0f));
+	Player player("Textures/Player64Õ128.png");
+	player.setPos(sf::Vector2f(200.0f,  mapPixelSize.y / 2.0f));
 
 	// Variables
 	sf::Vector2f offset {0, 0};
 	sf::Clock clock;
-	int lastDir{ 0 };
+	int direction{ 0 };
 	
 	// Window loop
 	while (window.isOpen())
@@ -42,21 +42,27 @@ int main()
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
+			
 			if (event.type == sf::Event::Closed)
 			{
 				window.close();
 			}
 
+			if (event.type == sf::Event::TouchBegan)
+			{
+				std::cout << std::endl;
+			}
+			
 			if (event.type == sf::Event::KeyPressed)
 			{
 				// X movement
 				if (event.key.code == sf::Keyboard::D)
 				{
-					lastDir = 1;
+					direction = 1;
 				}
 				else if (event.key.code == sf::Keyboard::A)
 				{
-					lastDir = -1;
+					direction = -1;
 				}
 				
 				// Jump 
@@ -67,39 +73,40 @@ int main()
 			}
 			else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			{
-				lastDir = 0;
+				direction = 0;
 			}
 		}
 
 
 		// Update
-		player.move(lastDir);
+		player.move(direction);
 		player.update(map, time);
 
 		sf::Vector2f playerPos = player.getPos();
-		if (playerPos.x > mapSize.x - winSize.x / 2)
+		if (playerPos.x > mapPixelSize.x - winPixelSize.x / 2)
 		{
-			offset.x = mapSize.x - winSize.x;
+			offset.x = mapPixelSize.x - winPixelSize.x;
 		}
-		else if (playerPos.x > winSize.x / 2)
+		else if (playerPos.x > winPixelSize.x / 2)
 		{
-			offset.x = playerPos.x - winSize.x / 2;
+			offset.x = playerPos.x - winPixelSize.x / 2;
 		}
 		else
 		{
 			offset.x = 0;
 		}
+
 		
 		// Clear
-		window.clear(sf::Color(128, 128, 128, 255));
+		window.clear(sf::Color::White);
 	
 
 		// Draw block
-		for (float i = 0; i < frameSize.y; i++)
+		for (float i = 0; i < winTileSize.y; i++)
 		{
-			for (float j = 0; j < frameSize.x + 1; j++)
+			for (float j = 0; j < winTileSize.x + 1; j++)
 			{ 
-				const sf::Vector2f offsetInCages{ offset.x / cageSize, offset.y / cageSize};
+				const sf::Vector2f offsetInCages{ offset.x / tileSize, offset.y / tileSize};
 				window.draw(map.getSprite(sf::Vector2u(j + offsetInCages.x, i + offsetInCages.y), offset));
 			}
 		}
