@@ -7,7 +7,7 @@ void Player::update(const Map map, const int time)
 	collision(map, 0);
 
 	// Y
-	plVelocity.y += time * 0.01f;
+	plVelocity.y += time * 0.008f;
 	
 	rect.top += plVelocity.y * time;
 	onGround = false;
@@ -25,7 +25,7 @@ void Player::collision(Map map, const int mode)
 		for (int y = rect.top / cageSize; y < (rect.top + rect.height) / cageSize; y++)
 		{
 			const int curCage = map.getCage(sf::Vector2i(x, y));
-			if (curCage != 0)
+			if (curCage != -1)
 			{
 				// X
 				if (mode == 0)
