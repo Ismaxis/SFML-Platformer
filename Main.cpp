@@ -13,7 +13,7 @@
 int main()
 {
 	//Map
-	Map map("Maps/map4.txt", "Textures/mapSheet32.png");
+	Map map("Maps/map4.txt", "Textures/mapSheet32-2.png");
 
 	// Sizes
 	const unsigned int tileSize = map.getCageSize();
@@ -29,7 +29,7 @@ int main()
 	window.setFramerateLimit(144);
 
 	// Player
-	Player player("Textures/Player64x128.png");
+	Player player("Textures/Player.png");
 	player.setPos(sf::Vector2f(300, 20 * tileSize));
 
 	// Variables
@@ -52,11 +52,6 @@ int main()
 			if (event.type == sf::Event::Closed)
 			{
 				window.close();
-			}
-
-			if (event.type == sf::Event::TouchBegan)
-			{
-				std::cout << std::endl;
 			}
 
 			if (event.type == sf::Event::KeyPressed)
@@ -89,23 +84,27 @@ int main()
 						grabDirection = -1;
 					}
 				}
-				else
-				{
-					grabDirection = 0;
-				}
 			}
-			else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+			if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			{
 				direction = 0;
 			}
+			if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+			{
+				grabDirection = 0;
+			}
+
 		}
 
 
 		// Update
 		player.move(direction);
-		
-		player.grabOnStairs(grabDirection);
-		
+
+		if (player.isOnStairs())
+		{
+			player.grabOnStairs(grabDirection);
+		}
+
 		if (isJump)
 		{
 			player.jump();
