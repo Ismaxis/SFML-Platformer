@@ -11,7 +11,7 @@
 //Physical position - float
 
 int main()
-{		
+{
 	//Map
 	Map map("Maps/map4.txt", "Textures/mapSheet32.png");
 
@@ -19,7 +19,7 @@ int main()
 	const unsigned int tileSize = map.getCageSize();
 	const sf::Vector2u gridTileSize = map.getGridSize();
 	const sf::Vector2u mapPixelSize{ gridTileSize.x * tileSize, gridTileSize.y * tileSize };
-	
+
 	//const sf::Vector2u winPixelSize{ sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height };
 	const sf::Vector2u winPixelSize{ 1920, 1080 };
 	const sf::Vector2u winTileSize = { winPixelSize.x / tileSize, static_cast<unsigned int> (winPixelSize.y / tileSize) + 1u };
@@ -30,12 +30,14 @@ int main()
 
 	// Player
 	Player player("Textures/Player64x128.png");
-	player.setPos(sf::Vector2f(300,  20 * tileSize));
+	player.setPos(sf::Vector2f(300, 20 * tileSize));
 
 	// Variables
 	sf::Vector2i offset{ 0, 0 };
 	sf::Clock clock;
 	int direction{ 0 };
+	int grabDirection{ 0 };
+	bool isJump = false;
 	
 	// Window loop
 	while (window.isOpen())
@@ -70,9 +72,26 @@ int main()
 				}
 
 				// Jump 
-				if ((event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::W) && player.getStatus())
+				if (event.key.code == sf::Keyboard::Space && player.isOnGround())
 				{
-					player.jump();
+					isJump = true;
+				}
+
+				// Stairs grab
+				if (player.isOnStairs())
+				{
+					if (event.key.code == sf::Keyboard::W)
+					{
+						grabDirection = 1;
+					}
+					else if (event.key.code == sf::Keyboard::S)
+					{
+						grabDirection = -1;
+					}
+				}
+				else
+				{
+					grabDirection = 0;
 				}
 			}
 			else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !sf::Keyboard::isKeyPressed(sf::Keyboard::A))
@@ -84,9 +103,18 @@ int main()
 
 		// Update
 		player.move(direction);
+		
+		player.grabOnStairs(grabDirection);
+		
+		if (isJump)
+		{
+			player.jump();
+			isJump = false;
+		}
+		
 		player.update(map, time);
 
-		// Offset
+		// Offsets
 		sf::Vector2i playerPos = player.getPos();
 		// X offset
 		if (playerPos.x > mapPixelSize.x - winPixelSize.x / 2)
@@ -96,7 +124,7 @@ int main()
 		else if (playerPos.x > winPixelSize.x / 2)
 		{
 			offset.x = playerPos.x - winPixelSize.x / 2;
-		}
+		} 
 		else
 		{
 			offset.x = 0;

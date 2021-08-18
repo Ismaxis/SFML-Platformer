@@ -10,7 +10,7 @@ sf::Vector2u Map::getGridSize() const
 	return gridSize;
 }
 
-int Map::getCage(const sf::Vector2i coords)
+int Map::getCage(const sf::Vector2i coords) const
 {
 	return map[coords.y][coords.x];
 }

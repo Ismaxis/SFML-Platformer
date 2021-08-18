@@ -346,3 +346,6 @@ SFML-Platformer.vcxproj
 /Maps/map3.tmx
 Textures/mapSheet32.psd
 Textures/Player64X128.psd
+
+
+SFML/

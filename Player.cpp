@@ -1,31 +1,43 @@
 #include "Player.h"
 
-void Player::update(const Map map, const int time)
+void Player::update(const Map &map, const int time)
 {
 	// X
 	rect.left += plVelocity.x * time;
 	collision(map, 0);
 
 	// Y
+
 	plVelocity.y += time * 0.008f;
-	
 	rect.top += plVelocity.y * time;
+	
+	onStairs = false;
 	onGround = false;
 	collision(map, 1);
 
 	plVelocity.x = 0;
 }
 
-void Player::collision(Map map, const int mode)
+void Player::collision(const Map &map, const int mode)
 // Mode: 0 - x check, 1 - y check
 {
 	const int cageSize = map.getCageSize();
-	for (int x = rect.left / cageSize; x < (rect.left + rect.width) / cageSize; x++)
+
+	sf::Vector2f topLeftCage = { rect.left / cageSize, rect.top / cageSize };
+	sf::Vector2f bottomRightCage = { (rect.left + rect.width) / cageSize, (rect.top + rect.height) / cageSize };
+
+	for (int x = topLeftCage.x; x < bottomRightCage.x; x++)
 	{
-		for (int y = rect.top / cageSize; y < (rect.top + rect.height) / cageSize; y++)
+		for (int y = topLeftCage.y; y < bottomRightCage.y; y++)
 		{
 			const int curCage = map.getCage(sf::Vector2i(x, y));
-			if (curCage != -1)
+			// Stairs check
+			if (curCage == 3)
+			{
+				onStairs = true;
+			}
+			// Collision check
+			else if (curCage != -1) 
 			{
 				// X
 				if (mode == 0)
@@ -60,15 +72,24 @@ void Player::collision(Map map, const int mode)
 	}
 }
 
-void Player::move(const int direction)
-// Directions: -1 - left, 1 - right
-{
-	plVelocity.x = direction * defVel.x;
-}
-
 void Player::jump()
 {
 	plVelocity.y = -defVel.y;
+	onGround = false;
+}
+
+void Player::move(const int direction)
+{
+	// Directions: -1 - left, 1 - right
+	plVelocity.x = direction * defVel.x;
+}
+
+void Player::grabOnStairs(const int direction)
+{
+	if (direction != 0)
+	{
+		plVelocity.y = direction * -defVel.y;
+	}
 }
 
 void Player::setPos(const sf::Vector2f pos)
@@ -87,14 +108,14 @@ sf::Vector2i Player::getPos() const
 	return pos;
 }
 
-bool Player::getStatus() const
+bool Player::isOnGround() const
 {
 	return onGround;
 }
 
-sf::Vector2u Player::getSize() const
+bool Player::isOnStairs() const
 {
-	return sf::Vector2u(rect.width, rect.height);
+	return onStairs;
 }
 
 sf::Sprite Player::getSprite(const sf::Vector2i offset) const

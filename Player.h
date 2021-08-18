@@ -7,9 +7,13 @@ class Player
 {
 private:
 	sf::FloatRect rect;
+
 	sf::Vector2f plVelocity = { 0.0f, 0.0f };
 	const sf::Vector2f defVel = { 0.7f, 2.3f };
+
 	bool onGround = false;
+	bool onStairs = false;
+
 	sf::Texture plTexture;
 
 public:
@@ -26,22 +30,23 @@ public:
 		rect.height = size.y;
 	}
 
-	void update(Map map, int time);
+	void update(const Map &map, int time);
 
-	void collision(Map map, int mode);
+	void collision(const Map &map, int mode);
+
+	void jump();
 
 	void move(int direction);
 
-	void jump();
+	void grabOnStairs(int direction);
 
 	void setPos(sf::Vector2f pos);
 
 	sf::Vector2i getPos() const;
 
-	bool getStatus() const;
+	bool isOnGround() const;
 
-	sf::Vector2u getSize() const;
+	bool isOnStairs() const;
 
 	sf::Sprite getSprite(sf::Vector2i offset) const;
 };
-
