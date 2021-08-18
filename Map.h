@@ -15,7 +15,7 @@ private:
 
 	sf::Texture sheet;
 
-	float cageSize;
+	unsigned int cageSize;
 
 public:
 	Map(const std::string mapPath, const std::string sheetPath)
@@ -60,11 +60,11 @@ public:
 		cageSize = sheet.getSize().y;
 	}
 
-	float getCageSize() const;
+	unsigned int getCageSize() const;
 
 	sf::Vector2u getGridSize() const;
 
 	int getCage(sf::Vector2i coords);
 
-	sf::Sprite getSprite(sf::Vector2u pos, sf::Vector2f offset);
+	sf::Sprite getSprite(sf::Vector2f pos, sf::Vector2i offset);
 };

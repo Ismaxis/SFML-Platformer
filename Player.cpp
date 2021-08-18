@@ -77,9 +77,9 @@ void Player::setPos(const sf::Vector2f pos)
 	rect.top = pos.y - rect.height;
 }
 
-sf::Vector2f Player::getPos() const
+sf::Vector2i Player::getPos() const
 {
-	sf::Vector2f pos;
+	sf::Vector2i pos;
 	
 	pos.x = rect.left + rect.width / 2;
 	pos.y = rect.top + rect.height;
@@ -97,7 +97,7 @@ sf::Vector2u Player::getSize() const
 	return sf::Vector2u(rect.width, rect.height);
 }
 
-sf::Sprite Player::getSprite(const sf::Vector2f offset) const
+sf::Sprite Player::getSprite(const sf::Vector2i offset) const
 {
 	sf::Sprite playerSprite;
 	

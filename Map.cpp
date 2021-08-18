@@ -1,6 +1,6 @@
 #include "Map.h"
 
-float Map::getCageSize() const
+unsigned int Map::getCageSize() const
 {
 	return cageSize;
 }
@@ -15,7 +15,7 @@ int Map::getCage(const sf::Vector2i coords)
 	return map[coords.y][coords.x];
 }
 
-sf::Sprite Map::getSprite(const sf::Vector2u pos, const sf::Vector2f offset)
+sf::Sprite Map::getSprite(const sf::Vector2f pos, const sf::Vector2i offset)
 {
 	sf::Sprite curSprite;
 

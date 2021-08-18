@@ -5,34 +5,35 @@
 #include"Player.h"
 #include"Map.h"
 
+//Variables types rules:
+//Sizes - unsigned int
+//Draw position - int
+//Physical position - float
 
 int main()
-{	
+{		
 	//Map
 	Map map("Maps/map4.txt", "Textures/mapSheet32.png");
 
 	// Sizes
-	const float tileSize = map.getCageSize();
+	const unsigned int tileSize = map.getCageSize();
 	const sf::Vector2u gridTileSize = map.getGridSize();
-	const sf::Vector2f mapPixelSize{ gridTileSize.x * tileSize, gridTileSize.y * tileSize };
+	const sf::Vector2u mapPixelSize{ gridTileSize.x * tileSize, gridTileSize.y * tileSize };
 	
-	const sf::Vector2f winPixelSize{ float(sf::VideoMode::getDesktopMode().width), float(sf::VideoMode::getDesktopMode().height) };
-	const sf::Vector2f winTileSize = { winPixelSize.x/tileSize,  round(winPixelSize.y/tileSize) };
-	
-	//const sf::Vector2f winPixelSize{ winTileSize.x * tileSize, winTileSize.y * tileSize };
-	
+	//const sf::Vector2u winPixelSize{ sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height };
+	const sf::Vector2u winPixelSize{ 1920, 1080 };
+	const sf::Vector2u winTileSize = { winPixelSize.x / tileSize, static_cast<unsigned int> (winPixelSize.y / tileSize) + 1u };
+
 	// Window
-	sf::RenderWindow window(sf::VideoMode(winPixelSize.x - 1.0f, winPixelSize.y - 1.0f), "Game", sf::Style::None);
+	sf::RenderWindow window(sf::VideoMode(winPixelSize.x - 1u, winPixelSize.y - 1u), "Game", sf::Style::None);
 	window.setFramerateLimit(144);
-	//window.setPosition(sf::Vector2i(350, 150));
-	//window.setSize(sf::Vector2u(2 * winPixelSize.x / 3, 2 * winPixelSize.y / 3));
-	
+
 	// Player
-	Player player("Textures/Player64X128.png");
-	player.setPos(sf::Vector2f(300,  20 *  tileSize));
+	Player player("Textures/Player64x128.png");
+	player.setPos(sf::Vector2f(300,  20 * tileSize));
 
 	// Variables
-	sf::Vector2f offset{ 0, 0 };
+	sf::Vector2i offset{ 0, 0 };
 	sf::Clock clock;
 	int direction{ 0 };
 	
@@ -85,8 +86,9 @@ int main()
 		player.move(direction);
 		player.update(map, time);
 
-		sf::Vector2f playerPos = player.getPos();
-		// X
+		// Offset
+		sf::Vector2i playerPos = player.getPos();
+		// X offset
 		if (playerPos.x > mapPixelSize.x - winPixelSize.x / 2)
 		{
 			offset.x = mapPixelSize.x - winPixelSize.x;
@@ -100,7 +102,7 @@ int main()
 			offset.x = 0;
 		}
 
-		// Y
+		// Y offset
 		if (playerPos.y > mapPixelSize.y - winPixelSize.y / 2)
 		{
 			offset.y = mapPixelSize.y - winPixelSize.y;
@@ -114,21 +116,25 @@ int main()
 			offset.y = 0;
 		}
 
+
 		// Clear
 		window.clear(sf::Color::White);
 
 
-		// Draw block
-		const sf::Vector2f offsetInCages{ offset.x / tileSize, offset.y / tileSize };
+		// Draw
+		// Map draw
+		const sf::Vector2i offsetInCages{ static_cast<int> (offset.x / tileSize), static_cast<int> (offset.y / tileSize) };
 		for (float i = 0; i < winTileSize.y + 1; i++)
 		{
 			for (float j = 0; j < winTileSize.x + 1; j++)
 			{
-				window.draw(map.getSprite(sf::Vector2u(j + offsetInCages.x, i + offsetInCages.y), offset));
+				window.draw(map.getSprite(sf::Vector2f(j + offsetInCages.x, i + offsetInCages.y), offset));
 			}
 		}
 
+		// Player draw
 		window.draw(player.getSprite(offset));
+
 		window.display();
 	}
 }

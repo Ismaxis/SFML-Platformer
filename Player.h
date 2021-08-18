@@ -36,12 +36,12 @@ public:
 
 	void setPos(sf::Vector2f pos);
 
-	sf::Vector2f getPos() const;
+	sf::Vector2i getPos() const;
 
 	bool getStatus() const;
 
 	sf::Vector2u getSize() const;
 
-	sf::Sprite getSprite(sf::Vector2f offset) const;
+	sf::Sprite getSprite(sf::Vector2i offset) const;
 };
 
