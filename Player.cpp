@@ -1,7 +1,12 @@
 #include "Player.h"
 
-void Player::update(const Map &map, const int time)
+void Player::update(const Map &map, int time)
 {
+	// time check
+	if (time > 10)
+	{
+		time = 10;
+	}
 	// X
 	rect.left += plVelocity.x * time;
 	collision(map, 0);
@@ -26,8 +31,8 @@ void Player::collision(const Map &map, const int mode)
 {
 	const int cageSize = map.getCageSize();
 
-	sf::Vector2f topLeftCage = { rect.left / cageSize, rect.top / cageSize };
-	sf::Vector2f bottomRightCage = { (rect.left + rect.width) / cageSize, (rect.top + rect.height) / cageSize };
+	const sf::Vector2f topLeftCage = { rect.left / cageSize, rect.top / cageSize };
+	const sf::Vector2f bottomRightCage = { (rect.left + rect.width) / cageSize, (rect.top + rect.height) / cageSize };
 
 	// All cages occupied by player check
 	for (int x = topLeftCage.x; x < bottomRightCage.x; x++)

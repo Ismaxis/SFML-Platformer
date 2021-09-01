@@ -29,7 +29,6 @@ sf::Sprite Map::getSprite(const sf::Vector2f pos, const sf::Vector2i offset)
 	{
 		curSprite.setTexture(sheet);
 		curSprite.setTextureRect(sf::IntRect((map[pos.y][pos.x]) * cageSize, 0, cageSize, cageSize));
-
 	}
 	
 	return curSprite;

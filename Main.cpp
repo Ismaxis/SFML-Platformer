@@ -24,10 +24,12 @@ int main()
 	const sf::Vector2u winPixelSize{ 1920, 1080 };
 	const sf::Vector2u winTileSize = { winPixelSize.x / tileSize, static_cast<unsigned int> (winPixelSize.y / tileSize) + 1u };
 
-	// Window
+	// Window init
 	sf::RenderWindow window(sf::VideoMode(winPixelSize.x - 1u, winPixelSize.y - 1u), "Game", sf::Style::None);
 	window.setFramerateLimit(144);
-
+	window.setSize(sf::Vector2u( sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height));
+	window.setPosition(sf::Vector2i(0, 0));
+	
 	// Player
 	Player player("Textures/Player.png");
 	player.setPos(sf::Vector2f(300, 20 * tileSize));
@@ -116,13 +118,13 @@ int main()
 		// Offsets
 		sf::Vector2i playerPos = player.getPos();
 		// X offset
-		if (playerPos.x > mapPixelSize.x - winPixelSize.x / 2)
+		if (playerPos.x > mapPixelSize.x - winPixelSize.x / 2u)
 		{
 			offset.x = mapPixelSize.x - winPixelSize.x;
 		}
-		else if (playerPos.x > winPixelSize.x / 2)
+		else if (playerPos.x > winPixelSize.x / 2u)
 		{
-			offset.x = playerPos.x - winPixelSize.x / 2;
+			offset.x = playerPos.x - winPixelSize.x / 2u;
 		} 
 		else
 		{
@@ -130,13 +132,13 @@ int main()
 		}
 
 		// Y offset
-		if (playerPos.y > mapPixelSize.y - winPixelSize.y / 2)
+		if (playerPos.y > mapPixelSize.y - winPixelSize.y / 2u)
 		{
 			offset.y = mapPixelSize.y - winPixelSize.y;
 		}
-		else if (playerPos.y > winPixelSize.y / 2)
+		else if (playerPos.y > winPixelSize.y / 2u)
 		{
-			offset.y = playerPos.y - winPixelSize.y / 2;
+			offset.y = playerPos.y - winPixelSize.y / 2u;
 		}
 		else
 		{
