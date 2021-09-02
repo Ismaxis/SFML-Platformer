@@ -9,8 +9,19 @@ void Player::update(const Map &map, int time)
 	}
 	// X
 	rect.left += plVelocity.x * time;
-	collision(map, 0);
+	const CollisionInfo hCol = collision(map, 0);
 
+	// todo разобраться структурой, которую буду возвращать. Подоробнее в gNotes
+	
+	if (hCol.collisionSide == -1)
+	{
+		rect.left = hCol.availablePos;
+	}
+	else if(hCol.collisionSide == 1)
+	{
+		rect.left = hCol.availablePos;
+	}
+	
 	// Y
 	if (!onStairs)
 	{
@@ -21,19 +32,35 @@ void Player::update(const Map &map, int time)
 
 	onStairs = false;
 	onGround = false;
-	collision(map, 1);
+	
+	const CollisionInfo vCol = collision(map, 1);
 
+	if (vCol.collisionSide == -1)
+	{
+		rect.top = vCol.availablePos;
+		plVelocity.y = 0;
+		onGround = true;
+	}
+	else if (vCol.collisionSide == 1)
+	{
+		rect.top = vCol.availablePos;
+		plVelocity.y = 0;
+	}
+	
 	plVelocity.x = 0;
 }
 
-void Player::collision(const Map &map, const int mode)
+// Return: 0 - no collision at axis, 1 left/top, -1 - right/bottom
+CollisionInfo Player::collision(const Map &map, const int mode)
 // Mode: 0 - x check, 1 - y check
 {
 	const int cageSize = map.getCageSize();
 
-	const sf::Vector2f topLeftCage = { rect.left / cageSize, rect.top / cageSize };
-	const sf::Vector2f bottomRightCage = { (rect.left + rect.width) / cageSize, (rect.top + rect.height) / cageSize };
+	const sf::Vector2f topLeftCage{ rect.left / cageSize, rect.top / cageSize };
+	const sf::Vector2f bottomRightCage{ (rect.left + rect.width) / cageSize, (rect.top + rect.height) / cageSize };
 
+	CollisionInfo result;
+	
 	// All cages occupied by player check
 	for (int x = topLeftCage.x; x < bottomRightCage.x; x++)
 	{
@@ -52,34 +79,40 @@ void Player::collision(const Map &map, const int mode)
 				// X
 				if (mode == 0)
 				{
+					// right
 					if (plVelocity.x > 0)
 					{
-						rect.left = x * cageSize - rect.width;
+						result.collisionSide = -1;
+						result.availablePos = x * cageSize - rect.width;
 					}
+					// left
 					else if (plVelocity.x < 0)
 					{
-						rect.left = (x + 1) * cageSize;
+						result.collisionSide = 1;
+						result.availablePos = (x + 1) * cageSize;
 					}
 				}
 
 				// Y
 				else if (mode == 1)
 				{
+					// bottom
 					if (plVelocity.y > 0)
 					{
-						rect.top = y * cageSize - rect.height;
-						plVelocity.y = 0;
-						onGround = true;
+						result.collisionSide = -1;
+						result.availablePos = y * cageSize - rect.height;
 					}
+					// top
 					else if (plVelocity.y < 0)
 					{
-						rect.top = (y + 1) * cageSize;
-						plVelocity.y = 0;
+						result.collisionSide = 1;
+						result.availablePos = (y + 1) * cageSize;
 					}
 				}
 			}
 		}
 	}
+	return result;
 }
 
 void Player::jump()

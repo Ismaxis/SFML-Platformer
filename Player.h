@@ -2,6 +2,12 @@
 #include<iostream>
 #include "Map.h"
 
+struct CollisionInfo
+{
+	int collisionSide = 0;
+	float availablePos = 0;
+};
+
 #pragma once
 class Player
 {
@@ -32,7 +38,7 @@ public:
 
 	void update(const Map &map, int time);
 
-	void collision(const Map &map, int mode);
+	CollisionInfo collision(const Map &map, int mode);
 
 	void jump();
 
