@@ -10,8 +10,6 @@ void Player::update(const Map &map, int time)
 	// X
 	rect.left += plVelocity.x * time;
 	const CollisionInfo hCol = collision(map, 0);
-
-	// todo разобраться структурой, которую буду возвращать. Подоробнее в gNotes
 	
 	if (hCol.collisionSide == -1)
 	{
@@ -67,8 +65,10 @@ CollisionInfo Player::collision(const Map &map, const int mode)
 		for (int y = topLeftCage.y; y < bottomRightCage.y; y++)
 		{
 			const int curCage = map.getCage(sf::Vector2i(x, y));
+
+			// todo Сделать отдельную  проверку на лесницу. Обрабатывать 4 клетку как пол, если стоишь сверху. Больше в gKeep
 			// Stairs check
-			if (curCage == 3)
+			if (curCage == 3 || curCage == 4)
 			{
 				onStairs = true;
 			}

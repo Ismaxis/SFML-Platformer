@@ -13,7 +13,7 @@
 int main()
 {
 	//Map
-	Map map("Maps/map4.txt", "Textures/mapSheet32-2.png");
+	Map map("Maps/map4.txt", "Textures/mapSheet.png");
 
 	// Sizes
 	const unsigned int tileSize = map.getCageSize();
