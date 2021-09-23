@@ -22,7 +22,7 @@ int main()
 
 	//const sf::Vector2u winPixelSize{ sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height };
 	const sf::Vector2u winPixelSize{ 1920, 1080 };
-	const sf::Vector2u winTileSize = { winPixelSize.x / tileSize, static_cast<unsigned int> (winPixelSize.y / tileSize) + 1u };
+	const sf::Vector2u winTileSize = { winPixelSize.x / tileSize, winPixelSize.y / tileSize + 1u };
 
 	// Window init
 	sf::RenderWindow window(sf::VideoMode(winPixelSize.x - 1u, winPixelSize.y - 1u), "Game", sf::Style::None);
@@ -39,13 +39,13 @@ int main()
 	sf::Clock clock;
 	int direction{ 0 };
 	int grabDirection{ 0 };
-	bool isJump = false;
 	
 	// Window loop
 	while (window.isOpen())
 	{
 		const int time = clock.restart().asMilliseconds();
-
+		bool isJump = false;
+		
 		// Event loop
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -61,21 +61,21 @@ int main()
 				// X movement
 				if (event.key.code == sf::Keyboard::D)
 				{
-					direction = 1;
+					direction = -1;
 				}
 				else if (event.key.code == sf::Keyboard::A)
 				{
-					direction = -1;
+					direction = 1;
 				}
 
 				// Jump 
-				if (event.key.code == sf::Keyboard::Space && player.isOnGround())
+				if (event.key.code == sf::Keyboard::Space && (player.isOnGround() || player.isOnStairs()))
 				{
 					isJump = true;
 				}
 
 				// Stairs grab
-				if (player.isOnStairs())
+				if (player.isStairsAvailable())
 				{
 					if (event.key.code == sf::Keyboard::W)
 					{
@@ -98,19 +98,17 @@ int main()
 
 		}
 
-
 		// Update
 		player.move(direction);
-
-		if (player.isOnStairs())
+		
+		if (player.isStairsAvailable() && grabDirection != 0)
 		{
-			player.grabOnStairs(grabDirection);
+			player.grab(grabDirection);
 		}
 
 		if (isJump)
 		{
 			player.jump();
-			isJump = false;
 		}
 		
 		player.update(map, time);
@@ -149,7 +147,6 @@ int main()
 		// Clear
 		window.clear(sf::Color::White);
 
-
 		// Draw
 		// Map draw
 		const sf::Vector2i offsetInCages{ static_cast<int> (offset.x / tileSize), static_cast<int> (offset.y / tileSize) };
@@ -162,8 +159,11 @@ int main()
 		}
 
 		// Player draw
+		if (player.isOnGround() || player.isOnStairs())
+		{
+			window.draw(player.dbgSprite(offset));
+		}
 		window.draw(player.getSprite(offset));
-
 		window.display();
 	}
 }
