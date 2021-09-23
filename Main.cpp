@@ -61,11 +61,11 @@ int main()
 				// X movement
 				if (event.key.code == sf::Keyboard::D)
 				{
-					direction = 1;
+					direction = -1;
 				}
 				else if (event.key.code == sf::Keyboard::A)
 				{
-					direction = -1;
+					direction = 1;
 				}
 
 				// Jump 
@@ -102,7 +102,7 @@ int main()
 		// Update
 		player.move(direction);
 
-		if (player.isOnStairs())
+		if (player.isStairsAvailable())
 		{
 			player.grabOnStairs(grabDirection);
 		}
@@ -149,7 +149,6 @@ int main()
 		// Clear
 		window.clear(sf::Color::White);
 
-
 		// Draw
 		// Map draw
 		const sf::Vector2i offsetInCages{ static_cast<int> (offset.x / tileSize), static_cast<int> (offset.y / tileSize) };
@@ -162,8 +161,11 @@ int main()
 		}
 
 		// Player draw
+		if (player.isOnGround())
+		{
+			window.draw(player.dbgSprite(offset));
+		}
 		window.draw(player.getSprite(offset));
-
 		window.display();
 	}
 }

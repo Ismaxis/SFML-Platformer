@@ -2,14 +2,15 @@
 
 void Player::update(const Map &map, int time)
 {
-	// time check
+	// Frame time limit
 	if (time > 10)
 	{
 		time = 10;
 	}
+	
 	// X
 	rect.left += plVelocity.x * time;
-	const CollisionInfo hCol = collision(map, 0);
+	const CollisionInfo hCol = collisionX(map);
 	
 	if (hCol.collisionSide == -1)
 	{
@@ -21,20 +22,21 @@ void Player::update(const Map &map, int time)
 	}
 	
 	// Y
-	if (!onStairs)
-	{
-		plVelocity.y += time * 0.008f;
-	}
+	plVelocity.y += time * 0.008f;
 
 	rect.top += plVelocity.y * time;
 
-	onStairs = false;
+	isNowOnStairs = false;
 	onGround = false;
+
+	// Checking is player staying on top of the stair
+	const CollisionInfo bottomStairsCol = bottomStairsCollisionY(map);
 	
-	const CollisionInfo vCol = collision(map, 1);
+	const CollisionInfo vCol = collisionY(map);
 
 	if (vCol.collisionSide == -1)
 	{
+		stairsAvailable = false;
 		rect.top = vCol.availablePos;
 		plVelocity.y = 0;
 		onGround = true;
@@ -44,75 +46,144 @@ void Player::update(const Map &map, int time)
 		rect.top = vCol.availablePos;
 		plVelocity.y = 0;
 	}
+	else if(bottomStairsCol.collisionSide == -1)
+	{
+		stairsAvailable = true;
+		rect.top = bottomStairsCol.availablePos;
+		plVelocity.y = 0;
+		onGround = true;
+	}
 	
 	plVelocity.x = 0;
 }
 
-// Return: 0 - no collision at axis, 1 left/top, -1 - right/bottom
-CollisionInfo Player::collision(const Map &map, const int mode)
-// Mode: 0 - x check, 1 - y check
+CollisionInfo Player::collisionX(const Map& map) const
 {
 	const int cageSize = map.getCageSize();
-
-	const sf::Vector2f topLeftCage{ rect.left / cageSize, rect.top / cageSize };
-	const sf::Vector2f bottomRightCage{ (rect.left + rect.width) / cageSize, (rect.top + rect.height) / cageSize };
-
-	CollisionInfo result;
+	const sf::Vector2f topLeftCage = { rect.left / cageSize, rect.top / cageSize };
+	const sf::Vector2f bottomRightCage = { (rect.left + rect.width) / cageSize, (rect.top + rect.height) / cageSize };
 	
-	// All cages occupied by player check
-	for (int x = topLeftCage.x; x < bottomRightCage.x; x++)
-	{
-		for (int y = topLeftCage.y; y < bottomRightCage.y; y++)
-		{
-			const int curCage = map.getCage(sf::Vector2i(x, y));
+	CollisionInfo result = singleCollisionX(topLeftCage.y, bottomRightCage.y, map, topLeftCage.x, cageSize);
 
-			// todo Сделать отдельную  проверку на лесницу. Обрабатывать 4 клетку как пол, если стоишь сверху. Больше в gKeep
-			// Stairs check
-			if (curCage == 3 || curCage == 4)
+	if (result.collisionSide != 0)
+	{
+		return result;
+	}
+
+	result = singleCollisionX(topLeftCage.y, bottomRightCage.y, map, bottomRightCage.x, cageSize);
+	return result;
+}
+
+CollisionInfo Player::singleCollisionX(const float top, const float bottom, const Map& map, const int x, const int& cageSize) const
+{
+	CollisionInfo result;
+	// left
+	for (int y = top; y < bottom; y++)
+	{
+		const int curCage = map.getCage(sf::Vector2i(x, y));
+		
+		// Collision check
+		if (isBlock(curCage))
+		{
+			// right
+			if (plVelocity.x > 0)
 			{
-				onStairs = true;
+				result.collisionSide = -1;
+				result.availablePos = x * cageSize - rect.width;
 			}
 			
-			// Collision check
-			else if (curCage != -1) 
+			// left
+			if (plVelocity.x < 0)
 			{
-				// X
-				if (mode == 0)
-				{
-					// right
-					if (plVelocity.x > 0)
-					{
-						result.collisionSide = -1;
-						result.availablePos = x * cageSize - rect.width;
-					}
-					// left
-					else if (plVelocity.x < 0)
-					{
-						result.collisionSide = 1;
-						result.availablePos = (x + 1) * cageSize;
-					}
-				}
-
-				// Y
-				else if (mode == 1)
-				{
-					// bottom
-					if (plVelocity.y > 0)
-					{
-						result.collisionSide = -1;
-						result.availablePos = y * cageSize - rect.height;
-					}
-					// top
-					else if (plVelocity.y < 0)
-					{
-						result.collisionSide = 1;
-						result.availablePos = (y + 1) * cageSize;
-					}
-				}
+				result.collisionSide = 1;
+				result.availablePos = (x + 1) * cageSize;
 			}
 		}
 	}
 	return result;
+}
+
+CollisionInfo Player::collisionY(const Map& map) const
+{
+	const int cageSize = map.getCageSize();
+	const sf::Vector2f topLeftCage = { rect.left / cageSize, rect.top / cageSize };
+	const sf::Vector2f bottomRightCage = { (rect.left + rect.width) / cageSize, (rect.top + rect.height) / cageSize };
+	
+	CollisionInfo result = singleCollisionY(topLeftCage.x, bottomRightCage.x, map, bottomRightCage.y, cageSize);
+
+	if (result.collisionSide != 0)
+	{
+		return result;
+	}
+	
+	result = singleCollisionY(topLeftCage.x, bottomRightCage.x, map, topLeftCage.y, cageSize);
+	
+	return result;
+}
+
+CollisionInfo Player::singleCollisionY(const float left, const float right, const Map& map, const int y, const int& cageSize) const
+{
+	CollisionInfo result;
+	
+	// left
+	for (int x = left; x < right; x++)
+	{
+		const int curCage = map.getCage(sf::Vector2i(x, y));
+
+		// Collision check
+		if (isBlock(curCage))
+		{
+			if (plVelocity.y > 0)
+			{
+				result.collisionSide = -1;
+				result.availablePos = y * cageSize - rect.height;	
+			}
+			else if(plVelocity.y < 0)
+			{
+				result.collisionSide = 1;
+				result.availablePos = (y + 1) * cageSize;
+			}
+		}
+	}
+	return result;
+}
+
+CollisionInfo Player::bottomStairsCollisionY(const Map& map) const
+{
+	const int cageSize = map.getCageSize();
+	const float left = rect.left / cageSize;
+	const float right = (rect.left + rect.width) / cageSize;
+	const int bottom =  (rect.top + rect.height) / cageSize ;
+	
+	// Checking is player staying on top of the stair
+	CollisionInfo result;
+
+	for (int x = left; x < right; x++)
+	{
+		const int curCage = map.getCage(sf::Vector2i(x, bottom));
+		if (isTopOfStairs(curCage))
+		{
+			result.collisionSide = -1;
+			result.availablePos = bottom * cageSize - rect.height;
+		}
+	}
+
+	return result;
+}
+
+bool Player::isStairs(const int curCage)
+{
+	return (curCage == 3) || (curCage == 4);
+}
+
+bool Player::isTopOfStairs(const int curCage)
+{
+	return (curCage == 4);
+}
+
+bool Player::isBlock(const int curCage)
+{
+	return curCage != -1 && !isStairs(curCage);
 }
 
 void Player::jump()
@@ -123,8 +194,8 @@ void Player::jump()
 
 void Player::move(const int direction)
 {
-	// Directions: -1 - left, 1 - right
-	plVelocity.x = direction * defVel.x;
+	// Directions: 1 - left, -1 - right
+	plVelocity.x = direction * -defVel.x;
 }
 
 void Player::grabOnStairs(const int direction)
@@ -153,9 +224,15 @@ bool Player::isOnGround() const
 	return onGround;
 }
 
+bool Player::isStairsAvailable() const
+{
+	return stairsAvailable;
+}
+
+
 bool Player::isOnStairs() const
 {
-	return onStairs;
+	return isNowOnStairs;
 }
 
 sf::Sprite Player::getSprite(const sf::Vector2i offset) const
@@ -166,4 +243,25 @@ sf::Sprite Player::getSprite(const sf::Vector2i offset) const
 	playerSprite.setPosition(sf::Vector2f(rect.left - offset.x, rect.top - offset.y));
 	
 	return playerSprite;
+}
+
+sf::RectangleShape Player::dbgSprite(const sf::Vector2i offset) const
+{
+	sf::RectangleShape dbg;
+	const int cageSize = 32;
+	const int thick = 4;
+	dbg.setPosition(sf::Vector2f(cageSize * (rect.left / cageSize) - offset.x + thick, cageSize * (rect.top / cageSize) - offset.y + thick));
+
+	dbg.setSize(sf::Vector2f(rect.width - thick * 2, rect.height - thick * 2));
+	dbg.setOutlineThickness(thick);
+	if(stairsAvailable)
+	{
+		dbg.setOutlineColor(sf::Color::Red);
+	}
+	else
+	{
+		dbg.setOutlineColor(sf::Color::Cyan);
+	}
+	
+	return dbg;
 }

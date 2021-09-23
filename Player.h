@@ -18,7 +18,9 @@ private:
 	const sf::Vector2f defVel = { 0.7f, 2.3f };
 
 	bool onGround = false;
-	bool onStairs = false;
+	bool stairsAvailable = false;
+	bool isNowOnStairs = false;
+
 
 	sf::Texture plTexture;
 
@@ -38,7 +40,18 @@ public:
 
 	void update(const Map &map, int time);
 
-	CollisionInfo collision(const Map &map, int mode);
+	CollisionInfo collisionX(const Map& map) const;
+	CollisionInfo singleCollisionX(float top, float bottom, const Map& map, int x, const int& cageSize) const;
+	CollisionInfo collisionY(const Map& map) const;
+	CollisionInfo singleCollisionY(float left, float right, const Map& map, int y, const int& cageSize) const;
+
+	CollisionInfo bottomStairsCollisionY(const Map &map) const;
+	
+	static bool isStairs(int curCage);
+	static bool isTopOfStairs(int curCage);
+	static bool isBlock(int curCage);
+	/*static bool isBlockHor(int curCage);
+	static bool isBlockVer(int curCage);*/
 
 	void jump();
 
@@ -53,6 +66,8 @@ public:
 	bool isOnGround() const;
 
 	bool isOnStairs() const;
+	bool isStairsAvailable() const;
 
 	sf::Sprite getSprite(sf::Vector2i offset) const;
+	sf::RectangleShape dbgSprite(sf::Vector2i offset) const;
 };
