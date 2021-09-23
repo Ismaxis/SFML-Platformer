@@ -18,9 +18,9 @@ private:
 	const sf::Vector2f defVel = { 0.7f, 2.3f };
 
 	bool onGround = false;
+	bool onStairs = false;
 	bool stairsAvailable = false;
-	bool isNowOnStairs = false;
-
+	bool jumped = false;
 
 	sf::Texture plTexture;
 
@@ -45,6 +45,7 @@ public:
 	CollisionInfo collisionY(const Map& map) const;
 	CollisionInfo singleCollisionY(float left, float right, const Map& map, int y, const int& cageSize) const;
 
+	CollisionInfo stairsCollisionY(const Map& map);
 	CollisionInfo bottomStairsCollisionY(const Map &map) const;
 	
 	static bool isStairs(int curCage);
@@ -57,7 +58,7 @@ public:
 
 	void move(int direction);
 
-	void grabOnStairs(int direction);
+	void grab(int direction);
 
 	void setPos(sf::Vector2f pos);
 
