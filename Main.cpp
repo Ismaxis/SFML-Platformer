@@ -42,7 +42,7 @@ int main()
 
 	// Offsets params
 	sf::Vector2i offset;
-	Camera cam;
+	Camera cam(winPixelSize, mapPixelSize);
 	
 	// Window loop
 	while (window.isOpen())
@@ -118,7 +118,7 @@ int main()
 		player.update(map, time);
 
 		// Offsets
-		offset = cam.calculateOffsets(player.getPos(), player.getVel(), winPixelSize, mapPixelSize);
+		offset = cam.calculateOffsets(player.getPos(), player.getVel());
 
 		// Clear
 		window.clear(sf::Color::White);
