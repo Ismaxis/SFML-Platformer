@@ -131,17 +131,26 @@ int main()
 		// X offset
 		camAcceleration = 0;
 
-		if (offset.x >= playerPos.x - winPixelSize.x * 0.6 && offset.x <= playerPos.x - winPixelSize.x * 0.4)
+		if (offset.x < playerPos.x - winPixelSize.x * 0.8)
 		{
-			camVelocity = player.getVel().x;
+			offset.x = playerPos.x - winPixelSize.x * 0.8;
 		}
-		else if (offset.x < playerPos.x - winPixelSize.x * 0.6)
+		if (offset.x > abs(playerPos.x - winPixelSize.x * 0.15))
 		{
-			camAcceleration = (playerPos.x - winPixelSize.x * 0.6)/9000;
+			offset.x = playerPos.x - winPixelSize.x * 0.15;
 		}
-		else if (offset.x > abs(playerPos.x - winPixelSize.x * 0.4))
+		if (offset.x <= playerPos.x - winPixelSize.x * 0.49 && offset.x >= playerPos.x - winPixelSize.x * 0.51)
 		{
-			camAcceleration = -(playerPos.x - winPixelSize.x * 0.4)/9000;
+			camAcceleration = 0;
+			camVelocity = 0;
+		}
+		if (offset.x < playerPos.x - winPixelSize.x * 0.5 && playerVel.x == 0)
+		{
+			camAcceleration = (playerPos.x - winPixelSize.x * 0.5)/9000.0;
+		}
+		if (offset.x > abs(playerPos.x - winPixelSize.x * 0.5) && playerVel.x == 0)
+		{
+			camAcceleration = -(playerPos.x - winPixelSize.x * 0.5)/9000.0;
 		}
 
 		camVelocity += camAcceleration;
