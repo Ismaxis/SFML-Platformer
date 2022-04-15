@@ -63,6 +63,7 @@ public:
 	void setPos(sf::Vector2f pos);
 
 	sf::Vector2i getPos() const;
+	sf::Vector2f getVel() const;
 
 	bool isOnGround() const;
 

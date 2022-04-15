@@ -7,7 +7,7 @@ void Player::update(const Map& map, int time)
 	{
 		time = 10;
 	}
-
+	
 	// X
 	rect.left += plVelocity.x * time;
 	const CollisionInfo hCol = collisionX(map);
@@ -275,6 +275,11 @@ sf::Vector2i Player::getPos() const
 	pos.y = rect.top + rect.height;
 
 	return pos;
+}
+
+sf::Vector2f Player::getVel() const
+{
+	return plVelocity;
 }
 
 bool Player::isOnGround() const

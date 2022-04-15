@@ -13,7 +13,7 @@
 int main()
 {
 	//Map
-	Map map("Maps/map4.txt", "Textures/mapSheet.png");
+	Map map("Maps/map5.csv", "Textures/mapSheet.png");
 
 	// Sizes
 	const unsigned int tileSize = map.getCageSize();
@@ -25,20 +25,24 @@ int main()
 	const sf::Vector2u winTileSize = { winPixelSize.x / tileSize, winPixelSize.y / tileSize + 1u };
 
 	// Window init
-	sf::RenderWindow window(sf::VideoMode(winPixelSize.x - 1u, winPixelSize.y - 1u), "Game", sf::Style::None);
+	sf::RenderWindow window(sf::VideoMode(winPixelSize.x - 1u, winPixelSize.y - 1u), "Game", sf::Style::Default);
 	window.setFramerateLimit(144);
-	window.setSize(sf::Vector2u( sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height));
+    //window.setSize(sf::Vector2u( sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height));
 	window.setPosition(sf::Vector2i(0, 0));
 	
 	// Player
 	Player player("Textures/Player.png");
-	player.setPos(sf::Vector2f(300, 20 * tileSize));
+	player.setPos(sf::Vector2f(10 * tileSize, 20 * tileSize));
 
 	// Variables
-	sf::Vector2i offset{ 0, 0 };
 	sf::Clock clock;
 	int direction{ 0 };
 	int grabDirection{ 0 };
+
+	// Offsets params
+	sf::Vector2i offset{ 0, 0 };
+	float camAcceleration{ 0 };
+	float camVelocity{ 0 };
 	
 	// Window loop
 	while (window.isOpen())
@@ -113,20 +117,47 @@ int main()
 		
 		player.update(map, time);
 
+
+
+
+
+
 		// Offsets
 		sf::Vector2i playerPos = player.getPos();
+		sf::Vector2f playerVel = player.getVel();
+
+
+
 		// X offset
-		if (playerPos.x > mapPixelSize.x - winPixelSize.x / 2u)
+		camAcceleration = 0;
+
+		if (offset.x >= playerPos.x - winPixelSize.x * 0.6 && offset.x <= playerPos.x - winPixelSize.x * 0.4)
 		{
-			offset.x = mapPixelSize.x - winPixelSize.x;
+			camVelocity = player.getVel().x;
 		}
-		else if (playerPos.x > winPixelSize.x / 2u)
+		else if (offset.x < playerPos.x - winPixelSize.x * 0.6)
 		{
-			offset.x = playerPos.x - winPixelSize.x / 2u;
-		} 
-		else
+			camAcceleration = (playerPos.x - winPixelSize.x * 0.6)/9000;
+		}
+		else if (offset.x > abs(playerPos.x - winPixelSize.x * 0.4))
 		{
+			camAcceleration = -(playerPos.x - winPixelSize.x * 0.4)/9000;
+		}
+
+		camVelocity += camAcceleration;
+		offset.x += camVelocity;
+
+		if(offset.x < 0)
+		{
+			camAcceleration = 0;
+			camVelocity = 0;
 			offset.x = 0;
+		}
+		if(offset.x > mapPixelSize.x - winPixelSize.x)
+		{
+			camAcceleration = 0;
+			camVelocity = 0;
+			offset.x = mapPixelSize.x - winPixelSize.x;
 		}
 
 		// Y offset
@@ -142,6 +173,9 @@ int main()
 		{
 			offset.y = 0;
 		}
+
+
+
 
 
 		// Clear
