@@ -4,6 +4,7 @@
 #include<ctime>
 #include"Player.h"
 #include"Map.h"
+#include"Camera.h"
 
 //Variables types rules:
 //Sizes - unsigned int
@@ -13,7 +14,7 @@
 int main()
 {
 	//Map
-	Map map("Maps/map4.txt", "Textures/mapSheet.png");
+	Map map("Maps/map5.csv", "Textures/mapSheet64.png");
 
 	// Sizes
 	const unsigned int tileSize = map.getCageSize();
@@ -25,20 +26,23 @@ int main()
 	const sf::Vector2u winTileSize = { winPixelSize.x / tileSize, winPixelSize.y / tileSize + 1u };
 
 	// Window init
-	sf::RenderWindow window(sf::VideoMode(winPixelSize.x - 1u, winPixelSize.y - 1u), "Game", sf::Style::None);
+	sf::RenderWindow window(sf::VideoMode(winPixelSize.x - 1u, winPixelSize.y - 1u), "Game", sf::Style::Default);
 	window.setFramerateLimit(144);
-	window.setSize(sf::Vector2u( sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height));
+    //window.setSize(sf::Vector2u( sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height));
 	window.setPosition(sf::Vector2i(0, 0));
 	
 	// Player
 	Player player("Textures/Player.png");
-	player.setPos(sf::Vector2f(300, 20 * tileSize));
+	player.setPos(sf::Vector2f(10 * tileSize, 20 * tileSize));
 
 	// Variables
-	sf::Vector2i offset{ 0, 0 };
 	sf::Clock clock;
 	int direction{ 0 };
 	int grabDirection{ 0 };
+
+	// Offsets params
+	sf::Vector2i offset;
+	Camera cam(winPixelSize, mapPixelSize);
 	
 	// Window loop
 	while (window.isOpen())
@@ -114,35 +118,7 @@ int main()
 		player.update(map, time);
 
 		// Offsets
-		sf::Vector2i playerPos = player.getPos();
-		// X offset
-		if (playerPos.x > mapPixelSize.x - winPixelSize.x / 2u)
-		{
-			offset.x = mapPixelSize.x - winPixelSize.x;
-		}
-		else if (playerPos.x > winPixelSize.x / 2u)
-		{
-			offset.x = playerPos.x - winPixelSize.x / 2u;
-		} 
-		else
-		{
-			offset.x = 0;
-		}
-
-		// Y offset
-		if (playerPos.y > mapPixelSize.y - winPixelSize.y / 2u)
-		{
-			offset.y = mapPixelSize.y - winPixelSize.y;
-		}
-		else if (playerPos.y > winPixelSize.y / 2u)
-		{
-			offset.y = playerPos.y - winPixelSize.y / 2u;
-		}
-		else
-		{
-			offset.y = 0;
-		}
-
+		offset = cam.calculateOffsets(player.getPos(), player.getVel());
 
 		// Clear
 		window.clear(sf::Color::White);
@@ -159,10 +135,6 @@ int main()
 		}
 
 		// Player draw
-		if (player.isOnGround() || player.isOnStairs())
-		{
-			window.draw(player.dbgSprite(offset));
-		}
 		window.draw(player.getSprite(offset));
 		window.display();
 	}
