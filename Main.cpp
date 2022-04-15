@@ -14,7 +14,7 @@
 int main()
 {
 	//Map
-	Map map("Maps/map5.csv", "Textures/mapSheet.png");
+	Map map("Maps/map5.csv", "Textures/mapSheet64.png");
 
 	// Sizes
 	const unsigned int tileSize = map.getCageSize();
@@ -135,10 +135,6 @@ int main()
 		}
 
 		// Player draw
-		if (player.isOnGround() || player.isOnStairs())
-		{
-			window.draw(player.dbgSprite(offset));
-		}
 		window.draw(player.getSprite(offset));
 		window.display();
 	}

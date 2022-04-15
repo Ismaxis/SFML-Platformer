@@ -10,7 +10,7 @@ public:
 
 private:
 	const float magicDivider{ 4500.0 };
-	const float distanceToBorder{ 0.2f }; // % of screen width
+	const float distanceToBorder{ 0.4f }; // % of screen width
 
 	sf::Vector2u winPixelSize;
 	sf::Vector2u mapPixelSize;
