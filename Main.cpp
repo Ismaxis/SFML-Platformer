@@ -4,6 +4,7 @@
 #include<ctime>
 #include"Player.h"
 #include"Map.h"
+#include"Camera.h"
 
 //Variables types rules:
 //Sizes - unsigned int
@@ -40,9 +41,8 @@ int main()
 	int grabDirection{ 0 };
 
 	// Offsets params
-	sf::Vector2i offset{ 0, 0 };
-	float camAcceleration{ 0 };
-	float camVelocity{ 0 };
+	sf::Vector2i offset;
+	Camera cam;
 	
 	// Window loop
 	while (window.isOpen())
@@ -117,75 +117,8 @@ int main()
 		
 		player.update(map, time);
 
-
-
-
-
-
 		// Offsets
-		sf::Vector2i playerPos = player.getPos();
-		sf::Vector2f playerVel = player.getVel();
-
-
-
-		// X offset
-		camAcceleration = 0;
-
-		if (offset.x < playerPos.x - winPixelSize.x * 0.8)
-		{
-			offset.x = playerPos.x - winPixelSize.x * 0.8;
-		}
-		if (offset.x > abs(playerPos.x - winPixelSize.x * 0.15))
-		{
-			offset.x = playerPos.x - winPixelSize.x * 0.15;
-		}
-		if (offset.x <= playerPos.x - winPixelSize.x * 0.49 && offset.x >= playerPos.x - winPixelSize.x * 0.51)
-		{
-			camAcceleration = 0;
-			camVelocity = 0;
-		}
-		if (offset.x < playerPos.x - winPixelSize.x * 0.5 && playerVel.x == 0)
-		{
-			camAcceleration = (playerPos.x - winPixelSize.x * 0.5)/9000.0;
-		}
-		if (offset.x > abs(playerPos.x - winPixelSize.x * 0.5) && playerVel.x == 0)
-		{
-			camAcceleration = -(playerPos.x - winPixelSize.x * 0.5)/9000.0;
-		}
-
-		camVelocity += camAcceleration;
-		offset.x += camVelocity;
-
-		if(offset.x < 0)
-		{
-			camAcceleration = 0;
-			camVelocity = 0;
-			offset.x = 0;
-		}
-		if(offset.x > mapPixelSize.x - winPixelSize.x)
-		{
-			camAcceleration = 0;
-			camVelocity = 0;
-			offset.x = mapPixelSize.x - winPixelSize.x;
-		}
-
-		// Y offset
-		if (playerPos.y > mapPixelSize.y - winPixelSize.y / 2u)
-		{
-			offset.y = mapPixelSize.y - winPixelSize.y;
-		}
-		else if (playerPos.y > winPixelSize.y / 2u)
-		{
-			offset.y = playerPos.y - winPixelSize.y / 2u;
-		}
-		else
-		{
-			offset.y = 0;
-		}
-
-
-
-
+		offset = cam.calculateOffsets(player.getPos(), player.getVel(), winPixelSize, mapPixelSize);
 
 		// Clear
 		window.clear(sf::Color::White);
