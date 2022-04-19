@@ -23,7 +23,7 @@ int main()
 
 	//const sf::Vector2u winPixelSize{ sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height };
 	const sf::Vector2u winPixelSize{ 1920, 1080 };
-	const sf::Vector2u winTileSize = { winPixelSize.x / tileSize, winPixelSize.y / tileSize + 1u };
+	const sf::Vector2u winTileSize = { winPixelSize.x / tileSize, winPixelSize.y / tileSize + 1u }; // put into level class
 
 	// Window init
 	sf::RenderWindow window(sf::VideoMode(winPixelSize.x - 1u, winPixelSize.y - 1u), "Game", sf::Style::Default);
@@ -60,50 +60,57 @@ int main()
 				window.close();
 			}
 
-			if (event.type == sf::Event::KeyPressed)
-			{
-				// X movement
-				if (event.key.code == sf::Keyboard::D)
-				{
-					direction = -1;
-				}
-				else if (event.key.code == sf::Keyboard::A)
-				{
-					direction = 1;
-				}
 
-				// Jump 
-				if (event.key.code == sf::Keyboard::Space && (player.isOnGround() || player.isOnStairs()))
-				{
-					isJump = true;
-				}
 
-				// Stairs grab
-				if (player.isStairsAvailable())
-				{
-					if (event.key.code == sf::Keyboard::W)
-					{
-						grabDirection = 1;
-					}
-					else if (event.key.code == sf::Keyboard::S)
-					{
-						grabDirection = -1;
-					}
-				}
-			}
-			if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-			{
-				direction = 0;
-			}
-			if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-			{
-				grabDirection = 0;
-			}
+
+
+			//if (event.type == sf::Event::KeyPressed)
+			//{
+			//	// X movement
+			//	if (event.key.code == sf::Keyboard::D)
+			//	{
+			//		direction = 1;
+			//	}
+			//	else if (event.key.code == sf::Keyboard::A)
+			//	{
+			//		direction = -1;
+			//	}
+
+			//	// Jump 
+			//	if (event.key.code == sf::Keyboard::Space && (player.isOnGround() || player.isOnStairs()))
+			//	{
+			//		isJump = true;
+			//	}
+
+			//	// Stairs grab
+			//	if (player.isStairsAvailable())
+			//	{
+			//		if (event.key.code == sf::Keyboard::W)
+			//		{
+			//			grabDirection = -1;
+			//		}
+			//		else if (event.key.code == sf::Keyboard::S)
+			//		{
+			//			grabDirection = 1;
+			//		}
+			//	}
+			//}
+			//if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+			//{
+			//	direction = 0;
+			//}
+			//if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+			//{
+			//	grabDirection = 0;
+			//}
+
+
+
 
 		}
 
 		// Update
-		player.move(direction);
+		/*player.move(direction);
 		
 		if (player.isStairsAvailable() && grabDirection != 0)
 		{
@@ -115,7 +122,9 @@ int main()
 			player.jump();
 		}
 		
-		player.update(map, time);
+		player.update(map, time);*/
+
+
 
 		// Offsets
 		offset = cam.calculateOffsets(player.getPos(), player.getVel());

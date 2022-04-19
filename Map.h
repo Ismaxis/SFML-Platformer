@@ -18,7 +18,7 @@ private:
 	unsigned int cageSize;
 
 public:
-	Map(const std::string mapPath, const std::string sheetPath)
+	Map(const std::string& mapPath, const std::string& sheetPath)
 	{
 		// Map
 		std::ifstream file(mapPath, std::ios::in);
