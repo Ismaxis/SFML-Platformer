@@ -8,6 +8,7 @@ Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const 
 	tileSize = map->getCageSize();
 	gridTileSize = map->getGridSize();
 	mapPixelSize = { gridTileSize.x * tileSize, gridTileSize.y * tileSize };
+	winTileSize = { winPixelSize.x / tileSize, winPixelSize.y / tileSize + 1u };
 
 	player = new Player(playerTexturePath);
 	player->setPos(sf::Vector2f(10 * tileSize, 20 * tileSize)); // todo initial position of player
@@ -20,17 +21,12 @@ Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const 
 
 int Level::update(const std::vector<sf::Event>& events)
 {
-	const int time = clock.restart().asMilliseconds();
-
-	controls.isJump = false;
-
 	poolControls(events);
 
-	if(controls.walkDirection != 0)
-	{
-		player->move(controls.walkDirection);
-	}
-		
+	//std::cout << controls.walkDirection << "\n";
+
+	player->move(controls.walkDirection);
+
 	if (player->isStairsAvailable() && controls.grabDirection != 0)
 	{
 		player->grab(controls.grabDirection);
@@ -41,7 +37,7 @@ int Level::update(const std::vector<sf::Event>& events)
 		player->jump();
 	}
 
-	player->update(*map, time);
+	player->update(*map, clock.restart().asMilliseconds());
 
 	return 0; // nothing to do
 }
@@ -54,15 +50,14 @@ sf::Sprite Level::getSprite()
 	// generation offsets
 	offset = cam->calculateOffsets(player->getPos(), player->getVel());
 
-	std::cout << offset.x << " " << offset.y << "\n";
-
 	// map draw
 	const sf::Vector2i offsetInCages{ static_cast<int> (offset.x / tileSize), static_cast<int> (offset.y / tileSize) };
 	for (float i = 0; i < winTileSize.y + 1; i++)
 	{
 		for (float j = 0; j < winTileSize.x + 1; j++)
 		{
-			texture.draw(map->getSprite(sf::Vector2f(j + offsetInCages.x, i + offsetInCages.y), offset));
+			sf::Sprite sprt = map->getSprite(sf::Vector2f(j + offsetInCages.x, i + offsetInCages.y), offset);
+			texture.draw(sprt);
 		}
 	}
 
@@ -75,6 +70,8 @@ sf::Sprite Level::getSprite()
 
 void Level::poolControls(const std::vector<sf::Event>& events)
 {
+	controls.isJump = false;
+
 	for(const auto event : events)
 	{
 		if (event.type == sf::Event::KeyPressed)
@@ -86,7 +83,7 @@ void Level::poolControls(const std::vector<sf::Event>& events)
 			}
 			else if (event.key.code == sf::Keyboard::A)
 			{
-				controls.grabDirection = -1;
+				controls.walkDirection = -1;
 			}
 
 			// Jump 

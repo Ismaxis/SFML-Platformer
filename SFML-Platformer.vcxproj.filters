@@ -27,9 +27,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Menu\Button.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -47,13 +44,13 @@
     <ClInclude Include="Menu\Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="playerControls.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Layout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Level.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="playerControls.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -19,7 +19,8 @@ sf::Sprite Map::getSprite(const sf::Vector2f pos, const sf::Vector2i offset)
 {
 	sf::Sprite curSprite;
 
-	curSprite.setPosition(sf::Vector2f(cageSize * pos.x - offset.x, cageSize * pos.y - offset.y));
+	auto position = sf::Vector2f(cageSize * pos.x - offset.x, cageSize * pos.y - offset.y);
+	curSprite.setPosition(position);
 
 	if (pos.x >= map[0].size() || pos.y >= map.size() || map[pos.y][pos.x] == -1)
 	{
