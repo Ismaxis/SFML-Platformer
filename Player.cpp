@@ -251,13 +251,14 @@ void Player::jump()
 
 void Player::move(const int direction)
 {
-	// Directions: 1 - left, -1 - right
-	plVelocity.x = direction * -defVel.x;
+	// Directions: -1 - left, 1 - right
+	plVelocity.x = direction * defVel.x;
 }
 
 void Player::grab(const int direction)
 {
-	plVelocity.y = direction * -defVel.y / 2;
+	// Directions: -1 - up, 1 - down
+	plVelocity.y = direction * defVel.y / 2;
 	onStairs = true;
 }
 

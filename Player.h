@@ -25,7 +25,7 @@ private:
 	sf::Texture plTexture;
 
 public:
-	Player(const std::string path)
+	Player(const std::string& path)
 	{
 		if (!plTexture.loadFromFile(path))
 		{
