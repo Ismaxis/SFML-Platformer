@@ -58,7 +58,6 @@ sf::Vector2i Camera::calculateOffsets(const sf::Vector2i& playerPos, const sf::V
 	}
 
 
-
 	// Y offset
 	if (playerPos.y > mapPixelSize.y - winPixelSize.y / 2u)
 	{
@@ -73,7 +72,6 @@ sf::Vector2i Camera::calculateOffsets(const sf::Vector2i& playerPos, const sf::V
 		offset.y = 0;
 	}
 
-	
 
 	return offset;
 }

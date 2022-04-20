@@ -4,8 +4,8 @@
 class Layout
 {
 public:
-	virtual int update(std::vector<sf::Event> events) = 0; // checks 
-	//virtual sf::Sprite getSprite() = 0;
+	virtual int update(const std::vector<sf::Event>& events) = 0;
+	virtual sf::Sprite getSprite() = 0;
 
 protected:
 	sf::RenderTexture texture;

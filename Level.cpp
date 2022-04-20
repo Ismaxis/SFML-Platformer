@@ -5,11 +5,23 @@ Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const 
 	texture.create(winPixelSize.x, winPixelSize.y);
 
 	map = new Map(mapPath, mapSheetPath);
+	tileSize = map->getCageSize();
+	gridTileSize = map->getGridSize();
+	mapPixelSize = { gridTileSize.x * tileSize, gridTileSize.y * tileSize };
+
 	player = new Player(playerTexturePath);
+	player->setPos(sf::Vector2f(10 * tileSize, 20 * tileSize)); // todo initial position of player
+	controls.walkDirection = 0;
+	controls.grabDirection = 0;
+
+	cam = new Camera(winPixelSize, mapPixelSize);
+	offset = { 0, 0 };
 }
 
-int Level::update(std::vector<sf::Event> events)
+int Level::update(const std::vector<sf::Event>& events)
 {
+	const int time = clock.restart().asMilliseconds();
+
 	controls.isJump = false;
 
 	poolControls(events);
@@ -29,14 +41,41 @@ int Level::update(std::vector<sf::Event> events)
 		player->jump();
 	}
 
-	player->update(*map, clock.restart().asMilliseconds());
+	player->update(*map, time);
 
 	return 0; // nothing to do
 }
 
-void Level::poolControls(std::vector<sf::Event> events)
+sf::Sprite Level::getSprite()
 {
-	for(auto event : events)
+	// clear
+	texture.clear(sf::Color::White);
+
+	// generation offsets
+	offset = cam->calculateOffsets(player->getPos(), player->getVel());
+
+	std::cout << offset.x << " " << offset.y << "\n";
+
+	// map draw
+	const sf::Vector2i offsetInCages{ static_cast<int> (offset.x / tileSize), static_cast<int> (offset.y / tileSize) };
+	for (float i = 0; i < winTileSize.y + 1; i++)
+	{
+		for (float j = 0; j < winTileSize.x + 1; j++)
+		{
+			texture.draw(map->getSprite(sf::Vector2f(j + offsetInCages.x, i + offsetInCages.y), offset));
+		}
+	}
+
+	// player draw
+	texture.draw(player->getSprite(offset));
+
+	texture.display();
+	return sf::Sprite(texture.getTexture());
+}
+
+void Level::poolControls(const std::vector<sf::Event>& events)
+{
+	for(const auto event : events)
 	{
 		if (event.type == sf::Event::KeyPressed)
 		{

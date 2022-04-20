@@ -11,17 +11,25 @@ class Level : public Layout
 public:
 	Level(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath, sf::Vector2u winPixelSize);
 
-	int update(std::vector<sf::Event> events);
-	sf::Sprite getSprite();
+	int update(const std::vector<sf::Event>& events) override;
+	sf::Sprite getSprite() override;
 
 private:
-	sf::Vector2i offset;
+	Map* map;
+	unsigned int tileSize;
+	sf::Vector2u gridTileSize;
+	sf::Vector2u mapPixelSize;
+	sf::Vector2u winTileSize;
+
+	Player* player;
+	int direction{ 0 }; 
+	int grabDirection{ 0 }; 
 	playerControls controls;
 
-	Player player;
-	Map map;
+	Camera* cam; 
+	sf::Vector2i offset;
 
 	sf::Clock clock;
 
-	void poolControls(std::vector<sf::Event> events);
+	void poolControls(const std::vector<sf::Event>& events);
 };
