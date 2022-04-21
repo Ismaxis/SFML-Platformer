@@ -1,6 +1,6 @@
 #include "Menu.h"
 
-Menu::Menu(sf::Vector2u winPixelSize)
+Menu::Menu(const sf::Vector2u winPixelSize)
 {
 	texture.create(winPixelSize.x , winPixelSize.y);
 
@@ -8,20 +8,16 @@ Menu::Menu(sf::Vector2u winPixelSize)
 	playBtn = new Button(sf::Vector2i(winPixelSize.x/2 - playBtnSize.x/2, winPixelSize.y/2 - playBtnSize.y/2), playBtnSize);
 }
 
+Menu::~Menu()
+{
+	delete playBtn;
+}
+
 int Menu::update(const Inputs& input)
 {
-	bool isLmb = false;
+	isLmb = false;
+	poolInputs(input);
 
-	for (const auto event : input.events)
-	{
-		if(event.type == sf::Event::MouseButtonPressed)
-		{
-			if(event.mouseButton.button == sf::Mouse::Left)
-			{
-				isLmb = true;
-			}
-		}
-	}
 	playBtn->update(input.mousePos, isLmb);
 
 	if(playBtn->isClicked())
@@ -40,4 +36,18 @@ sf::Sprite Menu::getSprite()
 
 	texture.display();
 	return sf::Sprite(texture.getTexture());
+}
+
+void Menu::poolInputs(const Inputs& input)
+{
+	for (const auto event : input.events)
+	{
+		if(event.type == sf::Event::MouseButtonPressed)
+		{
+			if(event.mouseButton.button == sf::Mouse::Left)
+			{
+				isLmb = true;
+			}
+		}
+	}
 }

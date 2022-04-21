@@ -7,11 +7,9 @@ public:
 	Button(sf::Vector2i position, sf::Vector2i size);
 
 	void update(sf::Vector2i mousePos, bool lmb);
-	bool isClicked();
-	bool isActive();
+	bool isClicked() const;
+	bool isActive() const;
 	sf::Sprite getSprite();
-
-	void setText(const std::string& text);
 
 private:
 

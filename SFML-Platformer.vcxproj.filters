@@ -33,7 +33,7 @@
     <ClCompile Include="Layout\Menu\Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Layout\Menu\Button.cpp">
+    <ClCompile Include="Layout\Button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,7 +47,7 @@
     <ClInclude Include="Layout\Level\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Layout\Menu\Button.h">
+    <ClInclude Include="Layout\Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Layout\Level\playerControls.h">

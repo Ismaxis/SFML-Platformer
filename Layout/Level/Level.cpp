@@ -1,6 +1,6 @@
 #include "Level.h"
 
-Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath, sf::Vector2u winPixelSize)
+Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath, const sf::Vector2u winPixelSize)
 {
 	texture.create(winPixelSize.x, winPixelSize.y);
 
@@ -17,14 +17,24 @@ Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const 
 
 	cam = new Camera(winPixelSize, mapPixelSize);
 	offset = { 0, 0 };
+
+	exitBtn = new Button(exitBtnPos, exitBtnSize);
+}
+
+Level::~Level()
+{
+	delete map;
+	delete player;
+	delete cam;
+	delete exitBtn;
 }
 
 int Level::update(const Inputs& input)
 {
-	poolControls(input);
+	isLmb = false;
+	 poolInputs(input);
 
-	//std::cout << controls.walkDirection << "\n";
-
+	// move player
 	player->move(controls.walkDirection);
 
 	if (player->isStairsAvailable() && controls.grabDirection != 0)
@@ -37,7 +47,16 @@ int Level::update(const Inputs& input)
 		player->jump();
 	}
 
+	// update ui
+	exitBtn->update(input.mousePos, isLmb);
+
+	// update player
 	player->update(*map, clock.restart().asMilliseconds());
+
+	if(exitBtn->isClicked())
+	{
+		return EXIT_TO_MENU;
+	}
 
 	return NOTHING; // nothing to do
 }
@@ -61,6 +80,9 @@ sf::Sprite Level::getSprite()
 		}
 	}
 
+	// ui draw
+	texture.draw(exitBtn->getSprite());
+
 	// player draw
 	texture.draw(player->getSprite(offset));
 
@@ -68,15 +90,16 @@ sf::Sprite Level::getSprite()
 	return sf::Sprite(texture.getTexture());
 }
 
-void Level::poolControls(const Inputs& input)
+void Level::poolInputs(const Inputs& input)
 {
 	controls.isJump = false;
 
 	for(const auto event : input.events)
 	{
+		// keyboard
 		if (event.type == sf::Event::KeyPressed)
 		{
-			// X movement
+			// x movement
 			if (event.key.code == sf::Keyboard::D)
 			{
 				controls.walkDirection = 1;
@@ -86,13 +109,13 @@ void Level::poolControls(const Inputs& input)
 				controls.walkDirection = -1;
 			}
 
-			// Jump 
+			// jump 
 			if (event.key.code == sf::Keyboard::Space && (player->isOnGround() || player->isOnStairs()))
 			{
 				controls.isJump = true;
 			}
 
-			// Stairs grab
+			// stairs grab
 			if (player->isStairsAvailable())
 			{
 				if (event.key.code == sf::Keyboard::W)
@@ -105,6 +128,7 @@ void Level::poolControls(const Inputs& input)
 				}
 			}
 		}
+		// keyboard hold
 		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
 			controls.walkDirection = 0;
@@ -113,5 +137,15 @@ void Level::poolControls(const Inputs& input)
 		{
 			controls.grabDirection = 0;
 		}
+
+		// mouse
+		if(event.type == sf::Event::MouseButtonPressed)
+		{
+			if(event.mouseButton.button == sf::Mouse::Left)
+			{
+				isLmb = true;
+			}
+		}
+		
 	}
 }

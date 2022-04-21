@@ -1,5 +1,6 @@
 #pragma once
 #include "../Layout.h"
+#include "../Button.h"
 #include "Map.h"
 #include "Player.h"
 #include "Camera.h"
@@ -11,6 +12,7 @@ class Level : public Layout
 {
 public:
 	Level(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath, sf::Vector2u winPixelSize);
+	~Level();
 
 	int update(const Inputs& input) override;
 	sf::Sprite getSprite() override;
@@ -32,5 +34,10 @@ private:
 
 	sf::Clock clock;
 
-	void poolControls(const Inputs& input);
+	Button* exitBtn;
+	sf::Vector2i exitBtnPos = { 20, 20 };
+	sf::Vector2i exitBtnSize = { 50, 50 };
+	bool isLmb;
+
+	void  poolInputs(const Inputs& input);
 };

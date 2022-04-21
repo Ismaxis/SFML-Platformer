@@ -5,8 +5,6 @@ Button::Button(sf::Vector2i position, sf::Vector2i size) : _position(position), 
 	_texture.create(_size.x, _size.y);
 	_passiveColor = sf::Color(0,0,255);
 	_activeColor = sf::Color(120,0,255);
-	
-	_font.loadFromFile("arial.ttf");
 }
 
 void Button::update(sf::Vector2i mousePos, bool lmb)
@@ -32,12 +30,12 @@ void Button::update(sf::Vector2i mousePos, bool lmb)
 	_isClicked = false;
 }
 
-bool Button::isClicked()
+bool Button::isClicked() const
 {
 	return _isClicked;
 }
 
-bool Button::isActive()
+bool Button::isActive() const
 {
 	return _isActive;
 }
@@ -74,9 +72,4 @@ sf::Sprite Button::getSprite()
 	sprite.setPosition(_position.x, _position.y);
 
 	return sprite;
-}
-
-void Button::setText(const std::string& text)
-{
-	_btnText = text;
 }

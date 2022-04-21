@@ -21,7 +21,6 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(winPixelSize.x - 1u, winPixelSize.y - 1u), "Game", sf::Style::Default);
 	window.setFramerateLimit(144);
 	window.setPosition(sf::Vector2i(0, 0));
-
 	
 	Layout* curLayout = new Menu(winPixelSize);
 
@@ -51,6 +50,11 @@ int main()
 		{
 			delete curLayout;
 			curLayout = new Level(mapPath, mapSheetPath, playerTexturePath, winPixelSize);
+		}
+		if(updateCode == EXIT_TO_MENU)
+		{
+			delete curLayout;
+			curLayout = new Menu(winPixelSize);
 		}
 
 		window.draw(curLayout->getSprite());

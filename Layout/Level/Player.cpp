@@ -2,13 +2,13 @@
 
 void Player::update(const Map& map, int time)
 {
-	// Frame time limit
+	// frame time limit
 	if (time > 10)
 	{
 		time = 10;
 	}
 	
-	// X
+	// x
 	rect.left += plVelocity.x * time;
 	const CollisionInfo hCol = collisionX(map);
 
@@ -21,7 +21,7 @@ void Player::update(const Map& map, int time)
 		rect.left = hCol.availablePos;
 	}
 
-	// Y
+	// y
 	if (!onStairs)
 	{
 		plVelocity.y += time * 0.008f;
@@ -31,7 +31,7 @@ void Player::update(const Map& map, int time)
 
 	const CollisionInfo vCol = collisionY(map);
 
-	// Checking is player staying on top of the stair
+	// checking is player staying on top of the stair
 	CollisionInfo bottomStairsCol;
 	if (!onStairs)
 	{
@@ -39,11 +39,13 @@ void Player::update(const Map& map, int time)
 	}
 	const CollisionInfo stairsCol = stairsCollisionY(map);
 
+	// update state
 	onGround = false;
 	onStairs = false;
 	stairsAvailable = false;
 	jumped = false;
 
+	// reading collision info
 	if (vCol.collisionSide == -1)
 	{
 		stairsAvailable = false;
@@ -69,7 +71,7 @@ void Player::update(const Map& map, int time)
 		onStairs = true;
 		stairsAvailable = true;
 	}
-	
+
 	if (stairsCol.collisionSide == 1)
 	{
 		stairsAvailable = true;
@@ -213,7 +215,7 @@ CollisionInfo Player::bottomStairsCollisionY(const Map& map) const
 	const float right = (rect.left + rect.width) / cageSize;
 	const int bottom =  (rect.top + rect.height) / cageSize;
 	
-	// Checking is player staying on top of the stair
+	// checking is player staying on top of the stair
 	CollisionInfo result;
 
 	for (int x = left; x < right; x++)
@@ -251,13 +253,13 @@ void Player::jump()
 
 void Player::move(const int direction)
 {
-	// Directions: -1 - left, 1 - right
+	// directions: -1 - left, 1 - right
 	plVelocity.x = direction * defVel.x;
 }
 
 void Player::grab(const int direction)
 {
-	// Directions: -1 - up, 1 - down
+	// directions: -1 - up, 1 - down
 	plVelocity.y = direction * defVel.y / 2;
 	onStairs = true;
 }
@@ -311,8 +313,8 @@ sf::Sprite Player::getSprite(const sf::Vector2i offset) const
 sf::RectangleShape Player::dbgSprite(const sf::Vector2i offset) const
 {
 	sf::RectangleShape dbg;
-	const int cageSize = 32;
-	const int thick = 4;
+	constexpr int cageSize = 32;
+	constexpr int thick = 4;
 	dbg.setPosition(sf::Vector2f(cageSize * (rect.left / cageSize) - offset.x + thick, cageSize * (rect.top / cageSize) - offset.y + thick));
 
 	dbg.setSize(sf::Vector2f(rect.width - thick * 2, rect.height - thick * 2));
