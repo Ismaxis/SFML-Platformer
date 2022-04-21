@@ -1,6 +1,6 @@
 #include "Level.h"
 
-Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath ,sf::Vector2u winPixelSize)
+Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath, sf::Vector2u winPixelSize)
 {
 	texture.create(winPixelSize.x, winPixelSize.y);
 
@@ -19,9 +19,9 @@ Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const 
 	offset = { 0, 0 };
 }
 
-int Level::update(const std::vector<sf::Event>& events)
+int Level::update(const Inputs& input)
 {
-	poolControls(events);
+	poolControls(input);
 
 	//std::cout << controls.walkDirection << "\n";
 
@@ -39,7 +39,7 @@ int Level::update(const std::vector<sf::Event>& events)
 
 	player->update(*map, clock.restart().asMilliseconds());
 
-	return 0; // nothing to do
+	return NOTHING; // nothing to do
 }
 
 sf::Sprite Level::getSprite()
@@ -68,11 +68,11 @@ sf::Sprite Level::getSprite()
 	return sf::Sprite(texture.getTexture());
 }
 
-void Level::poolControls(const std::vector<sf::Event>& events)
+void Level::poolControls(const Inputs& input)
 {
 	controls.isJump = false;
 
-	for(const auto event : events)
+	for(const auto event : input.events)
 	{
 		if (event.type == sf::Event::KeyPressed)
 		{

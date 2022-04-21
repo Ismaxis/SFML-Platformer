@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Camera.h"
 #include "playerControls.h"
+#include "../updateCodes.h"
 
 // draw tile map
 class Level : public Layout
@@ -11,7 +12,7 @@ class Level : public Layout
 public:
 	Level(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath, sf::Vector2u winPixelSize);
 
-	int update(const std::vector<sf::Event>& events) override;
+	int update(const Inputs& input) override;
 	sf::Sprite getSprite() override;
 
 private:
@@ -31,5 +32,5 @@ private:
 
 	sf::Clock clock;
 
-	void poolControls(const std::vector<sf::Event>& events);
+	void poolControls(const Inputs& input);
 };
