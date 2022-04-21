@@ -24,10 +24,10 @@
     <ClCompile Include="Map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
+    <ClCompile Include="Layout\Level\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Level.cpp">
+    <ClCompile Include="Layout\Level\Level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,19 +38,19 @@
     <ClInclude Include="Map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
+    <ClInclude Include="Layout\Level\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Menu\Button.h">
+    <ClInclude Include="Layout\Menu\Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="playerControls.h">
+    <ClInclude Include="Layout\Level\playerControls.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Layout.h">
+    <ClInclude Include="Layout\Layout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Level.h">
+    <ClInclude Include="Layout\Level\Level.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

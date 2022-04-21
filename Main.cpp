@@ -1,9 +1,8 @@
 #include<SFML/Graphics.hpp>
 #include<iostream>
 #include"Player.h"
-#include"Map.h"
-#include"Camera.h"
-#include "Level.h"
+#include "Layout/Layout.h"
+#include "Layout/Level/Level.h"
 
 //Variables types rules:
 //Sizes - unsigned int
