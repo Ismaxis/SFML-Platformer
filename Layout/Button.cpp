@@ -1,10 +1,24 @@
 #include "Button.h"
 
+#include <iostream>
+
 Button::Button(sf::Vector2i position, sf::Vector2i size) : _position(position), _size(size)
 {
 	_texture.create(_size.x, _size.y);
-	_passiveColor = sf::Color(0,0,255);
-	_activeColor = sf::Color(120,0,255);
+}
+
+void Button::setTexture(const std::string& defTexturePath, const std::string& activeTexturePath)
+{
+	if(!_defTexture.loadFromFile(defTexturePath))
+	{
+		std::cout << "Could not open default button texture" << std::endl;
+	}
+	if(!_actTexture.loadFromFile(activeTexturePath))
+	{
+		std::cout << "Could not open active button texture" << std::endl;
+	}
+
+	_originalTextureSize = _defTexture.getSize(); // if _defTexture.getSize() = _actTexture.getSize()
 }
 
 void Button::update(sf::Vector2i mousePos, bool lmb)
@@ -42,34 +56,23 @@ bool Button::isActive() const
 
 sf::Sprite Button::getSprite()
 {
-	auto rect = sf::RectangleShape(sf::Vector2f(_size));
-
-	sf::Text text;
-	
-	text.setFont(_font);
-	text.setStyle(sf::Text::Bold);
-	text.setString(_btnText);
-	text.setCharacterSize(40);
-	text.setFillColor(sf::Color::Black);
-
-	if(_isActive)
+	sf::Sprite btnSprite;
+	if(isActive())
 	{
-		rect.setFillColor(_activeColor);
+		btnSprite.setTexture(_actTexture);
 	}
 	else
 	{
-		rect.setFillColor(_passiveColor);
+		btnSprite.setTexture(_defTexture);
 	}
+	btnSprite.setScale(_size.x/_originalTextureSize.x, _size.y/_originalTextureSize.y);
 
-	_texture.clear();
-
-	_texture.draw(rect);
-	_texture.draw(text);
-
+	_texture.clear(sf::Color(0,0,0,0));
+	_texture.draw(btnSprite);
 	_texture.display();
 
-	auto sprite = sf::Sprite(_texture.getTexture());
-	sprite.setPosition(_position.x, _position.y);
+	auto resultSprite = sf::Sprite(_texture.getTexture());
+	resultSprite.setPosition(_position.x, _position.y);
 
-	return sprite;
+	return resultSprite;
 }

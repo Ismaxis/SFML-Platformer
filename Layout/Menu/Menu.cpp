@@ -6,6 +6,7 @@ Menu::Menu(const sf::Vector2u winPixelSize)
 
 	sf::Vector2i playBtnSize = {300, 200};
 	playBtn = new Button(sf::Vector2i(winPixelSize.x/2 - playBtnSize.x/2, winPixelSize.y/2 - playBtnSize.y/2), playBtnSize);
+	playBtn->setTexture("Textures/startButton.png", "Textures/startButtonActive.png");
 }
 
 Menu::~Menu()

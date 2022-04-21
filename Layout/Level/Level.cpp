@@ -19,6 +19,7 @@ Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const 
 	offset = { 0, 0 };
 
 	exitBtn = new Button(exitBtnPos, exitBtnSize);
+	exitBtn->setTexture("Textures/exitButton.png","Textures/exitButtonActive.png");
 }
 
 Level::~Level()
