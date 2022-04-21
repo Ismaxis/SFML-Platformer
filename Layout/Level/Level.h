@@ -1,7 +1,7 @@
 #pragma once
 #include "../Layout.h"
-#include "../../Map.h"
-#include "../../Player.h"
+#include "Map.h"
+#include "Player.h"
 #include "Camera.h"
 #include "playerControls.h"
 
