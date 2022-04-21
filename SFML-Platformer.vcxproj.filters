@@ -30,6 +30,12 @@
     <ClCompile Include="Layout\Level\Level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Layout\Menu\Menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Layout\Button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Layout\Level\Player.h">
@@ -41,7 +47,7 @@
     <ClInclude Include="Layout\Level\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Layout\Menu\Button.h">
+    <ClInclude Include="Layout\Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Layout\Level\playerControls.h">
@@ -51,6 +57,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Layout\Level\Level.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Layout\Menu\Menu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Layout\Inputs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Layout\updateCodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

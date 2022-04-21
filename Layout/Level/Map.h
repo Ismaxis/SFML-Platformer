@@ -51,7 +51,7 @@ public:
 		}
 		file.close();
 
-		// Sheet
+		// sheet
 		if (!sheet.loadFromFile(sheetPath))
 		{
 			std::cout << "Could not open sheet" << std::endl;
@@ -66,5 +66,5 @@ public:
 
 	int getCage(sf::Vector2i coords) const;
 
-	sf::Sprite getSprite(sf::Vector2f pos, sf::Vector2i offset);
+	sf::Sprite getSprite(sf::Vector2f pos, sf::Vector2i offset) const;
 };

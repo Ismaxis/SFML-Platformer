@@ -6,12 +6,12 @@ class Button
 public:
 	Button(sf::Vector2i position, sf::Vector2i size);
 
-	void update(sf::Vector2i mousePos, bool lmb);
-	bool isClicked();
-	bool isActive();
-	sf::Sprite getSprite();
+	void setTexture(const std::string& defTexturePath, const std::string& activeTexturePath);
 
-	void setText(const std::string& text);
+	void update(sf::Vector2i mousePos, bool lmb);
+	bool isClicked() const;
+	bool isActive() const;
+	sf::Sprite getSprite();
 
 private:
 
@@ -26,6 +26,8 @@ private:
 	sf::Font _font;
 	std::string _btnText;
 
-	sf::Color _passiveColor;
-	sf::Color _activeColor;
+	sf::Texture _defTexture;
+	sf::Texture _actTexture;
+	sf::Vector2u _originalTextureSize;
+
 };

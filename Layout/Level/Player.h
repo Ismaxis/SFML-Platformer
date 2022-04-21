@@ -51,8 +51,6 @@ public:
 	static bool isStairs(int curCage);
 	static bool isTopOfStairs(int curCage);
 	static bool isBlock(int curCage);
-	/*static bool isBlockHor(int curCage);
-	static bool isBlockVer(int curCage);*/
 
 	void jump();
 
