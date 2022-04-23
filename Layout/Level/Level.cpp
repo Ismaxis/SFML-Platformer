@@ -18,8 +18,8 @@ Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const 
 	cam = new Camera(winPixelSize, mapPixelSize);
 	offset = { 0, 0 };
 
-	exitBtn = new Button(exitBtnPos, exitBtnSize);
-	exitBtn->setTexture("Textures/exitButton.png","Textures/exitButtonActive.png");
+	pauseMenu = new PauseMenu("Textures/exitButton.png","Textures/exitButtonActive.png", winPixelSize);
+
 }
 
 Level::~Level()
@@ -27,37 +27,38 @@ Level::~Level()
 	delete map;
 	delete player;
 	delete cam;
-	delete exitBtn;
+	delete pauseMenu;
 }
 
 int Level::update(const Inputs& input)
 {
-	isLmb = false;
-	 poolInputs(input);
+	poolInputs(input);
 
-	// move player
-	player->move(controls.walkDirection);
-
-	if (player->isStairsAvailable() && controls.grabDirection != 0)
+	if(isPause)
 	{
-		player->grab(controls.grabDirection);
+		// update pause menu
+		if(pauseMenu->update(input) == EXIT_TO_MENU)
+		{
+			return EXIT_TO_MENU;	
+		}		
 	}
-
-	if (controls.isJump)
+	else
 	{
-		player->jump();
+		// move player
+		player->move(controls.walkDirection);
+
+		if (player->isStairsAvailable() && controls.grabDirection != 0)
+		{
+			player->grab(controls.grabDirection);
+		}
+
+		if (controls.isJump)
+		{
+			player->jump();
+		}
 	}
-
-	// update ui
-	exitBtn->update(input.mousePos, isLmb);
-
 	// update player
 	player->update(*map, clock.restart().asMilliseconds());
-
-	if(exitBtn->isClicked())
-	{
-		return EXIT_TO_MENU;
-	}
 
 	return NOTHING; // nothing to do
 }
@@ -81,8 +82,11 @@ sf::Sprite Level::getSprite()
 		}
 	}
 
-	// ui draw
-	texture.draw(exitBtn->getSprite());
+	// pause menu draw
+	if(isPause)
+	{
+		texture.draw(pauseMenu->getSprite());
+	}
 
 	// player draw
 	texture.draw(player->getSprite(offset));
@@ -128,6 +132,15 @@ void Level::poolInputs(const Inputs& input)
 					controls.grabDirection = 1;
 				}
 			}
+
+			// esc
+			if(event.type == sf::Event::KeyPressed)
+			{
+				if(event.key.code == sf::Keyboard::Escape)
+				{
+					isPause = !isPause;
+				}
+			}
 		}
 		// keyboard hold
 		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !sf::Keyboard::isKeyPressed(sf::Keyboard::A))
@@ -138,15 +151,5 @@ void Level::poolInputs(const Inputs& input)
 		{
 			controls.grabDirection = 0;
 		}
-
-		// mouse
-		if(event.type == sf::Event::MouseButtonPressed)
-		{
-			if(event.mouseButton.button == sf::Mouse::Left)
-			{
-				isLmb = true;
-			}
-		}
-		
 	}
 }

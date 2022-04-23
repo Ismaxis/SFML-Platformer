@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "playerControls.h"
 #include "../updateCodes.h"
+#include "../PauseMenu/PauseMenu.h"
 
 // draw tile map
 class Level : public Layout
@@ -34,10 +35,8 @@ private:
 
 	sf::Clock clock;
 
-	Button* exitBtn;
-	sf::Vector2i exitBtnPos = { 20, 20 };
-	sf::Vector2i exitBtnSize = { 50, 50 };
-	bool isLmb;
+	PauseMenu* pauseMenu;
+	bool isPause;
 
-	void  poolInputs(const Inputs& input);
+	void poolInputs(const Inputs& input);
 };
