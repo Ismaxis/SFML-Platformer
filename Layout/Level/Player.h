@@ -15,7 +15,7 @@ private:
 	sf::FloatRect rect;
 
 	sf::Vector2f plVelocity = { 0.0f, 0.0f };
-	const sf::Vector2f defVel = { 0.7f, 2.3f };
+	const sf::Vector2f defVel = { 1.0f, 2.3f };
 
 	bool onGround = false;
 	bool onStairs = false;

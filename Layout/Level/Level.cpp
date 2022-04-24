@@ -66,7 +66,7 @@ int Level::update(const Inputs& input)
 sf::Sprite Level::getSprite()
 {
 	// clear
-	texture.clear(sf::Color::White);
+	texture.clear(sf::Color(222, 183, 247));
 
 	// generation offsets
 	offset = cam->calculateOffsets(player->getPos(), player->getVel());
