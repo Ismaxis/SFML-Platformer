@@ -14,6 +14,11 @@ std::string mapPath{"Maps/map5.csv"};
 std::string mapSheetPath{"Textures/mapSheet64.png"};
 std::string playerTexturePath{"Textures/Player.png"};
 
+std::pair<std::string, std::string> startButtonPaths{"Textures/startButton.png", "Textures/startButtonActive.png"};
+
+std::pair<std::string, std::string> exitButtonPaths{"Textures/exitButton.png", "Textures/exitButtonActive.png"};
+std::string pauseLabelPath{"Textures/pause.png"};
+
 int main()
 {
 	// Window init

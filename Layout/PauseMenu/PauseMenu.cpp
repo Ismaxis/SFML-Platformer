@@ -1,11 +1,20 @@
 #include "PauseMenu.h"
 
-PauseMenu::PauseMenu(const std::string& exitBtnPassive, const std::string& exitBtnActive, sf::Vector2u winPixelSize)
+#include <iostream>
+
+PauseMenu::PauseMenu(const std::string& exitBtnPassive, const std::string& exitBtnActive, const std::string& pauseLabelPath, sf::Vector2u winPixelSize)
 {
 	texture.create(winPixelSize.x, winPixelSize.y);
 
 	exitButton = new Button(exitBtnPos, exitBtnSize);
 	exitButton->setTexture(exitBtnPassive, exitBtnActive);
+
+	if(!pauseLabelTexture.loadFromFile(pauseLabelPath))
+	{
+		std::cout << "Could not open pauseLabel texture";
+	}
+
+	pauseLabelPos = {winPixelSize.x / 2 - pauseLabelSize.x / 2, winPixelSize.y / 2 - pauseLabelSize.y / 2};
 }
 
 int PauseMenu::update(const Inputs& input)
@@ -32,6 +41,13 @@ sf::Sprite PauseMenu::getSprite()
 
 	// draw button
 	texture.draw(exitButton->getSprite());
+
+	// draw label
+	const sf::Vector2u textureSize = pauseLabelTexture.getSize();
+	sf::Sprite labelSprite(pauseLabelTexture);
+	labelSprite.setPosition(pauseLabelPos.x, pauseLabelPos.y);
+	labelSprite.setScale(pauseLabelSize.x / textureSize.x, pauseLabelSize.y / textureSize.y);
+	texture.draw(labelSprite);
 
 	texture.display();
 	return sf::Sprite(texture.getTexture());

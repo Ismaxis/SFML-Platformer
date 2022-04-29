@@ -18,7 +18,7 @@ Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const 
 	cam = new Camera(winPixelSize, mapPixelSize);
 	offset = { 0, 0 };
 
-	pauseMenu = new PauseMenu("Textures/exitButton.png","Textures/exitButtonActive.png", winPixelSize);
+	pauseMenu = new PauseMenu(exitButtonPaths.first, exitButtonPaths.second, pauseLabelPath, winPixelSize);
 
 }
 
@@ -82,14 +82,14 @@ sf::Sprite Level::getSprite()
 		}
 	}
 
+	// player draw
+	texture.draw(player->getSprite(offset));
+
 	// pause menu draw
 	if(isPause)
 	{
 		texture.draw(pauseMenu->getSprite());
 	}
-
-	// player draw
-	texture.draw(player->getSprite(offset));
 
 	texture.display();
 	return sf::Sprite(texture.getTexture());

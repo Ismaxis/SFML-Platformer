@@ -8,6 +8,9 @@
 #include "../updateCodes.h"
 #include "../PauseMenu/PauseMenu.h"
 
+extern std::pair<std::string,std::string> exitButtonPaths;
+extern std::string pauseLabelPath;
+
 // draw tile map
 class Level : public Layout
 {
