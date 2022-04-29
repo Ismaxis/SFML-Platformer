@@ -3,6 +3,8 @@
 #include "../Button.h"
 #include "../updateCodes.h"
 
+extern std::pair<std::string, std::string> startButtonPaths;
+
 class Menu : public Layout
 {
 public:

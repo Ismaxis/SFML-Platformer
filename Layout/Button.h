@@ -14,7 +14,6 @@ public:
 	sf::Sprite getSprite();
 
 private:
-
 	bool _isClicked;
 	bool _isActive;
 
