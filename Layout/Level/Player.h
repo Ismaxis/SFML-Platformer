@@ -1,3 +1,4 @@
+#pragma once
 #include<SFML/Graphics.hpp>
 #include<iostream>
 #include "Map.h"
@@ -8,7 +9,6 @@ struct CollisionInfo
 	float availablePos = 0;
 };
 
-#pragma once
 class Player
 {
 private:
@@ -37,6 +37,8 @@ public:
 		rect.width = size.x;
 		rect.height = size.y;
 	}
+
+	~Player();
 
 	void update(const Map &map, int time);
 

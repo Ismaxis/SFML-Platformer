@@ -7,6 +7,8 @@ class PauseMenu : public Layout
 public:
 	PauseMenu(const std::string& exitBtnPassive, const std::string& exitBtnActive, const std::string& pauseLabelPath, sf::Vector2u winPixelSize);
 
+	~PauseMenu();
+
 	int update(const Inputs& input) override;
 	sf::Sprite getSprite() override;
 

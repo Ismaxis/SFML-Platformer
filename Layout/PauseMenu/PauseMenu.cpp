@@ -17,6 +17,11 @@ PauseMenu::PauseMenu(const std::string& exitBtnPassive, const std::string& exitB
 	pauseLabelPos = {winPixelSize.x / 2 - pauseLabelSize.x / 2, winPixelSize.y / 2 - pauseLabelSize.y / 2};
 }
 
+PauseMenu::~PauseMenu()
+{
+	delete exitButton;
+}
+
 int PauseMenu::update(const Inputs& input)
 {
 	isLmb = false;

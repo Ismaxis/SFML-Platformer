@@ -1,5 +1,10 @@
 #include "Player.h"
 
+Player::~Player()
+{
+
+}
+
 void Player::update(const Map& map, int time)
 {
 	// frame time limit

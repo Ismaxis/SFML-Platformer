@@ -10,7 +10,6 @@ private:
 	std::vector<std::vector<int>> map;
 
 	sf::Vector2u frameSize;
-	
 	sf::Vector2u gridSize;
 
 	sf::Texture sheet;
@@ -59,6 +58,8 @@ public:
 
 		cageSize = sheet.getSize().y;
 	}
+
+	~Map();
 
 	unsigned int getCageSize() const;
 

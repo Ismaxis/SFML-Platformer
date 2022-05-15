@@ -19,7 +19,6 @@ Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const 
 	offset = { 0, 0 };
 
 	pauseMenu = new PauseMenu(exitButtonPaths.first, exitButtonPaths.second, pauseLabelPath, winPixelSize);
-
 }
 
 Level::~Level()

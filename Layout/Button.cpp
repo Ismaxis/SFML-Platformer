@@ -7,6 +7,11 @@ Button::Button(sf::Vector2i position, sf::Vector2i size) : _position(position), 
 	_texture.create(_size.x, _size.y);
 }
 
+Button::~Button()
+{
+
+}
+
 void Button::setTexture(const std::string& defTexturePath, const std::string& activeTexturePath)
 {
 	if(!_defTexture.loadFromFile(defTexturePath))
@@ -18,7 +23,7 @@ void Button::setTexture(const std::string& defTexturePath, const std::string& ac
 		std::cout << "Could not open active button texture" << std::endl;
 	}
 
-	_originalTextureSize = _defTexture.getSize(); // if _defTexture.getSize() = _actTexture.getSize()
+	_originalTextureSize = _defTexture.getSize(); 
 }
 
 void Button::update(sf::Vector2i mousePos, bool lmb)

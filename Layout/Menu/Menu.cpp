@@ -31,6 +31,11 @@ int Menu::update(const Inputs& input)
 
 sf::Sprite Menu::getSprite()
 {
+	// todo !!!
+	// we want to remove RenderTexture
+	// instead of it we will return a list of vectors
+	// this vectors will draw in main loop
+
 	texture.clear(sf::Color(60,0,100));
 
 	texture.draw(playBtn->getSprite());

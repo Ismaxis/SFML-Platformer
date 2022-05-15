@@ -1,5 +1,10 @@
 #include "Map.h"
 
+Map::~Map()
+{
+
+}
+
 unsigned int Map::getCageSize() const
 {
 	return cageSize;
@@ -28,7 +33,7 @@ sf::Sprite Map::getSprite(const sf::Vector2f pos, const sf::Vector2i offset) con
 	}
 	else
 	{
-		curSprite.setTexture(sheet);
+		curSprite.setTexture(sheet); // todo change texture to sprite and change only rect for every tile
 		curSprite.setTextureRect(sf::IntRect((map[pos.y][pos.x]) * cageSize, 0, cageSize, cageSize));
 	}
 	
