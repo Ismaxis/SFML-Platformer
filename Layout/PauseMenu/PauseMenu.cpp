@@ -45,7 +45,7 @@ sf::Sprite PauseMenu::getSprite()
 	texture.clear(sf::Color(0,0,0,100));
 
 	// draw button
-	texture.draw(exitButton->getSprite());
+	texture.draw(*exitButton->getSprite());
 
 	// draw label
 	const sf::Vector2u textureSize = pauseLabelTexture.getSize();

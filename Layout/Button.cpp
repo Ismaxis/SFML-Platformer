@@ -4,7 +4,7 @@
 
 Button::Button(sf::Vector2i position, sf::Vector2i size) : _position(position), _size(size)
 {
-	_texture.create(_size.x, _size.y);
+
 }
 
 Button::~Button()
@@ -14,16 +14,29 @@ Button::~Button()
 
 void Button::setTexture(const std::string& defTexturePath, const std::string& activeTexturePath)
 {
-	if(!_defTexture.loadFromFile(defTexturePath))
+	if(!defTexture.loadFromFile(defTexturePath))
 	{
 		std::cout << "Could not open default button texture" << std::endl;
 	}
-	if(!_actTexture.loadFromFile(activeTexturePath))
+	else
+	{
+		const sf::Vector2i originalSize(defTexture.getSize());
+		defSprite.setTexture(defTexture);
+		defSprite.setScale(_size.x / originalSize.x, _size.y / originalSize.y);
+		defSprite.setPosition(_position.x, _position.y);
+	}
+
+	if(!actTexture.loadFromFile(activeTexturePath))
 	{
 		std::cout << "Could not open active button texture" << std::endl;
 	}
-
-	_originalTextureSize = _defTexture.getSize(); 
+	else
+	{
+		const sf::Vector2i originalSize(actTexture.getSize());
+		actSprite.setTexture(actTexture);
+		actSprite.setScale(_size.x / originalSize.x, _size.y / originalSize.y);
+		actSprite.setPosition(_position.x, _position.y);
+	}
 }
 
 void Button::update(sf::Vector2i mousePos, bool lmb)
@@ -59,25 +72,14 @@ bool Button::isActive() const
 	return _isActive;
 }
 
-sf::Sprite Button::getSprite()
+sf::Sprite* Button::getSprite()
 {
-	sf::Sprite btnSprite;
 	if(isActive())
 	{
-		btnSprite.setTexture(_actTexture);
+		return &actSprite;
 	}
 	else
 	{
-		btnSprite.setTexture(_defTexture);
+		return &defSprite;
 	}
-	btnSprite.setScale(_size.x/_originalTextureSize.x, _size.y/_originalTextureSize.y);
-
-	_texture.clear(sf::Color(0,0,0,0));
-	_texture.draw(btnSprite);
-	_texture.display();
-
-	auto resultSprite = sf::Sprite(_texture.getTexture());
-	resultSprite.setPosition(_position.x, _position.y);
-
-	return resultSprite;
 }

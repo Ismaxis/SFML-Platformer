@@ -13,7 +13,7 @@ public:
 	void update(sf::Vector2i mousePos, bool lmb);
 	bool isClicked() const;
 	bool isActive() const;
-	sf::Sprite getSprite();
+	sf::Sprite* getSprite();
 
 private:
 	bool _isClicked;
@@ -21,12 +21,10 @@ private:
 
 	sf::Vector2i _position; // top left corner 
 	sf::Vector2i _size;
-
-	sf::RenderTexture _texture; // todo remove this
-
-	sf::Texture _defTexture;
+	
 	sf::Sprite defSprite;
-	sf::Texture _actTexture;
 	sf::Sprite actSprite;
-	sf::Vector2u _originalTextureSize;
+
+	sf::Texture defTexture;
+	sf::Texture actTexture;
 };
