@@ -1,4 +1,5 @@
 #include "Level.h"
+#include <chrono>
 
 Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath, const sf::Vector2u winPixelSize)
 {
@@ -71,15 +72,24 @@ sf::Sprite Level::getSprite()
 	offset = cam->calculateOffsets(player->getPos(), player->getVel());
 
 	// map draw
+	auto start = std::chrono::steady_clock::now();
+
 	const sf::Vector2i offsetInCages{ static_cast<int> (offset.x / tileSize), static_cast<int> (offset.y / tileSize) };
 	for (float i = 0; i < winTileSize.y + 1; i++)
 	{
 		for (float j = 0; j < winTileSize.x + 1; j++)
 		{
-			sf::Sprite sprt = map->getSprite(sf::Vector2f(j + offsetInCages.x, i + offsetInCages.y), offset);
-			texture.draw(sprt);
+			const sf::Sprite* sprite = map->getSprite(sf::Vector2f(j + offsetInCages.x, i + offsetInCages.y), offset);
+			if(sprite != nullptr)
+			{
+				texture.draw(*sprite);
+			}
 		}
 	}
+
+	auto end = std::chrono::steady_clock::now();
+
+	std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << "\n";
 
 	// player draw
 	texture.draw(player->getSprite(offset));
