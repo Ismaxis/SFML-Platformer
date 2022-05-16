@@ -29,8 +29,6 @@ private:
 	sf::Vector2u winTileSize;
 
 	Player* player;
-	int direction{ 0 }; 
-	int grabDirection{ 0 }; 
 	playerControls controls;
 
 	Camera* cam; 

@@ -39,13 +39,20 @@ Map::Map(const std::string& mapPath, const std::string& sheetPath)
 
 	cageSize = sheet.getSize().y;
 
-	curSprite = new sf::Sprite;
-	curSprite->setTexture(sheet);
+	for (int i = 0; i < sheet.getSize().x; i += cageSize)
+	{
+		auto newSprite = new sf::Sprite(sheet);
+		newSprite->setTextureRect(sf::IntRect(i, 0, cageSize, cageSize));
+		sprites.push_back(newSprite);
+	}
 }
 
 Map::~Map()
 {
-	delete curSprite;
+	for (const auto sprite : sprites)
+	{
+		delete sprite;
+	}
 }
 
 unsigned int Map::getCageSize() const
@@ -71,8 +78,7 @@ sf::Sprite* Map::getSprite(const sf::Vector2f pos, const sf::Vector2i offset)
 	}
 	else
 	{
-		curSprite->setPosition(sf::Vector2f(cageSize * pos.x - offset.x, cageSize * pos.y - offset.y));
-		curSprite->setTextureRect(sf::IntRect((map[pos.y][pos.x]) * cageSize, 0, cageSize, cageSize));
-		return curSprite;
+		sprites[map[pos.y][pos.x]]->setPosition(sf::Vector2f(cageSize * pos.x - offset.x, cageSize * pos.y - offset.y));
+		return sprites[map[pos.y][pos.x]];
 	}
 }

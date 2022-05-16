@@ -13,7 +13,7 @@ private:
 	sf::Vector2u gridSize;
 
 	sf::Texture sheet;
-	sf::Sprite* curSprite;
+	std::vector<sf::Sprite*> sprites;
 
 	unsigned int cageSize;
 

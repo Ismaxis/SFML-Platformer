@@ -79,10 +79,10 @@ sf::Sprite Level::getSprite()
 	{
 		for (float j = 0; j < winTileSize.x + 1; j++)
 		{
-			const sf::Sprite* sprt = map->getSprite(sf::Vector2f(j + offsetInCages.x, i + offsetInCages.y), offset);
-			if(sprt != nullptr)
+			const sf::Sprite* sprite = map->getSprite(sf::Vector2f(j + offsetInCages.x, i + offsetInCages.y), offset);
+			if(sprite != nullptr)
 			{
-				texture.draw(*sprt);
+				texture.draw(*sprite);
 			}
 		}
 	}
