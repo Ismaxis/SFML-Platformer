@@ -25,7 +25,7 @@ private:
 	Map* map;
 	unsigned int tileSize;
 	sf::Vector2u gridTileSize;
-	sf::Vector2u mapPixelSize;
+	sf::Vector2u mapPixelSize; 
 	sf::Vector2u winTileSize;
 
 	Player* player;
