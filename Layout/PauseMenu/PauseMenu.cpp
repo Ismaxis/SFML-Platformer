@@ -21,16 +21,21 @@ PauseMenu::PauseMenu(const std::string& exitBtnPassive, const std::string& exitB
 	labelSprite->setPosition(pauseLabelPos.x, pauseLabelPos.y);
 	labelSprite->setScale(pauseLabelSize.x / textureSize.x, pauseLabelSize.y / textureSize.y);
 
-	backgroundSprite = new sf::Sprite;
+
+	sf::Texture backgroundTexture;
+	backgroundTexture.create(1,1);
+
+	backgroundSprite = new sf::Sprite(backgroundTexture);
 	backgroundSprite->setColor(sf::Color(0,0,0,100));
 	backgroundSprite->setPosition(0,0);
-	backgroundSprite->setTextureRect(sf::IntRect(0,0, winPixelSize.x, winPixelSize.y));
+	backgroundSprite->setScale(winPixelSize.x, winPixelSize.y);
 }
 
 PauseMenu::~PauseMenu()
 {
 	delete exitButton;
 	delete labelSprite;
+	delete backgroundSprite;
 }
 
 int PauseMenu::update(const Inputs& input)

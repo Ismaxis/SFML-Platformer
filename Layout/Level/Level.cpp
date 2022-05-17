@@ -15,6 +15,12 @@ Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const 
 	controls.walkDirection = 0;
 	controls.grabDirection = 0;
 
+	sf::Texture backgroundTexture;
+	backgroundTexture.create(1,1);
+	backgroundSprite = new sf::Sprite(backgroundTexture);
+	backgroundSprite->setScale(winPixelSize.x, winPixelSize.y);
+	backgroundSprite->setColor(sf::Color(222, 183, 247));
+
 	cam = new Camera(winPixelSize, mapPixelSize);
 	offset = { 0, 0 };
 
@@ -102,6 +108,8 @@ std::queue<sf::Sprite*> Level::getSprites()
 	offset = cam->calculateOffsets(player->getPos(), player->getVel());
 
 	std::queue<sf::Sprite*> result;
+
+	result.push(new sf::Sprite(*backgroundSprite));
 
 	// map
 	const sf::Vector2i offsetInCages{ static_cast<int> (offset.x / tileSize), static_cast<int> (offset.y / tileSize) };

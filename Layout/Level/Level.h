@@ -33,6 +33,8 @@ private:
 	Player* player;
 	playerControls controls;
 
+	sf::Sprite* backgroundSprite;
+
 	Camera* cam; 
 	sf::Vector2i offset;
 

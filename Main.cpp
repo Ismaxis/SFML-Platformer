@@ -63,7 +63,7 @@ int main()
 			curLayout = new Menu(winPixelSize);
 		}
 
-		auto start = std::chrono::steady_clock::now();
+		//auto start = std::chrono::steady_clock::now();
 
 		window.clear(sf::Color(255,255,255));
 		auto sprites = curLayout->getSprites();
@@ -75,7 +75,7 @@ int main()
 		}
 		window.display();
 
-		auto end = std::chrono::steady_clock::now();
-		std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << "\n";
+		//auto end = std::chrono::steady_clock::now();
+		//std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << "\n";
 	}
 }

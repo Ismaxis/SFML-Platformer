@@ -19,5 +19,7 @@ private:
 	Button* playBtn;
 	bool isLmb;
 
+	sf::Sprite* backgroundSprite;
+
 	void poolInputs(const Inputs& input);
 };
