@@ -44,6 +44,13 @@ sf::Sprite Menu::getSprite()
 	return sf::Sprite(texture.getTexture());
 }
 
+std::queue<sf::Sprite*> Menu::getSprites()
+{
+	std::queue<sf::Sprite*> result;
+	result.push(new sf::Sprite(*playBtn->getSprite()));
+	return result;
+}
+
 void Menu::poolInputs(const Inputs& input)
 {
 	for (const auto event : input.events)

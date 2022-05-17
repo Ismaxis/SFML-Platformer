@@ -21,6 +21,8 @@ public:
 	int update(const Inputs& input) override;
 	sf::Sprite getSprite() override;
 
+	std::queue<sf::Sprite*> getSprites() override;
+
 private:
 	Map* map;
 	unsigned int tileSize;

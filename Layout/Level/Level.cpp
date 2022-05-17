@@ -1,5 +1,4 @@
 #include "Level.h"
-#include <chrono>
 
 Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath, const sf::Vector2u winPixelSize)
 {
@@ -72,8 +71,6 @@ sf::Sprite Level::getSprite()
 	offset = cam->calculateOffsets(player->getPos(), player->getVel());
 
 	// map draw
-	auto start = std::chrono::steady_clock::now();
-
 	const sf::Vector2i offsetInCages{ static_cast<int> (offset.x / tileSize), static_cast<int> (offset.y / tileSize) };
 	for (float i = 0; i < winTileSize.y + 1; i++)
 	{
@@ -87,12 +84,8 @@ sf::Sprite Level::getSprite()
 		}
 	}
 
-	auto end = std::chrono::steady_clock::now();
-
-	std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << "\n";
-
 	// player draw
-	texture.draw(player->getSprite(offset));
+	texture.draw(*player->getSprite(offset));
 
 	// pause menu draw
 	if(isPause)
@@ -102,6 +95,43 @@ sf::Sprite Level::getSprite()
 
 	texture.display();
 	return sf::Sprite(texture.getTexture());
+}
+
+std::queue<sf::Sprite*> Level::getSprites()
+{
+	offset = cam->calculateOffsets(player->getPos(), player->getVel());
+
+	std::queue<sf::Sprite*> result;
+
+	// map
+	const sf::Vector2i offsetInCages{ static_cast<int> (offset.x / tileSize), static_cast<int> (offset.y / tileSize) };
+	for (float i = 0; i < winTileSize.y + 1; i++)
+	{
+		for (float j = 0; j < winTileSize.x + 1; j++)
+		{
+			sf::Sprite* sprite = map->getSprite(sf::Vector2f(j + offsetInCages.x, i + offsetInCages.y), offset);
+			if(sprite != nullptr)
+			{
+				result.push(new sf::Sprite(*sprite));
+			}
+		}
+	}
+
+	// player
+	result.push(new sf::Sprite(*player->getSprite(offset)));
+
+	// pause menu
+	if(isPause)
+	{
+		auto pauseMenuSprites = pauseMenu->getSprites();
+		while(!pauseMenuSprites.empty())
+		{
+			result.push(new sf::Sprite(*pauseMenuSprites.front()));
+			pauseMenuSprites.pop();
+		}
+	}
+
+	return result;
 }
 
 void Level::poolInputs(const Inputs& input)

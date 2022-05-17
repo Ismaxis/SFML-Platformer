@@ -1,3 +1,4 @@
+#include <chrono>
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Layout/Layout.h"
@@ -62,7 +63,19 @@ int main()
 			curLayout = new Menu(winPixelSize);
 		}
 
-		window.draw(curLayout->getSprite());
+		auto start = std::chrono::steady_clock::now();
+
+		window.clear(sf::Color(255,255,255));
+		auto sprites = curLayout->getSprites();
+		while(!sprites.empty())
+		{
+			window.draw(*sprites.front());
+			delete sprites.front();
+			sprites.pop();
+		}
 		window.display();
+
+		auto end = std::chrono::steady_clock::now();
+		std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << "\n";
 	}
 }

@@ -15,11 +15,22 @@ PauseMenu::PauseMenu(const std::string& exitBtnPassive, const std::string& exitB
 	}
 
 	pauseLabelPos = {winPixelSize.x / 2 - pauseLabelSize.x / 2, winPixelSize.y / 2 - pauseLabelSize.y / 2};
+
+	labelSprite = new sf::Sprite(pauseLabelTexture);
+	const sf::Vector2u textureSize = pauseLabelTexture.getSize();
+	labelSprite->setPosition(pauseLabelPos.x, pauseLabelPos.y);
+	labelSprite->setScale(pauseLabelSize.x / textureSize.x, pauseLabelSize.y / textureSize.y);
+
+	backgroundSprite = new sf::Sprite;
+	backgroundSprite->setColor(sf::Color(0,0,0,100));
+	backgroundSprite->setPosition(0,0);
+	backgroundSprite->setTextureRect(sf::IntRect(0,0, winPixelSize.x, winPixelSize.y));
 }
 
 PauseMenu::~PauseMenu()
 {
 	delete exitButton;
+	delete labelSprite;
 }
 
 int PauseMenu::update(const Inputs& input)
@@ -48,19 +59,26 @@ sf::Sprite PauseMenu::getSprite()
 	texture.draw(*exitButton->getSprite());
 
 	// draw label
-	const sf::Vector2u textureSize = pauseLabelTexture.getSize();
-	sf::Sprite labelSprite(pauseLabelTexture);
-	labelSprite.setPosition(pauseLabelPos.x, pauseLabelPos.y);
-	labelSprite.setScale(pauseLabelSize.x / textureSize.x, pauseLabelSize.y / textureSize.y);
-	texture.draw(labelSprite);
+
+	texture.draw(*labelSprite);
 
 	texture.display();
 	return sf::Sprite(texture.getTexture());
 }
 
+std::queue<sf::Sprite*> PauseMenu::getSprites()
+{
+	std::queue<sf::Sprite*> result;
+	result.push(new sf::Sprite(*backgroundSprite));
+	result.push(new sf::Sprite(*exitButton->getSprite()));
+	result.push(new sf::Sprite(*labelSprite));
+
+	return result;
+}
+
 void PauseMenu::poolInputs(const Inputs& input)
 {
-	for (const auto& event : input.events)
+	for (auto& event : input.events)
 	{
 		if(event.type == sf::Event::MouseButtonPressed)
 		{

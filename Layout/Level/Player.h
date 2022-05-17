@@ -23,6 +23,7 @@ private:
 	bool jumped = false;
 
 	sf::Texture plTexture;
+	sf::Sprite* playerSprite;
 
 public:
 	Player(const std::string& path)
@@ -36,6 +37,8 @@ public:
 
 		rect.width = size.x;
 		rect.height = size.y;
+
+		playerSprite = new sf::Sprite(plTexture);
 	}
 
 	~Player();
@@ -70,6 +73,6 @@ public:
 	bool isOnStairs() const;
 	bool isStairsAvailable() const;
 
-	sf::Sprite getSprite(sf::Vector2i offset) const;
+	sf::Sprite* getSprite(sf::Vector2i offset) const;
 	sf::RectangleShape dbgSprite(sf::Vector2i offset) const;
 };

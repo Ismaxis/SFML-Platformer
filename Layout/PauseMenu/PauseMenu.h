@@ -11,6 +11,7 @@ public:
 
 	int update(const Inputs& input) override;
 	sf::Sprite getSprite() override;
+	std::queue<sf::Sprite*> getSprites() override;
 
 private:
 	Button* exitButton;
@@ -19,8 +20,11 @@ private:
 	bool isLmb;
 
 	sf::Texture pauseLabelTexture;
+	sf::Sprite* labelSprite;
 	sf::Vector2u pauseLabelPos;
 	sf::Vector2i pauseLabelSize = { 800, 400 };
+
+	sf::Sprite* backgroundSprite;
 
 	void poolInputs(const Inputs& input);
 };
