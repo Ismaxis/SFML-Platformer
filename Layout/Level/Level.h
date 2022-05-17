@@ -10,7 +10,7 @@
 
 extern std::pair<std::string,std::string> exitButtonPaths;
 extern std::string pauseLabelPath;
-extern std::string pauseBackgroundPath;
+extern std::string emptyPath;
 
 // draw tile map
 class Level : public Layout

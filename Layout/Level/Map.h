@@ -1,9 +1,9 @@
+#pragma once
 #include<SFML/Graphics.hpp>
 #include<iostream>
 #include<fstream>
 #include<sstream>
 
-#pragma once
 class Map
 {
 private:
@@ -13,7 +13,7 @@ private:
 	sf::Vector2u gridSize;
 
 	sf::Texture sheet;
-	std::vector<sf::Sprite*> sprites;
+	std::vector<sf::Sprite> sprites;
 
 	unsigned int cageSize;
 
@@ -28,5 +28,5 @@ public:
 
 	int getCage(sf::Vector2i coords) const;
 
-	sf::Sprite getSprite(sf::Vector2f pos, sf::Vector2i offset);
+	sf::Sprite getSprite(sf::Vector2i pos, sf::Vector2i offset) const;
 };

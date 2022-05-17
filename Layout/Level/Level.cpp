@@ -24,7 +24,7 @@ Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const 
 	cam = new Camera(winPixelSize, mapPixelSize);
 	offset = { 0, 0 };
 
-	pauseMenu = new PauseMenu(exitButtonPaths.first, exitButtonPaths.second, pauseLabelPath, pauseBackgroundPath, winPixelSize);
+	pauseMenu = new PauseMenu(exitButtonPaths.first, exitButtonPaths.second, pauseLabelPath, emptyPath, winPixelSize);
 }
 
 Level::~Level()
@@ -117,9 +117,10 @@ std::queue<sf::Sprite> Level::getSprites()
 	{
 		for (float j = 0; j < winTileSize.x + 1; j++)
 		{
-			sf::Sprite sprite = map->getSprite(sf::Vector2f(j + offsetInCages.x, i + offsetInCages.y), offset);
-			//if(sprite != nullptr)
+			const auto pos = sf::Vector2i(j + offsetInCages.x, i + offsetInCages.y);
+			if(map->getCage(pos) != -1)
 			{
+				sf::Sprite sprite = map->getSprite(pos, offset);
 				result.push(sprite);
 			}
 		}

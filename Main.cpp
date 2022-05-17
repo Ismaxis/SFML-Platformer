@@ -19,7 +19,7 @@ std::pair<std::string, std::string> startButtonPaths{"Textures/startButton.png",
 
 std::pair<std::string, std::string> exitButtonPaths{"Textures/exitButton.png", "Textures/exitButtonActive.png"};
 std::string pauseLabelPath{"Textures/pause.png"};
-std::string pauseBackgroundPath{"Textures/pauseBackground.png"};
+std::string emptyPath{"Textures/empty.png"};
 
 int main()
 {

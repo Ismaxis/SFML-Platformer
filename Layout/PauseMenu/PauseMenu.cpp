@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-PauseMenu::PauseMenu(const std::string& exitBtnPassive, const std::string& exitBtnActive, const std::string& pauseLabelPath, const std::string& pauseBackgroundPath, sf::Vector2u winPixelSize)
+PauseMenu::PauseMenu(const std::string& exitBtnPassive, const std::string& exitBtnActive, const std::string& pauseLabelPath, const std::string& emptyPath, sf::Vector2u winPixelSize)
 {
 	texture.create(winPixelSize.x, winPixelSize.y);
 
@@ -21,7 +21,7 @@ PauseMenu::PauseMenu(const std::string& exitBtnPassive, const std::string& exitB
 	labelSprite->setPosition(pauseLabelPos.x, pauseLabelPos.y);
 	labelSprite->setScale(pauseLabelSize.x / textureSize.x, pauseLabelSize.y / textureSize.y);
 	
-	backgroundTexture.loadFromFile(pauseBackgroundPath);
+	backgroundTexture.loadFromFile(emptyPath);
 	backgroundSprite.setTexture(backgroundTexture);
 	backgroundSprite.setColor(sf::Color(0,0,0,100));
 	backgroundSprite.setScale(winPixelSize.x, winPixelSize.y);
