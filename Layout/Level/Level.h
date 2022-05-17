@@ -21,17 +21,19 @@ public:
 	int update(const Inputs& input) override;
 	sf::Sprite getSprite() override;
 
+	std::queue<sf::Sprite*> getSprites() override;
+
 private:
 	Map* map;
 	unsigned int tileSize;
 	sf::Vector2u gridTileSize;
-	sf::Vector2u mapPixelSize;
+	sf::Vector2u mapPixelSize; 
 	sf::Vector2u winTileSize;
 
 	Player* player;
-	int direction{ 0 }; 
-	int grabDirection{ 0 }; 
 	playerControls controls;
+
+	sf::Sprite* backgroundSprite;
 
 	Camera* cam; 
 	sf::Vector2i offset;

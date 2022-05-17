@@ -13,10 +13,13 @@ public:
 
 	int update(const Inputs& input) override;
 	sf::Sprite getSprite() override;
+	std::queue<sf::Sprite*> getSprites() override;
 
 private:
 	Button* playBtn;
 	bool isLmb;
+
+	sf::Sprite* backgroundSprite;
 
 	void poolInputs(const Inputs& input);
 };

@@ -2,7 +2,7 @@
 
 Player::~Player()
 {
-
+	delete playerSprite;
 }
 
 void Player::update(const Map& map, int time)
@@ -305,13 +305,9 @@ bool Player::isOnStairs() const
 	return onStairs;
 }
 
-sf::Sprite Player::getSprite(const sf::Vector2i offset) const
+sf::Sprite* Player::getSprite(const sf::Vector2i offset) const
 {
-	sf::Sprite playerSprite;
-	
-	playerSprite.setTexture(plTexture);
-	playerSprite.setPosition(sf::Vector2f(rect.left - offset.x, rect.top - offset.y));
-	
+	playerSprite->setPosition(sf::Vector2f(rect.left - offset.x, rect.top - offset.y));
 	return playerSprite;
 }
 

@@ -4,14 +4,21 @@ Menu::Menu(const sf::Vector2u winPixelSize)
 {
 	texture.create(winPixelSize.x , winPixelSize.y);
 
-	sf::Vector2i playBtnSize = {300, 200};
+	const sf::Vector2i playBtnSize = {300, 200};
 	playBtn = new Button(sf::Vector2i(winPixelSize.x/2 - playBtnSize.x/2, winPixelSize.y/2 - playBtnSize.y/2), playBtnSize);
 	playBtn->setTexture(startButtonPaths.first, startButtonPaths.second);
+
+	sf::Texture backgroundTexture;
+	backgroundTexture.create(1,1);
+	backgroundSprite = new sf::Sprite(backgroundTexture);
+	backgroundSprite->setScale(winPixelSize.x, winPixelSize.y);
+	backgroundSprite->setColor(sf::Color(60,0,100));
 }
 
 Menu::~Menu()
 {
 	delete playBtn;
+	delete backgroundSprite;
 }
 
 int Menu::update(const Inputs& input)
@@ -31,17 +38,20 @@ int Menu::update(const Inputs& input)
 
 sf::Sprite Menu::getSprite()
 {
-	// todo !!!
-	// we want to remove RenderTexture
-	// instead of it we will return a list of vectors
-	// this vectors will draw in main loop
-
 	texture.clear(sf::Color(60,0,100));
 
 	texture.draw(*playBtn->getSprite());
 
 	texture.display();
 	return sf::Sprite(texture.getTexture());
+}
+
+std::queue<sf::Sprite*> Menu::getSprites()
+{
+	std::queue<sf::Sprite*> result;
+	result.push(new sf::Sprite(*backgroundSprite));
+	result.push(new sf::Sprite(*playBtn->getSprite()));
+	return result;
 }
 
 void Menu::poolInputs(const Inputs& input)
