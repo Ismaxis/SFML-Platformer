@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-PauseMenu::PauseMenu(const std::string& exitBtnPassive, const std::string& exitBtnActive, const std::string& pauseLabelPath, sf::Vector2u winPixelSize)
+PauseMenu::PauseMenu(const std::string& exitBtnPassive, const std::string& exitBtnActive, const std::string& pauseLabelPath, const std::string& pauseBackgroundPath, sf::Vector2u winPixelSize)
 {
 	texture.create(winPixelSize.x, winPixelSize.y);
 
@@ -20,22 +20,16 @@ PauseMenu::PauseMenu(const std::string& exitBtnPassive, const std::string& exitB
 	const sf::Vector2u textureSize = pauseLabelTexture.getSize();
 	labelSprite->setPosition(pauseLabelPos.x, pauseLabelPos.y);
 	labelSprite->setScale(pauseLabelSize.x / textureSize.x, pauseLabelSize.y / textureSize.y);
-
-
-	sf::Texture backgroundTexture;
-	backgroundTexture.create(1,1);
-
-	backgroundSprite = new sf::Sprite(backgroundTexture);
-	backgroundSprite->setColor(sf::Color(0,0,0,100));
-	backgroundSprite->setPosition(0,0);
-	backgroundSprite->setScale(winPixelSize.x, winPixelSize.y);
+	
+	backgroundTexture.loadFromFile(pauseBackgroundPath);
+	backgroundSprite.setTexture(backgroundTexture);
+	backgroundSprite.setScale(winPixelSize.x, winPixelSize.y);
 }
 
 PauseMenu::~PauseMenu()
 {
 	delete exitButton;
 	delete labelSprite;
-	delete backgroundSprite;
 }
 
 int PauseMenu::update(const Inputs& input)
@@ -71,12 +65,12 @@ sf::Sprite PauseMenu::getSprite()
 	return sf::Sprite(texture.getTexture());
 }
 
-std::queue<sf::Sprite*> PauseMenu::getSprites()
+std::queue<sf::Sprite> PauseMenu::getSprites()
 {
-	std::queue<sf::Sprite*> result;
-	result.push(new sf::Sprite(*backgroundSprite));
-	result.push(new sf::Sprite(*exitButton->getSprite()));
-	result.push(new sf::Sprite(*labelSprite));
+	std::queue<sf::Sprite> result;
+	result.push(backgroundSprite);
+	//result.push(*exitButton->getSprite());
+	//result.push(*labelSprite);
 
 	return result;
 }

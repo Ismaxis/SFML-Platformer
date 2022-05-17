@@ -70,15 +70,15 @@ int Map::getCage(const sf::Vector2i coords) const
 	return map[coords.y][coords.x];
 }
 
-sf::Sprite* Map::getSprite(const sf::Vector2f pos, const sf::Vector2i offset)
+sf::Sprite Map::getSprite(const sf::Vector2f pos, const sf::Vector2i offset)
 {
 	if (pos.x >= map[0].size() || pos.y >= map.size() || map[pos.y][pos.x] == -1)
 	{
-		return nullptr;
+		return sf::Sprite();
 	}
 	else
 	{
 		sprites[map[pos.y][pos.x]]->setPosition(sf::Vector2f(cageSize * pos.x - offset.x, cageSize * pos.y - offset.y));
-		return sprites[map[pos.y][pos.x]];
+		return *sprites[map[pos.y][pos.x]];
 	}
 }
