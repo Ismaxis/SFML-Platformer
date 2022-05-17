@@ -23,6 +23,7 @@ PauseMenu::PauseMenu(const std::string& exitBtnPassive, const std::string& exitB
 	
 	backgroundTexture.loadFromFile(pauseBackgroundPath);
 	backgroundSprite.setTexture(backgroundTexture);
+	backgroundSprite.setColor(sf::Color(0,0,0,100));
 	backgroundSprite.setScale(winPixelSize.x, winPixelSize.y);
 }
 
@@ -69,8 +70,8 @@ std::queue<sf::Sprite> PauseMenu::getSprites()
 {
 	std::queue<sf::Sprite> result;
 	result.push(backgroundSprite);
-	//result.push(*exitButton->getSprite());
-	//result.push(*labelSprite);
+	result.push(*exitButton->getSprite());
+	result.push(*labelSprite);
 
 	return result;
 }
