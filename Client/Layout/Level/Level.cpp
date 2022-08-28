@@ -2,7 +2,7 @@
 
 Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath, const sf::Vector2u winPixelSize)
 {
-	if (Connect("127.0.0.1", 60000))
+	if (Connect("194.67.111.111", 60000))
 	{
 		std::cout << "Connected\n";
 	}
@@ -102,9 +102,6 @@ int Level::update(const Inputs& input)
 
 			case(GameMsg::Game_UpdatePlayer):
 			{
-				size_t i = msg.body.size() - sizeof(playerDescription);
-				std::cout << msg.body.size() << "\n" << sizeof(playerDescription) << "\n" << i << "\n";
-
 				playerDescription desc;
 				msg >> desc;
 				if(players.find(desc.uniqueID) == players.end())
