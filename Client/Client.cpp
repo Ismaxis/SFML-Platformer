@@ -1,6 +1,6 @@
-#include <chrono>
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <chrono>
 #include "Layout/Layout.h"
 #include "Layout/Level/Level.h"
 #include "Layout/Menu/Menu.h"

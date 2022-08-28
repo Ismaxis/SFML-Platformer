@@ -10,8 +10,7 @@ public:
 	virtual sf::Sprite getSprite() = 0;
 	virtual std::queue<sf::Sprite> getSprites() = 0;
 
-	virtual ~Layout() = default; 
-	// its important to have a virtual destructor in base abstract class
+	virtual ~Layout() = default; // its important to have a virtual destructor in base abstract class
 
 protected:
 	sf::RenderTexture texture;
