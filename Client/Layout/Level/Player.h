@@ -26,21 +26,9 @@ private:
 	sf::Sprite* playerSprite;
 
 public:
-	Player(const std::string& path)
-	{
-		if (!plTexture.loadFromFile(path))
-		{
-			std::cout << "Could not open player texture" << std::endl;
-		}
-
-		const sf::Vector2u size = plTexture.getSize();
-
-		rect.width = size.x;
-		rect.height = size.y;
-
-		playerSprite = new sf::Sprite(plTexture);
-	}
-
+	Player() = default;
+	Player(const std::string& path);
+	Player(Player&) = default;
 	~Player();
 
 	void update(const Map &map, int time);
@@ -64,8 +52,9 @@ public:
 	void grab(int direction);
 
 	void setPos(sf::Vector2f pos);
-
 	sf::Vector2i getPos() const;
+
+	void setVel(sf::Vector2f vel);
 	sf::Vector2f getVel() const;
 
 	bool isOnGround() const;

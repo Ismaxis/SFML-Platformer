@@ -1,5 +1,20 @@
 #include "Player.h"
 
+Player::Player(const std::string& path)
+{
+	if (!plTexture.loadFromFile(path))
+	{
+		std::cout << "Could not open player texture" << std::endl;
+	}
+
+	const sf::Vector2u size = plTexture.getSize();
+
+	rect.width = size.x;
+	rect.height = size.y;
+
+	playerSprite = new sf::Sprite(plTexture);
+}
+
 Player::~Player()
 {
 	delete playerSprite;
@@ -283,6 +298,11 @@ sf::Vector2i Player::getPos() const
 	pos.y = rect.top + rect.height;
 
 	return pos;
+}
+
+void Player::setVel(const sf::Vector2f vel)
+{
+	plVelocity = vel;
 }
 
 sf::Vector2f Player::getVel() const

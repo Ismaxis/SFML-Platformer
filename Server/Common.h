@@ -19,18 +19,19 @@ enum class GameMsg : uint32_t
 	Game_UpdatePlayer,
 };
 
-struct sPlayerDescription
+struct playerDescription
 {
-	uint32_t nUniqueID = 0;
-	uint32_t nAvatarID = 0;
+	std::pair<float, float> pos;
+	std::pair<float, float> vel;
 
-	uint32_t nHealth = 100;
-	uint32_t nAmmo = 20;
-	uint32_t nKills = 0;
-	uint32_t nDeaths = 0;
+	uint32_t uniqueID = 0;
 
-	float fRadius = 0.5f;
+	//uint32_t nAvatarID = 0;
 
-	olc::vf2d vPos;
-	olc::vf2d vVel;
+	//uint32_t nHealth = 100;
+	//uint32_t nAmmo = 20;
+	//uint32_t nKills = 0;
+	//uint32_t nDeaths = 0;
+
+	//float fRadius = 0.5f;
 };

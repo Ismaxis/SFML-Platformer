@@ -11,7 +11,7 @@ public:
 	{
 	}
 
-	std::unordered_map<uint32_t, sPlayerDescription> m_mapPlayerRoster;
+	std::unordered_map<uint32_t, playerDescription> m_mapPlayerRoster;
 	std::vector<uint32_t> m_vGarbageIDs;
 
 protected:
@@ -41,7 +41,7 @@ protected:
 			else
 			{
 				auto& pd = m_mapPlayerRoster[client->GetID()];
-				std::cout << "[UNGRACEFUL REMOVAL]:" + std::to_string(pd.nUniqueID) + "\n";
+				std::cout << "[UNGRACEFUL REMOVAL]:" + std::to_string(pd.uniqueID) + "\n";
 				m_mapPlayerRoster.erase(client->GetID());
 				m_vGarbageIDs.push_back(client->GetID());
 			}
@@ -70,14 +70,14 @@ protected:
 		{
 		case GameMsg::Client_RegisterWithServer:
 		{
-			sPlayerDescription desc;
+			playerDescription desc;
 			msg >> desc;
-			desc.nUniqueID = client->GetID();
-			m_mapPlayerRoster.insert_or_assign(desc.nUniqueID, desc);
+			desc.uniqueID = client->GetID();
+			m_mapPlayerRoster.insert_or_assign(desc.uniqueID, desc);
 
 			olc::net::message<GameMsg> msgSendID;
 			msgSendID.header.id = GameMsg::Client_AssignID;
-			msgSendID << desc.nUniqueID;
+			msgSendID << desc.uniqueID;
 			MessageClient(client, msgSendID);
 
 			olc::net::message<GameMsg> msgAddPlayer;

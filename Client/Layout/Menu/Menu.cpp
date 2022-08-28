@@ -36,16 +36,6 @@ int Menu::update(const Inputs& input)
 	return NOTHING; // nothing to do
 }
 
-sf::Sprite Menu::getSprite()
-{
-	texture.clear(sf::Color(60,0,100));
-
-	texture.draw(*playBtn->getSprite());
-
-	texture.display();
-	return sf::Sprite(texture.getTexture());
-}
-
 std::queue<sf::Sprite> Menu::getSprites()
 {
 	std::queue<sf::Sprite> result;

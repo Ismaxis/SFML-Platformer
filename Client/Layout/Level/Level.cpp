@@ -2,6 +2,11 @@
 
 Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath, const sf::Vector2u winPixelSize)
 {
+	if (Connect("127.0.0.1", 60000))
+	{
+		std::cout << "Connected\n";
+	}
+
 	texture.create(winPixelSize.x, winPixelSize.y);
 
 	map = new Map(mapPath, mapSheetPath);
@@ -10,10 +15,10 @@ Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const 
 	mapPixelSize = { gridTileSize.x * tileSize, gridTileSize.y * tileSize };
 	winTileSize = { winPixelSize.x / tileSize, winPixelSize.y / tileSize + 1u };
 
-	player = new Player(playerTexturePath);
-	player->setPos(sf::Vector2f(10 * tileSize, 20 * tileSize)); // todo initial position of player
-	controls.walkDirection = 0;
-	controls.grabDirection = 0;
+	// todo find a way to load right texture when player adds to game
+	plStoredTexturePath = playerTexturePath;
+	//player = new Player(playerTexturePath);
+	//player->setPos(sf::Vector2f(10 * tileSize, 20 * tileSize)); // todo initial position of player
 
 	sf::Texture backgroundTexture;
 	backgroundTexture.create(1,1);
@@ -30,13 +35,101 @@ Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const 
 Level::~Level()
 {
 	delete map;
-	delete player;
 	delete cam;
 	delete pauseMenu;
+	for (const auto& player : players)
+	{
+		delete player.second;
+	}
 }
 
 int Level::update(const Inputs& input)
 {
+	// Check for incoming network messages
+	if (IsConnected())
+	{
+		while (!Incoming().empty())
+		{
+			auto msg = Incoming().pop_front().msg;
+
+			switch (msg.header.id)
+			{
+			case(GameMsg::Client_Accepted):
+			{
+				std::cout << "Server accepted client - you're in!\n";
+				olc::net::message<GameMsg> msg;
+				msg.header.id = GameMsg::Client_RegisterWithServer;
+				playerDescription descPlayer{{10 * tileSize, 10 * tileSize}, {0.f, 0.f}};
+				msg << descPlayer;
+				Send(msg);
+				break;
+			}
+
+			case(GameMsg::Client_AssignID):
+			{
+				// Server is assigning us OUR id
+				msg >> thisPlayerID;
+				std::cout << "Assigned Client ID = " << thisPlayerID << "\n";
+				break;
+			}
+
+			case(GameMsg::Game_AddPlayer):
+			{
+				playerDescription desc;
+				msg >> desc;
+
+				Player* newPlayer = new Player(plStoredTexturePath);
+				newPlayer->setPos(sf::Vector2f(desc.pos.first, desc.pos.second));
+				newPlayer->setVel(sf::Vector2f(desc.vel.first, desc.vel.second));
+
+				players.insert_or_assign(desc.uniqueID, newPlayer);
+
+				if (desc.uniqueID == thisPlayerID)
+				{
+					// Now we exist in game world
+					isWaitingForConnection = false;
+				}
+				break;
+			}
+
+			case(GameMsg::Game_RemovePlayer):
+			{
+				uint32_t nRemovalID = 0;
+				msg >> nRemovalID;
+				players.erase(nRemovalID);
+				break;
+			}
+
+			case(GameMsg::Game_UpdatePlayer):
+			{
+				size_t i = msg.body.size() - sizeof(playerDescription);
+				std::cout << msg.body.size() << "\n" << sizeof(playerDescription) << "\n" << i << "\n";
+
+				playerDescription desc;
+				msg >> desc;
+				if(players.find(desc.uniqueID) == players.end())
+				{
+					std::cout << "Player " << desc.uniqueID << " does not exist\n";
+					break;
+				}
+
+				players[desc.uniqueID]->setPos(sf::Vector2f(desc.pos.first, desc.pos.second));
+				players[desc.uniqueID]->setVel(sf::Vector2f(desc.vel.first, desc.vel.second));
+				break;
+			}
+			}
+		}
+	}
+
+	if (isWaitingForConnection)
+	{
+		return NOTHING;
+	}
+
+
+	// Local updates
+
+	// THIS player inputs
 	poolInputs(input);
 
 	if(isPause)
@@ -49,63 +142,47 @@ int Level::update(const Inputs& input)
 	}
 	else
 	{
-		// move player
-		player->move(controls.walkDirection);
+		// move THIS player
+		players[thisPlayerID]->move(controls.walkDirection);
 
-		if (player->isStairsAvailable() && controls.grabDirection != 0)
+		if (players[thisPlayerID]->isStairsAvailable() && controls.grabDirection != 0)
 		{
-			player->grab(controls.grabDirection);
+			players[thisPlayerID]->grab(controls.grabDirection);
 		}
 
 		if (controls.isJump)
 		{
-			player->jump();
+			players[thisPlayerID]->jump();
 		}
 	}
-	// update player
-	player->update(*map, clock.restart().asMilliseconds());
+
+	// update all players
+	for (auto& player : players)
+	{
+		player.second->update(*map, clock.restart().asMilliseconds());
+	}
+
+	// Send player description
+	olc::net::message<GameMsg> msg;
+	msg.header.id = GameMsg::Game_UpdatePlayer;
+	auto pos = players[thisPlayerID]->getPos();
+	auto vel = players[thisPlayerID]->getVel();
+	const playerDescription desc{{pos.x, pos.y},{vel.x, vel.y},thisPlayerID};
+	msg << desc;
+	Send(msg);
 
 	return NOTHING; // nothing to do
 }
 
-sf::Sprite Level::getSprite()
-{
-	// clear
-	texture.clear(sf::Color(222, 183, 247));
-
-	// generation offsets
-	offset = cam->calculateOffsets(player->getPos(), player->getVel());
-
-	// map draw
-	const sf::Vector2i offsetInCages{ static_cast<int> (offset.x / tileSize), static_cast<int> (offset.y / tileSize) };
-	for (float i = 0; i < winTileSize.y + 1; i++)
-	{
-		for (float j = 0; j < winTileSize.x + 1; j++)
-		{
-			/*const sf::Sprite* sprite = map->getSprite(sf::Vector2f(j + offsetInCages.x, i + offsetInCages.y), offset);
-			if(sprite != nullptr)
-			{
-				texture.draw(*sprite);
-			}*/
-		}
-	}
-
-	// player draw
-	texture.draw(*player->getSprite(offset));
-
-	// pause menu draw
-	if(isPause)
-	{
-		texture.draw(pauseMenu->getSprite());
-	}
-
-	texture.display();
-	return sf::Sprite(texture.getTexture());
-}
-
 std::queue<sf::Sprite> Level::getSprites()
 {
-	offset = cam->calculateOffsets(player->getPos(), player->getVel());
+	if(isWaitingForConnection)
+	{
+		// waiting screen;
+		return std::queue<sf::Sprite>(pauseMenu->getSprites());
+	}
+
+	offset = cam->calculateOffsets(players[thisPlayerID]->getPos(), players[thisPlayerID]->getVel());
 
 	std::queue<sf::Sprite> result;
 
@@ -129,8 +206,11 @@ std::queue<sf::Sprite> Level::getSprites()
 		}
 	}
 
-	// player
-	result.push(*player->getSprite(offset));
+	// players
+	for (auto& player : players)
+	{
+		result.push(*player.second->getSprite(offset));
+	}
 
 	// pause menu
 	if(isPause)
@@ -166,13 +246,13 @@ void Level::poolInputs(const Inputs& input)
 			}
 
 			// jump 
-			if (event.key.code == sf::Keyboard::Space && (player->isOnGround() || player->isOnStairs()))
+			if (event.key.code == sf::Keyboard::Space && (players[thisPlayerID]->isOnGround() || players[thisPlayerID]->isOnStairs()))
 			{
 				controls.isJump = true;
 			}
 
 			// stairs grab
-			if (player->isStairsAvailable())
+			if (players[thisPlayerID]->isStairsAvailable())
 			{
 				if (event.key.code == sf::Keyboard::W)
 				{

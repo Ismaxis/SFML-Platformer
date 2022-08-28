@@ -12,7 +12,7 @@ public:
 	~Menu();
 
 	int update(const Inputs& input) override;
-	sf::Sprite getSprite() override;
+
 	std::queue<sf::Sprite> getSprites() override;
 
 private:

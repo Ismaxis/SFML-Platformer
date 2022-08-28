@@ -50,22 +50,6 @@ int PauseMenu::update(const Inputs& input)
 	return NOTHING;
 }
 
-sf::Sprite PauseMenu::getSprite()
-{
-	// clear and fill with transparent black
-	texture.clear(sf::Color(0,0,0,100));
-
-	// draw button
-	texture.draw(*exitButton->getSprite());
-
-	// draw label
-
-	texture.draw(*labelSprite);
-
-	texture.display();
-	return sf::Sprite(texture.getTexture());
-}
-
 std::queue<sf::Sprite> PauseMenu::getSprites()
 {
 	std::queue<sf::Sprite> result;

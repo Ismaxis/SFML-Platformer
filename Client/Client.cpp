@@ -57,11 +57,13 @@ int main()
 		{
 			delete curLayout;
 			curLayout = new Level(mapPath, mapSheetPath, playerTexturePath, winPixelSize);
+			continue;
 		}
 		if(updateCode == EXIT_TO_MENU)
 		{
 			delete curLayout;
 			curLayout = new Menu(winPixelSize);
+			continue;
 		}
 
 		//auto start = std::chrono::steady_clock::now();
