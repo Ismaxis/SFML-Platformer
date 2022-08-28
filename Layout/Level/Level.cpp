@@ -117,11 +117,14 @@ std::queue<sf::Sprite> Level::getSprites()
 	{
 		for (float j = 0; j < winTileSize.x + 1; j++)
 		{
-			const auto pos = sf::Vector2i(j + offsetInCages.x, i + offsetInCages.y);
-			if(map->getCage(pos) != -1)
+			const auto coords = sf::Vector2i(j + offsetInCages.x, i + offsetInCages.y);
+			if(map->isCoordsValid(coords) && map->getCage(coords) != -1)
 			{
-				sf::Sprite sprite = map->getSprite(pos, offset);
-				result.push(sprite);
+				sf::Sprite sprite = map->getSprite(coords, offset);
+				if(sprite.getTexture())
+				{
+					result.push(sprite);
+				}
 			}
 		}
 	}

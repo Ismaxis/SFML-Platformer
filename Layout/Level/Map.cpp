@@ -60,17 +60,26 @@ sf::Vector2u Map::getGridSize() const
 	return gridSize;
 }
 
+bool Map::isCoordsValid(const sf::Vector2i coords) const
+{
+	if (coords.x >= map[0].size() || coords.y >= map.size())
+	{
+		return false;
+	}
+	return true;
+}
+
 int Map::getCage(const sf::Vector2i coords) const
 {
-	//(pos.x >= map[0].size() || pos.y >= map.size() 
 	return map[coords.y][coords.x];
 }
 
-sf::Sprite Map::getSprite(const sf::Vector2i pos, const sf::Vector2i offset) const
+sf::Sprite Map::getSprite(const sf::Vector2i coords, const sf::Vector2i offset) const
 {
-	sf::Sprite curSprite(sprites[map[pos.y][pos.x]]);
-	const auto position = sf::Vector2f(static_cast<float>(static_cast<int>(cageSize) * pos.x - offset.x), 
-	                                   static_cast<float>(static_cast<int>(cageSize) * pos.y - offset.y));
+	sf::Sprite curSprite(sprites[getCage(coords)]);
+
+	const auto position = sf::Vector2f(static_cast<float>(static_cast<int>(cageSize) * coords.x - offset.x), 
+	                                   static_cast<float>(static_cast<int>(cageSize) * coords.y - offset.y));
 	curSprite.setPosition(position);
 	return curSprite;
 }
