@@ -10,18 +10,19 @@
 
 extern std::pair<std::string,std::string> exitButtonPaths;
 extern std::string pauseLabelPath;
+extern std::string emptyPath;
 
 // draw tile map
 class Level : public Layout
 {
 public:
-	Level(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath, sf::Vector2u winPixelSize);
+	Level(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath,  sf::Vector2u winPixelSize);
 	~Level();
 
 	int update(const Inputs& input) override;
 	sf::Sprite getSprite() override;
 
-	std::queue<sf::Sprite*> getSprites() override;
+	std::queue<sf::Sprite> getSprites() override;
 
 private:
 	Map* map;

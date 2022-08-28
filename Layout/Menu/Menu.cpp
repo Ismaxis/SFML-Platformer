@@ -46,11 +46,11 @@ sf::Sprite Menu::getSprite()
 	return sf::Sprite(texture.getTexture());
 }
 
-std::queue<sf::Sprite*> Menu::getSprites()
+std::queue<sf::Sprite> Menu::getSprites()
 {
-	std::queue<sf::Sprite*> result;
-	result.push(new sf::Sprite(*backgroundSprite));
-	result.push(new sf::Sprite(*playBtn->getSprite()));
+	std::queue<sf::Sprite> result;
+	result.push(*backgroundSprite);
+	result.push(*playBtn->getSprite());
 	return result;
 }
 

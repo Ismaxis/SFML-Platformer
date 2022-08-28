@@ -24,7 +24,7 @@ Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const 
 	cam = new Camera(winPixelSize, mapPixelSize);
 	offset = { 0, 0 };
 
-	pauseMenu = new PauseMenu(exitButtonPaths.first, exitButtonPaths.second, pauseLabelPath, winPixelSize);
+	pauseMenu = new PauseMenu(exitButtonPaths.first, exitButtonPaths.second, pauseLabelPath, emptyPath, winPixelSize);
 }
 
 Level::~Level()
@@ -82,11 +82,11 @@ sf::Sprite Level::getSprite()
 	{
 		for (float j = 0; j < winTileSize.x + 1; j++)
 		{
-			const sf::Sprite* sprite = map->getSprite(sf::Vector2f(j + offsetInCages.x, i + offsetInCages.y), offset);
+			/*const sf::Sprite* sprite = map->getSprite(sf::Vector2f(j + offsetInCages.x, i + offsetInCages.y), offset);
 			if(sprite != nullptr)
 			{
 				texture.draw(*sprite);
-			}
+			}*/
 		}
 	}
 
@@ -103,13 +103,13 @@ sf::Sprite Level::getSprite()
 	return sf::Sprite(texture.getTexture());
 }
 
-std::queue<sf::Sprite*> Level::getSprites()
+std::queue<sf::Sprite> Level::getSprites()
 {
 	offset = cam->calculateOffsets(player->getPos(), player->getVel());
 
-	std::queue<sf::Sprite*> result;
+	std::queue<sf::Sprite> result;
 
-	result.push(new sf::Sprite(*backgroundSprite));
+	result.push(*backgroundSprite);
 
 	// map
 	const sf::Vector2i offsetInCages{ static_cast<int> (offset.x / tileSize), static_cast<int> (offset.y / tileSize) };
@@ -117,16 +117,20 @@ std::queue<sf::Sprite*> Level::getSprites()
 	{
 		for (float j = 0; j < winTileSize.x + 1; j++)
 		{
-			sf::Sprite* sprite = map->getSprite(sf::Vector2f(j + offsetInCages.x, i + offsetInCages.y), offset);
-			if(sprite != nullptr)
+			const auto coords = sf::Vector2i(j + offsetInCages.x, i + offsetInCages.y);
+			if(map->isCoordsValid(coords) && map->getCage(coords) != -1)
 			{
-				result.push(new sf::Sprite(*sprite));
+				sf::Sprite sprite = map->getSprite(coords, offset);
+				if(sprite.getTexture())
+				{
+					result.push(sprite);
+				}
 			}
 		}
 	}
 
 	// player
-	result.push(new sf::Sprite(*player->getSprite(offset)));
+	result.push(*player->getSprite(offset));
 
 	// pause menu
 	if(isPause)
@@ -134,7 +138,7 @@ std::queue<sf::Sprite*> Level::getSprites()
 		auto pauseMenuSprites = pauseMenu->getSprites();
 		while(!pauseMenuSprites.empty())
 		{
-			result.push(new sf::Sprite(*pauseMenuSprites.front()));
+			result.push(pauseMenuSprites.front());
 			pauseMenuSprites.pop();
 		}
 	}

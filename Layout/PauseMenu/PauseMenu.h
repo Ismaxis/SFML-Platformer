@@ -5,13 +5,13 @@
 class PauseMenu : public Layout
 {
 public:
-	PauseMenu(const std::string& exitBtnPassive, const std::string& exitBtnActive, const std::string& pauseLabelPath, sf::Vector2u winPixelSize);
+	PauseMenu(const std::string& exitBtnPassive, const std::string& exitBtnActive, const std::string& pauseBackgroundPath, const std::string& pauseLabelPath, sf::Vector2u winPixelSize);
 
 	~PauseMenu();
 
 	int update(const Inputs& input) override;
 	sf::Sprite getSprite() override;
-	std::queue<sf::Sprite*> getSprites() override;
+	std::queue<sf::Sprite> getSprites() override;
 
 private:
 	Button* exitButton;
@@ -24,7 +24,8 @@ private:
 	sf::Vector2u pauseLabelPos;
 	sf::Vector2i pauseLabelSize = { 800, 400 };
 
-	sf::Sprite* backgroundSprite;
+	sf::Texture backgroundTexture;
+	sf::Sprite backgroundSprite;
 
 	void poolInputs(const Inputs& input);
 };

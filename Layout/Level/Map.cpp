@@ -41,19 +41,14 @@ Map::Map(const std::string& mapPath, const std::string& sheetPath)
 
 	for (int i = 0; i < sheet.getSize().x; i += cageSize)
 	{
-		auto newSprite = new sf::Sprite(sheet);
-		newSprite->setTextureRect(sf::IntRect(i, 0, cageSize, cageSize));
+		sf::Sprite newSprite(sheet);
+		newSprite.setTextureRect(sf::IntRect(i, 0, cageSize, cageSize));
 		sprites.push_back(newSprite);
 	}
 }
 
 Map::~Map()
-{
-	for (const auto sprite : sprites)
-	{
-		delete sprite;
-	}
-}
+= default;
 
 unsigned int Map::getCageSize() const
 {
@@ -65,20 +60,26 @@ sf::Vector2u Map::getGridSize() const
 	return gridSize;
 }
 
+bool Map::isCoordsValid(const sf::Vector2i coords) const
+{
+	if (coords.x >= map[0].size() || coords.y >= map.size())
+	{
+		return false;
+	}
+	return true;
+}
+
 int Map::getCage(const sf::Vector2i coords) const
 {
 	return map[coords.y][coords.x];
 }
 
-sf::Sprite* Map::getSprite(const sf::Vector2f pos, const sf::Vector2i offset)
+sf::Sprite Map::getSprite(const sf::Vector2i coords, const sf::Vector2i offset) const
 {
-	if (pos.x >= map[0].size() || pos.y >= map.size() || map[pos.y][pos.x] == -1)
-	{
-		return nullptr;
-	}
-	else
-	{
-		sprites[map[pos.y][pos.x]]->setPosition(sf::Vector2f(cageSize * pos.x - offset.x, cageSize * pos.y - offset.y));
-		return sprites[map[pos.y][pos.x]];
-	}
+	sf::Sprite curSprite(sprites[getCage(coords)]);
+
+	const auto position = sf::Vector2f(static_cast<float>(static_cast<int>(cageSize) * coords.x - offset.x), 
+	                                   static_cast<float>(static_cast<int>(cageSize) * coords.y - offset.y));
+	curSprite.setPosition(position);
+	return curSprite;
 }

@@ -19,6 +19,7 @@ std::pair<std::string, std::string> startButtonPaths{"Textures/startButton.png",
 
 std::pair<std::string, std::string> exitButtonPaths{"Textures/exitButton.png", "Textures/exitButtonActive.png"};
 std::string pauseLabelPath{"Textures/pause.png"};
+std::string emptyPath{"Textures/empty.png"};
 
 int main()
 {
@@ -66,11 +67,10 @@ int main()
 		//auto start = std::chrono::steady_clock::now();
 
 		window.clear(sf::Color(255,255,255));
-		auto sprites = curLayout->getSprites();
+		std::queue<sf::Sprite> sprites = curLayout->getSprites();
 		while(!sprites.empty())
 		{
-			window.draw(*sprites.front());
-			delete sprites.front();
+			window.draw(sprites.front());
 			sprites.pop();
 		}
 		window.display();

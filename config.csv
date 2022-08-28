@@ -1,0 +1,9 @@
+mapPath = Maps/map5.csv
+mapSheetPath = Textures/mapSheet64.png
+playerTexturePath = Textures/Player.png
+
+startButtonPaths = Textures/startButton.png, Textures/startButtonActive.png
+
+exitButtonPaths = Textures/exitButton.png, Textures/exitButtonActive.png
+pauseLabelPath = Textures/pause.png
+emptyPath = Textures/empty.png
