@@ -33,6 +33,7 @@ Level::Level(const std::string& mapPath, const std::string& mapSheetPath,
 
     pauseMenu = new PauseMenu(exitButtonPaths.first, exitButtonPaths.second,
                               pauseLabelPath, emptyPath, winPixelSize);
+    isPause = false;
 }
 
 Level::~Level() {
@@ -236,10 +237,8 @@ void Level::poolInputs(const Inputs& input) {
             }
 
             // esc
-            if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::Escape) {
-                    isPause = !isPause;
-                }
+            if (event.key.code == sf::Keyboard::Escape) {
+                isPause = !isPause;
             }
         }
         // keyboard hold

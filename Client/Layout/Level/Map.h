@@ -1,34 +1,33 @@
 #pragma once
-#include<SFML/Graphics.hpp>
-#include<iostream>
-#include<fstream>
-#include<sstream>
+#include <SFML/Graphics.hpp>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
-class Map
-{
-private:
-	std::vector<std::vector<int>> map;
+class Map {
+   private:
+    std::vector<std::vector<int>> map;
 
-	sf::Vector2u frameSize;
-	sf::Vector2u gridSize;
+    sf::Vector2u frameSize;
+    sf::Vector2u gridSize;
 
-	sf::Texture sheet;
-	std::vector<sf::Sprite> sprites;
+    sf::Texture sheet;
+    std::vector<sf::Sprite> sprites;
 
-	unsigned int cageSize;
+    unsigned int cageSize;
 
-public:
-	Map(const std::string& mapPath, const std::string& sheetPath);
+   public:
+    Map(const std::string& mapPath, const std::string& sheetPath);
 
-	~Map();
+    ~Map();
 
-	unsigned int getCageSize() const;
+    unsigned int getCageSize() const;
 
-	sf::Vector2u getGridSize() const;
+    sf::Vector2u getGridSize() const;
 
-	bool isCoordsValid(sf::Vector2i coords) const;
+    bool isCoordsValid(sf::Vector2i coords) const;
 
-	int getCage(sf::Vector2i coords) const;
+    int getCage(sf::Vector2i coords) const;
 
-	sf::Sprite getSprite(sf::Vector2i coords, sf::Vector2i offset) const;
+    sf::Sprite getSprite(sf::Vector2i coords, sf::Vector2i offset) const;
 };

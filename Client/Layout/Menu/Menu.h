@@ -1,25 +1,24 @@
 #pragma once
-#include "../Layout.h"
 #include "../Button.h"
+#include "../Layout.h"
 #include "../updateCodes.h"
 
 extern std::pair<std::string, std::string> startButtonPaths;
 
-class Menu : public Layout
-{
-public:
-	Menu(sf::Vector2u winPixelSize);
-	~Menu();
+class Menu : public Layout {
+   public:
+    Menu(sf::Vector2u winPixelSize);
+    ~Menu();
 
-	int update(const Inputs& input) override;
+    int update(const Inputs& input) override;
 
-	std::queue<sf::Sprite> getSprites() override;
+    std::queue<sf::Sprite> getSprites() override;
 
-private:
-	Button* playBtn;
-	bool isLmb;
+   private:
+    Button* playBtn;
+    bool isLmb;
 
-	sf::Sprite* backgroundSprite;
+    sf::Sprite* backgroundSprite;
 
-	void poolInputs(const Inputs& input);
+    void poolInputs(const Inputs& input);
 };
