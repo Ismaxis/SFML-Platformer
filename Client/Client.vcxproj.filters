@@ -53,7 +53,7 @@
     <ClInclude Include="Layout\Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Layout\Level\playerControls.h">
+    <ClInclude Include="Layout\Level\PlayerControls.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Layout\Layout.h">

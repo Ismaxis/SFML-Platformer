@@ -170,7 +170,7 @@
     <ClInclude Include="Layout\Level\Map.h" />
     <ClInclude Include="Layout\Button.h" />
     <ClInclude Include="Layout\Level\Player.h" />
-    <ClInclude Include="Layout\Level\playerControls.h" />
+    <ClInclude Include="Layout\Level\PlayerControls.h" />
     <ClInclude Include="Layout\Menu\Menu.h" />
     <ClInclude Include="Layout\updateCodes.h" />
     <ClInclude Include="Layout\PauseMenu\PauseMenu.h" />
