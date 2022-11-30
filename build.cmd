@@ -1,0 +1,1 @@
+cmake -G "MinGW Makefiles" -S . -B "./out" && make -C "./out"
