@@ -9,5 +9,4 @@
 ### Platform independence 
 - Full Unix/Windows compatibility achieved with **CMake** building tool
 
-
-![DEMO IMAGE](https://user-images.githubusercontent.com/83420512/204858795-b38d89df-7df4-4170-a3c9-77558c8b9f10.jpg)
+![DEMO GIF](https://user-images.githubusercontent.com/83420512/205180208-9081649a-f1a3-4d65-8a90-48931453da52.gif)
