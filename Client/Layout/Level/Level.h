@@ -19,7 +19,7 @@ extern std::string emptyPath;
 class Level : public Layout, olc::net::client_interface<GameMsg>
 {
 public:
-	Level(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath,  sf::Vector2u winPixelSize);
+	Level(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath,  sf::Vector2u winPixelSize, const std::string& ip);
 	~Level();
 
 	int update(const Inputs& input) override;

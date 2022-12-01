@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <fstream>
 #include <chrono>
 #include "Layout/Layout.h"
 #include "Layout/Level/Level.h"
@@ -23,6 +24,10 @@ std::string emptyPath{"Textures/empty.png"};
 
 int main()
 {
+	std::string ip;
+	std::getline(std::ifstream("config.csv"), ip);
+	std::cout << ip;
+
 	// Window init
 	const sf::Vector2u winPixelSize{ 1920, 1080 };
 	sf::RenderWindow window(sf::VideoMode(winPixelSize.x - 1u, winPixelSize.y - 1u), "Game", sf::Style::Default);
@@ -56,7 +61,7 @@ int main()
 		if(updateCode == START_LEVEL)
 		{
 			delete curLayout;
-			curLayout = new Level(mapPath, mapSheetPath, playerTexturePath, winPixelSize);
+			curLayout = new Level(mapPath, mapSheetPath, playerTexturePath, winPixelSize, ip);
 			continue;
 		}
 		if(updateCode == EXIT_TO_MENU)

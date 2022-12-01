@@ -1,10 +1,10 @@
 #include "Level.h"
 
-Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath, const sf::Vector2u winPixelSize)
+Level::Level(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath, const sf::Vector2u winPixelSize, const std::string& ip)
 {
-	if (Connect("194.67.111.111", 60000))
+	if (Connect(ip, 60000))
 	{
-		std::cout << "Connected\n";
+		std::cout << "Connected to " + ip + '\n';
 	}
 
 	texture.create(winPixelSize.x, winPixelSize.y);

@@ -355,3 +355,6 @@ Textures/startButton.psd
 
 Linux/
 ServerLinux/out/
+build/
+out/
+CMakeFiles/
