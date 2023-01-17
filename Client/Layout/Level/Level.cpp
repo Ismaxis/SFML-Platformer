@@ -154,9 +154,10 @@ int Level::update(const Inputs& input)
 	}
 
 	// update all players
-	for (auto& player : players)
+    const auto time = clock.restart().asMilliseconds();
+    for (const auto& player : players)
 	{
-		player.second->update(*map, clock.restart().asMilliseconds());
+        player.second->update(*map, time);
 	}
 
 	// Send player description
