@@ -22,9 +22,8 @@ enum class GameMsg : uint32_t
 struct playerDescription
 {
 	std::pair<float, float> pos;
-	std::pair<float, float> vel;
 
-	uint32_t uniqueID = 0;
+    uint32_t uniqueID = 0;
 
 	//uint32_t nAvatarID = 0;
 

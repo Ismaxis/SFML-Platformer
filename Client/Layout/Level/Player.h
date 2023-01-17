@@ -25,15 +25,8 @@ private:
 	sf::Texture plTexture;
 	sf::Sprite* playerSprite;
 
-public:
-	Player() = default;
-	Player(const std::string& path);
-	Player(Player&) = default;
-	~Player();
-
-	void update(const Map &map, int time);
-
-	CollisionInfo collisionX(const Map& map) const;
+protected:
+    CollisionInfo collisionX(const Map& map) const;
 	CollisionInfo singleCollisionX(float top, float bottom, const Map& map, int x, const int& cageSize) const;
 	CollisionInfo collisionY(const Map& map) const;
 	CollisionInfo singleCollisionY(float left, float right, const Map& map, int y, const int& cageSize) const;
@@ -44,6 +37,14 @@ public:
 	static bool isStairs(int curCage);
 	static bool isTopOfStairs(int curCage);
 	static bool isBlock(int curCage);
+
+public:
+    Player() = default;
+    Player(const std::string& path);
+    Player(Player&) = default;
+    ~Player();
+
+    void update(const Map& map, int time);
 
 	void jump();
 

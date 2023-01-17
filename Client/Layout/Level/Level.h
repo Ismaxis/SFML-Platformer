@@ -11,48 +11,47 @@
 #include "../PauseMenu/PauseMenu.h"
 #include "../../../Server/Common.h"
 
-extern std::pair<std::string,std::string> exitButtonPaths;
+extern std::pair<std::string, std::string> exitButtonPaths;
 extern std::string pauseLabelPath;
 extern std::string emptyPath;
 
-// draw tile map
 class Level : public Layout, olc::net::client_interface<GameMsg>
 {
 public:
-	Level(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath,  sf::Vector2u winPixelSize, const std::string& ip);
-	~Level();
+    Level(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath,
+          sf::Vector2u winPixelSize, const std::string& ip);
+    ~Level() override;
 
-	int update(const Inputs& input) override;
+    int update(const Inputs& input) override;
 
-	std::queue<sf::Sprite> getSprites() override;
+    std::queue<sf::Sprite> getSprites() override;
 
 private:
-	Map* map;
-	unsigned int tileSize;
-	sf::Vector2u gridTileSize;
-	sf::Vector2u mapPixelSize; 
-	sf::Vector2u winTileSize;
+    Map map;
+    unsigned int tileSize;
+    sf::Vector2u gridTileSize;
+    sf::Vector2u mapPixelSize;
+    sf::Vector2u winTileSize;
 
-	//Player* player;
+    std::unordered_map<uint32_t, std::shared_ptr<Player>> players;
+    uint32_t thisPlayerID;
+    int timeSinceLastPosUpdate;
 
-	std::unordered_map<uint32_t, Player*> players;
-	uint32_t thisPlayerID;
+    std::string plStoredTexturePath;
 
-	std::string plStoredTexturePath;
+    bool isWaitingForConnection = true;
 
-	bool isWaitingForConnection = true;
+    playerControls controls;
 
-	playerControls controls;
+    sf::Sprite* backgroundSprite;
 
-	sf::Sprite* backgroundSprite;
+    Camera cam;
+    sf::Vector2i offset;
 
-	Camera* cam; 
-	sf::Vector2i offset;
+    sf::Clock clock;
 
-	sf::Clock clock;
+    PauseMenu pauseMenu;
+    bool isPause;
 
-	PauseMenu* pauseMenu;
-	bool isPause;
-
-	void poolInputs(const Inputs& input);
+    void poolInputs(const Inputs& input);
 };
