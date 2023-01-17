@@ -22,18 +22,26 @@ std::pair<std::string, std::string> exitButtonPaths{"Textures/exitButton.png", "
 std::string pauseLabelPath{"Textures/pause.png"};
 std::string emptyPath{"Textures/empty.png"};
 
-int main()
+int main(const int argc, const char* argv[])
 {
 	std::string ip;
 	std::getline(std::ifstream("config.csv"), ip);
-	std::cout << ip;
 
-	// Window init
-	const sf::Vector2u winPixelSize{ 1920, 1080 };
-	sf::RenderWindow window(sf::VideoMode(winPixelSize.x - 1u, winPixelSize.y - 1u), "Game", sf::Style::Default);
+    // Window init
+    sf::Vector2u winPixelSize{1920, 1080};
+    sf::Vector2i winPos{0, 0};
+
+    if (argc > 4)
+    {
+        winPixelSize.x = std::stoi(argv[1]);
+        winPixelSize.y = std::stoi(argv[2]);
+        winPos.x = std::stoi(argv[3]);
+        winPos.y = std::stoi(argv[4]);
+    }
+
+    sf::RenderWindow window(sf::VideoMode(winPixelSize.x - 1u, winPixelSize.y - 1u), "Game", sf::Style::Default);
 	window.setFramerateLimit(144);
-	window.setPosition(sf::Vector2i(0, 0));
-	
+    window.setPosition(winPos);
 	Layout* curLayout = new Menu(winPixelSize);
 
 	// Window loop
