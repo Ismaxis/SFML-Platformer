@@ -153,26 +153,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Layout\Level\Camera.cpp" />
     <ClCompile Include="Layout\Level\Level.cpp" />
     <ClCompile Include="Layout\Button.cpp" />
     <ClCompile Include="Client.cpp" />
-    <ClCompile Include="Layout\Level\Map.cpp" />
-    <ClCompile Include="Layout\Level\Player.cpp" />
+    <ClCompile Include="Game\Map.cpp" />
+    <ClCompile Include="Game\Player.cpp" />
     <ClCompile Include="Layout\Menu\Menu.cpp" />
     <ClCompile Include="Layout\PauseMenu\PauseMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Layout\Inputs.h" />
+    <ClInclude Include="Game\Game.h" />
+    <ClInclude Include="Inputs.h" />
     <ClInclude Include="Layout\Level\Camera.h" />
     <ClInclude Include="Layout\Layout.h" />
     <ClInclude Include="Layout\Level\Level.h" />
-    <ClInclude Include="Layout\Level\Map.h" />
+    <ClInclude Include="Game\Map.h" />
     <ClInclude Include="Layout\Button.h" />
-    <ClInclude Include="Layout\Level\Player.h" />
-    <ClInclude Include="Layout\Level\playerControls.h" />
+    <ClInclude Include="Game\Player.h" />
+    <ClInclude Include="Game\PlayerControls.h" />
     <ClInclude Include="Layout\Menu\Menu.h" />
-    <ClInclude Include="Layout\updateCodes.h" />
+    <ClInclude Include="Layout\UpdateCode.h" />
     <ClInclude Include="Layout\PauseMenu\PauseMenu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

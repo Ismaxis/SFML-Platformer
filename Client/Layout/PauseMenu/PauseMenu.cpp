@@ -33,7 +33,7 @@ PauseMenu::~PauseMenu()
 	delete labelSprite;
 }
 
-int PauseMenu::update(const Inputs& input)
+UpdateCode PauseMenu::update(const Inputs& input)
 {
 	isLmb = false;
 

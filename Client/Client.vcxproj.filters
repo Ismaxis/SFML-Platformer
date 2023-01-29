@@ -18,10 +18,10 @@
     <ClCompile Include="Client.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Layout\Level\Player.cpp">
+    <ClCompile Include="Game\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Layout\Level\Map.cpp">
+    <ClCompile Include="Game\Map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Layout\Level\Camera.cpp">
@@ -39,12 +39,15 @@
     <ClCompile Include="Layout\PauseMenu\PauseMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Layout\Level\Player.h">
+    <ClInclude Include="Game\Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Layout\Level\Map.h">
+    <ClInclude Include="Game\Map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Layout\Level\Camera.h">
@@ -53,7 +56,7 @@
     <ClInclude Include="Layout\Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Layout\Level\playerControls.h">
+    <ClInclude Include="Game\PlayerControls.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Layout\Layout.h">
@@ -65,13 +68,16 @@
     <ClInclude Include="Layout\Menu\Menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Layout\Inputs.h">
+    <ClInclude Include="Inputs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Layout\updateCodes.h">
+    <ClInclude Include="Layout\UpdateCode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Layout\PauseMenu\PauseMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

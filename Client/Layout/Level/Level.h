@@ -3,55 +3,39 @@
 
 #include "../Layout.h"
 #include "../Button.h"
-#include "Map.h"
-#include "Player.h"
 #include "Camera.h"
-#include "playerControls.h"
-#include "../updateCodes.h"
 #include "../PauseMenu/PauseMenu.h"
 #include "../../../Server/Common.h"
+#include "../../Game/Game.h"
 
 extern std::pair<std::string, std::string> exitButtonPaths;
 extern std::string pauseLabelPath;
 extern std::string emptyPath;
 
-class Level : public Layout, olc::net::client_interface<GameMsg>
+class Level : public Layout
 {
 public:
     Level(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath,
           sf::Vector2u winPixelSize, const std::string& ip);
     ~Level() override;
 
-    int update(const Inputs& input) override;
+    UpdateCode update(const Inputs& input) override;
 
     std::queue<sf::Sprite> getSprites() override;
 
 private:
-    Map map;
-    unsigned int tileSize;
-    sf::Vector2u gridTileSize;
-    sf::Vector2u mapPixelSize;
+    Game game;
+
+    int tileSize;
     sf::Vector2u winTileSize;
 
-    std::unordered_map<uint32_t, std::shared_ptr<Player>> players;
-    uint32_t thisPlayerID;
-    int timeSinceLastPosUpdate;
-
-    std::string plStoredTexturePath;
-
-    bool isWaitingForConnection = true;
-
-    playerControls controls;
-
-    sf::Sprite* backgroundSprite;
+    sf::Sprite backgroundSprite;
 
     Camera cam;
     sf::Vector2i offset;
 
-    sf::Clock clock;
-
     PauseMenu pauseMenu;
-    bool isPause;
+    bool isPause = false;
 
     void poolInputs(const Inputs& input);
 };
