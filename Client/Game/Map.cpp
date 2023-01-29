@@ -47,8 +47,7 @@ Map::Map(const std::string& mapPath, const std::string& sheetPath)
 	}
 }
 
-Map::~Map()
-= default;
+Map::~Map() = default;
 
 unsigned int Map::getCageSize() const
 {

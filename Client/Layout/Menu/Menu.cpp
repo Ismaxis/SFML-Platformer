@@ -21,7 +21,7 @@ Menu::~Menu()
 	delete backgroundSprite;
 }
 
-int Menu::update(const Inputs& input)
+UpdateCode Menu::update(const Inputs& input)
 {
 	isLmb = false;
 	poolInputs(input);

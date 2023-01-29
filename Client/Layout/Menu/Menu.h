@@ -1,7 +1,7 @@
 #pragma once
 #include "../Layout.h"
 #include "../Button.h"
-#include "../updateCodes.h"
+#include "../UpdateCode.h"
 
 extern std::pair<std::string, std::string> startButtonPaths;
 
@@ -11,7 +11,7 @@ public:
 	Menu(sf::Vector2u winPixelSize);
 	~Menu();
 
-	int update(const Inputs& input) override;
+    UpdateCode update(const Inputs& input) override;
 
 	std::queue<sf::Sprite> getSprites() override;
 

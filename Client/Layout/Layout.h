@@ -1,12 +1,13 @@
 #pragma once
 #include <queue>
 #include <SFML/Graphics.hpp>
-#include "Inputs.h"
+#include "../Inputs.h"
+#include "UpdateCode.h"
 
 class Layout
 {
 public:
-	virtual int update(const Inputs& input) = 0;
+    virtual UpdateCode update(const Inputs& input) = 0;
 	virtual std::queue<sf::Sprite> getSprites() = 0;
 
 	virtual ~Layout() = default; // its important to have a virtual destructor in base abstract class

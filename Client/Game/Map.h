@@ -15,7 +15,7 @@ private:
 	sf::Texture sheet;
 	std::vector<sf::Sprite> sprites;
 
-	unsigned int cageSize;
+    int cageSize;
 
 public:
 	Map(const std::string& mapPath, const std::string& sheetPath);

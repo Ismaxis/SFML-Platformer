@@ -5,7 +5,7 @@
 #include "Layout/Layout.h"
 #include "Layout/Level/Level.h"
 #include "Layout/Menu/Menu.h"
-#include "Layout/updateCodes.h"
+#include "Layout/UpdateCode.h"
 
 //Variables types rules:
 //Sizes - unsigned int
@@ -48,7 +48,7 @@ int main(const int argc, const char* argv[])
 	while (window.isOpen())
 	{
 		// Event loop
-		sf::Event event;
+        sf::Event event{};
 		Inputs input;
 		std::vector<sf::Event> events;
 		while (window.pollEvent(event))
@@ -64,7 +64,7 @@ int main(const int argc, const char* argv[])
 		input.events = events;
 		input.mousePos = sf::Mouse::getPosition(window);
 
-		int updateCode = curLayout->update(input);
+        UpdateCode updateCode = curLayout->update(input);
 
 		if(updateCode == START_LEVEL)
 		{
@@ -72,14 +72,14 @@ int main(const int argc, const char* argv[])
 			curLayout = new Level(mapPath, mapSheetPath, playerTexturePath, winPixelSize, ip);
 			continue;
 		}
-		if(updateCode == EXIT_TO_MENU)
-		{
-			delete curLayout;
-			curLayout = new Menu(winPixelSize);
-			continue;
-		}
+        if(updateCode == EXIT_TO_MENU)
+        {
+            delete curLayout;
+            curLayout = new Menu(winPixelSize);
+            continue;
+        }
 
-		//auto start = std::chrono::steady_clock::now();
+        //auto start = std::chrono::steady_clock::now();
 
 		window.clear(sf::Color(255,255,255));
 		std::queue<sf::Sprite> sprites = curLayout->getSprites();
