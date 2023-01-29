@@ -9,8 +9,8 @@ public:
 	sf::Vector2i calculateOffsets(const sf::Vector2i& playerPos, const sf::Vector2f& playerVel); 
 
 private:
-	constexpr float magicDivider = 4500.0f ;
-	constexpr float distanceToBorder = 0.4f; // % of screen width
+    const float magicDivider = 4500.0f;
+    const float distanceToBorder = 0.4f; // % of screen width
 
 	sf::Vector2u winPixelSize;
 	sf::Vector2u mapPixelSize;
