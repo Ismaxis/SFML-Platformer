@@ -15,7 +15,7 @@ class Game
 public:
     Game(const std::string& mapPath, const std::string& mapSheetPath, const std::string& playerTexturePath,
          const std::string& ip);
-    ~Game();
+    virtual ~Game();
 
     UpdateCode update(const Inputs& input);
 
@@ -39,9 +39,11 @@ private:
     sf::Clock clock;
     int timeSinceLastPosUpdate = 0;
 
-    PlayerControls controls;
-    void poolInputs(const Inputs& input);
 
     olc::net::client_interface<GameMsg> client;
     bool isWaitingForConnection = true;
+
+protected:
+    PlayerControls controls;
+    virtual void poolInputs(const Inputs& input);
 };

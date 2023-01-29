@@ -1,11 +1,14 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <fstream>
+#include <ctime>
 #include <chrono>
 #include "Layout/Layout.h"
 #include "Layout/Level/Level.h"
 #include "Layout/Menu/Menu.h"
 #include "Layout/UpdateCode.h"
+#include "Test/TestGame.h"
+#include "Game/Game.h"
 
 //Variables types rules:
 //Sizes - unsigned int
@@ -24,8 +27,8 @@ std::string emptyPath{"Textures/empty.png"};
 
 int main(const int argc, const char* argv[])
 {
-	std::string ip;
-	std::getline(std::ifstream("config.csv"), ip);
+    std::string ip;
+    std::getline(std::ifstream("config.csv"), ip);
 
     // Window init
     sf::Vector2u winPixelSize{1920, 1080};
@@ -39,40 +42,54 @@ int main(const int argc, const char* argv[])
         winPos.y = std::stoi(argv[4]);
     }
 
+    if (argc > 5)
+    {
+        if (strcmp(argv[5], "test") == 0)
+        {
+            srand(time(nullptr));
+            TestGame game(mapPath, mapSheetPath, playerTexturePath, ip, true);
+            while (true)
+            {
+                game.update({{}, {0, 0}});
+                Sleep(5);
+            }
+        }
+    }
+
     sf::RenderWindow window(sf::VideoMode(winPixelSize.x - 1u, winPixelSize.y - 1u), "Game", sf::Style::Default);
-	window.setFramerateLimit(144);
+    window.setFramerateLimit(144);
     window.setPosition(winPos);
-	Layout* curLayout = new Menu(winPixelSize);
+    Layout* curLayout = new Menu(winPixelSize);
 
-	// Window loop
-	while (window.isOpen())
-	{
-		// Event loop
+    // Window loop
+    while (window.isOpen())
+    {
+        // Event loop
         sf::Event event{};
-		Inputs input;
-		std::vector<sf::Event> events;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-			{
-				window.close();
-			}
+        Inputs input;
+        std::vector<sf::Event> events;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+            }
 
-			events.push_back(event);
-		}
+            events.push_back(event);
+        }
 
-		input.events = events;
-		input.mousePos = sf::Mouse::getPosition(window);
+        input.events = events;
+        input.mousePos = sf::Mouse::getPosition(window);
 
         UpdateCode updateCode = curLayout->update(input);
 
-		if(updateCode == START_LEVEL)
-		{
-			delete curLayout;
-			curLayout = new Level(mapPath, mapSheetPath, playerTexturePath, winPixelSize, ip);
-			continue;
-		}
-        if(updateCode == EXIT_TO_MENU)
+        if (updateCode == START_LEVEL)
+        {
+            delete curLayout;
+            curLayout = new Level(mapPath, mapSheetPath, playerTexturePath, winPixelSize, ip);
+            continue;
+        }
+        if (updateCode == EXIT_TO_MENU)
         {
             delete curLayout;
             curLayout = new Menu(winPixelSize);
@@ -81,16 +98,16 @@ int main(const int argc, const char* argv[])
 
         //auto start = std::chrono::steady_clock::now();
 
-		window.clear(sf::Color(255,255,255));
-		std::queue<sf::Sprite> sprites = curLayout->getSprites();
-		while(!sprites.empty())
-		{
-			window.draw(sprites.front());
-			sprites.pop();
-		}
-		window.display();
+        window.clear(sf::Color(255, 255, 255));
+        std::queue<sf::Sprite> sprites = curLayout->getSprites();
+        while (!sprites.empty())
+        {
+            window.draw(sprites.front());
+            sprites.pop();
+        }
+        window.display();
 
-		//auto end = std::chrono::steady_clock::now();
-		//std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << "\n";
-	}
+        //auto end = std::chrono::steady_clock::now();
+        //std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << "\n";
+    }
 }

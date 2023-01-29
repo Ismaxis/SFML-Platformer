@@ -162,6 +162,7 @@
     <ClCompile Include="Game\Player.cpp" />
     <ClCompile Include="Layout\Menu\Menu.cpp" />
     <ClCompile Include="Layout\PauseMenu\PauseMenu.cpp" />
+    <ClCompile Include="Test\TestGame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Game.h" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Layout\Menu\Menu.h" />
     <ClInclude Include="Layout\UpdateCode.h" />
     <ClInclude Include="Layout\PauseMenu\PauseMenu.h" />
+    <ClInclude Include="Test\TestGame.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

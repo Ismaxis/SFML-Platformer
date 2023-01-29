@@ -112,7 +112,9 @@ UpdateCode Game::update(const Inputs& input)
         player.second->update(map, time);
     }
 
-    if (players[thisPlayerID]->getPos() != posBeforeUpdate || ++timeSinceLastPosUpdate > 100)
+    ++timeSinceLastPosUpdate;
+    if (timeSinceLastPosUpdate > 5 && (timeSinceLastPosUpdate > 100 || players[thisPlayerID]->getPos() !=
+        posBeforeUpdate))
     {
         olc::net::message<GameMsg> msg;
         msg.header.id = GameMsg::Game_UpdatePlayer;
@@ -175,24 +177,21 @@ void Game::poolInputs(const Inputs& input)
             }
 
             // jump 
-            if (event.key.code == sf::Keyboard::Space && (players[thisPlayerID]->isOnGround() || players[thisPlayerID]->
-                isOnStairs()))
+            if (event.key.code == sf::Keyboard::Space)
             {
                 controls.isJump = true;
             }
 
             // stairs grab
-            if (players[thisPlayerID]->isStairsAvailable())
+            if (event.key.code == sf::Keyboard::W)
             {
-                if (event.key.code == sf::Keyboard::W)
-                {
-                    controls.grabDirection = -1;
-                }
-                else if (event.key.code == sf::Keyboard::S)
-                {
-                    controls.grabDirection = 1;
-                }
+                controls.grabDirection = -1;
             }
+            else if (event.key.code == sf::Keyboard::S)
+            {
+                controls.grabDirection = 1;
+            }
+            
         }
         // keyboard hold
         if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !sf::Keyboard::isKeyPressed(sf::Keyboard::A))
