@@ -52,6 +52,7 @@ UpdateCode Game::update(const Inputs& input)
 
                 auto newPlayer = std::make_shared<Player>(plStoredTexturePath);
                 newPlayer->setPos(sf::Vector2f(desc.pos.first, desc.pos.second));
+                newPlayer->setVel(sf::Vector2f(desc.vel.first, desc.vel.second));
 
                 players.insert_or_assign(desc.uniqueID, newPlayer);
 
@@ -82,6 +83,7 @@ UpdateCode Game::update(const Inputs& input)
                 }
 
                 players[desc.uniqueID]->setPos(sf::Vector2f(desc.pos.first, desc.pos.second));
+                players[desc.uniqueID]->setVel(sf::Vector2f(desc.vel.first, desc.vel.second));
                 break;
             }
             }
@@ -93,7 +95,6 @@ UpdateCode Game::update(const Inputs& input)
         return WAITING_FOR_CONNECTION;
     }
 
-    const auto posBeforeUpdate = players[thisPlayerID]->getPos();
     poolInputs(input);
 
     players[thisPlayerID]->move(controls.walkDirection);
@@ -112,17 +113,16 @@ UpdateCode Game::update(const Inputs& input)
         player.second->update(map, time);
     }
 
-    ++timeSinceLastPosUpdate;
-    if (timeSinceLastPosUpdate > 5 && (timeSinceLastPosUpdate > 100 || players[thisPlayerID]->getPos() !=
-        posBeforeUpdate))
+    if (networkingClock.getElapsedTime().asMilliseconds() >= networkingSyncTime)
     {
         olc::net::message<GameMsg> msg;
         msg.header.id = GameMsg::Game_UpdatePlayer;
         auto pos = players[thisPlayerID]->getPos();
-        const playerDescription desc{{pos.x, pos.y}, thisPlayerID};
+        auto vel = players[thisPlayerID]->getVel();
+        const playerDescription desc{{pos.x, pos.y}, {vel.x, vel.y}, thisPlayerID};
         msg << desc;
         client.Send(msg);
-        timeSinceLastPosUpdate = 0;
+        networkingClock.restart();
     }
     return NOTHING;
 }
@@ -155,6 +155,14 @@ sf::Vector2f Game::getLocalPlayerVel()
 bool Game::waitingForConnection() const
 {
     return isWaitingForConnection;
+}
+
+void Game::unregister()
+{
+    olc::net::message<GameMsg> msg;
+    msg.header.id = GameMsg::Client_UnregisterWithServer;
+    msg << thisPlayerID;
+    client.Send(msg);
 }
 
 void Game::poolInputs(const Inputs& input)
@@ -191,7 +199,6 @@ void Game::poolInputs(const Inputs& input)
             {
                 controls.grabDirection = 1;
             }
-            
         }
         // keyboard hold
         if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !sf::Keyboard::isKeyPressed(sf::Keyboard::A))

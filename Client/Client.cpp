@@ -10,11 +10,6 @@
 #include "Test/TestGame.h"
 #include "Game/Game.h"
 
-//Variables types rules:
-//Sizes - unsigned int
-//Draw position - int
-//Physical position - float
-
 std::string mapPath{"Maps/map5.csv"};
 std::string mapSheetPath{"Textures/mapSheet64.png"};
 std::string playerTexturePath{"Textures/Player.png"};
@@ -30,7 +25,6 @@ int main(const int argc, const char* argv[])
     std::string ip;
     std::getline(std::ifstream("config.csv"), ip);
 
-    // Window init
     sf::Vector2u winPixelSize{1920, 1080};
     sf::Vector2i winPos{0, 0};
 
@@ -41,12 +35,11 @@ int main(const int argc, const char* argv[])
         winPos.x = std::stoi(argv[3]);
         winPos.y = std::stoi(argv[4]);
     }
-
-    if (argc > 5)
+    if (argc > 6)
     {
         if (strcmp(argv[5], "test") == 0)
         {
-            srand(time(nullptr));
+            srand(std::stoi(argv[6]));
             TestGame game(mapPath, mapSheetPath, playerTexturePath, ip, true);
             while (true)
             {
@@ -61,10 +54,8 @@ int main(const int argc, const char* argv[])
     window.setPosition(winPos);
     Layout* curLayout = new Menu(winPixelSize);
 
-    // Window loop
     while (window.isOpen())
     {
-        // Event loop
         sf::Event event{};
         Inputs input;
         std::vector<sf::Event> events;
@@ -77,12 +68,10 @@ int main(const int argc, const char* argv[])
 
             events.push_back(event);
         }
-
         input.events = events;
         input.mousePos = sf::Mouse::getPosition(window);
 
         UpdateCode updateCode = curLayout->update(input);
-
         if (updateCode == START_LEVEL)
         {
             delete curLayout;
@@ -96,8 +85,6 @@ int main(const int argc, const char* argv[])
             continue;
         }
 
-        //auto start = std::chrono::steady_clock::now();
-
         window.clear(sf::Color(255, 255, 255));
         std::queue<sf::Sprite> sprites = curLayout->getSprites();
         while (!sprites.empty())
@@ -106,8 +93,5 @@ int main(const int argc, const char* argv[])
             sprites.pop();
         }
         window.display();
-
-        //auto end = std::chrono::steady_clock::now();
-        //std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << "\n";
     }
 }

@@ -8,8 +8,6 @@
 #include "../Layout/UpdateCode.h"
 #include "../Inputs.h"
 
-struct Inputs;
-
 class Game
 {
 public:
@@ -28,6 +26,8 @@ public:
 
     bool waitingForConnection() const;
 
+    void unregister();
+
 private:
     Map map;
 
@@ -37,8 +37,9 @@ private:
     std::string plStoredTexturePath;
 
     sf::Clock clock;
-    int timeSinceLastPosUpdate = 0;
-
+    sf::Clock networkingClock;
+    const int networkingRefreshRate = 60;
+    const int networkingSyncTime = 1000 / networkingRefreshRate;
 
     olc::net::client_interface<GameMsg> client;
     bool isWaitingForConnection = true;

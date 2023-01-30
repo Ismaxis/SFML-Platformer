@@ -32,6 +32,7 @@ UpdateCode Level::update(const Inputs& input)
         // update pause menu
         if (pauseMenu.update(input) == EXIT_TO_MENU)
         {
+            game.unregister();
             return EXIT_TO_MENU;
         }
     }
